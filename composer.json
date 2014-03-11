@@ -1,0 +1,22 @@
+{
+    "name": "captioning/captioning",
+    "require": {
+        "neitanod/forceutf8": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Julien Villetorte",
+            "email": "j.villetorte@gmail.com",
+            "homepage": "http://www.delphiki.com",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "type": "project",
+    "description": "A collection of tools to manipulate subtitles",
+    "autoload": {
+        "psr-0": {
+            "Captioning": "src/"
+        }
+    }
+}
