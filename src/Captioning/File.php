@@ -245,6 +245,108 @@ abstract class File implements FileInterface
         }
     }
 
+    public function merge($_file)
+    {
+        if (!is_a($_file, get_class($this))) {
+            throw new \Exception('Can\'t merge! Wrong type: '.end(explode('\\', get_class($_file))));
+        } else {
+            $this->cues = array_merge($this->cues, $_file->getCues());
+            $this->sortCues();
+        }
+    }
+
+    /**
+    * Shifts a range of subtitles a specified amount of time.
+    *
+    * @param $_time The time to use (ms), which can be positive or negative.
+    * @param int $_startIndex The subtitle index the range begins with.
+    * @param int $_endIndex The subtitle index the range ends with.
+    */
+    public function shift($_time, $_startIndex = false, $_endIndex = false)
+    {
+        if (!is_int($_time)) {
+            return false;
+        }
+        if ($_time == 0) {
+            return true;
+        }
+
+        if (!$_startIndex) {
+            $_startIndex = 0;
+        }
+        if (!$_endIndex) {
+            $_endIndex = $this->getCuesCount() - 1;
+        }
+        
+        $startCue = $this->getCue($_startIndex);
+        $endCue = $this->getCue($_endIndex);
+        
+        //check subtitles do exist
+        if (!$startCue || !$endCue) {
+            return false;
+        }
+        
+        for ($i = $_startIndex; $i < $_endIndex; $i++) {
+                $cue = $this->getCue($i);
+                $cue->shift($_time);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Auto syncs a range of subtitles given their first and last correct times.
+     * The subtitles are first shifted to the first subtitle's correct time, and then proportionally 
+     * adjusted using the last subtitle's correct time.
+     * 
+     * Based on gnome-subtitles (https://git.gnome.org/browse/gnome-subtitles/)
+     * 
+     * @param int $_startIndex The subtitle index to start the adjustment with.
+     * @param int $_startTime The correct start time for the first subtitle.
+     * @param int $_endIndex The subtitle index to end the adjustment with.
+     * @param int $_endTime The correct start time for the last subtitle.
+     * @param bool $_syncLast Whether to sync the last subtitle.
+     * @return bool Whether the subtitles could be adjusted
+    */
+    
+    public function sync($_startIndex, $_startTime, $_endIndex, $_endTime, $_syncLast = true)
+    {
+        //set first and last subtitles index
+        if (!$_startIndex) {
+            $_startIndex = 0;
+        }
+        if (!$_endIndex) {
+            $_endIndex = $this->getCuesCount() - 1;
+        }
+    
+        //check subtitles do exist
+        $startSubtitle = $this->getCue($_startIndex);
+        $endSubtitle = $this->getCue($_endIndex);
+        if (!$startSubtitle || !$endSubtitle) {
+            return false;
+        }
+        
+        if (!($_startTime < $_endTime)) {
+            return false;
+        }
+        
+        $shift = $_startTime - $startSubtitle->getStartMS();
+        $factor = ($_endTime - $_startTime) / ($endSubtitle->getStartMS() - $startSubtitle->getStartMS());
+
+        /* Shift subtitles to the start point */
+        if ($shift) {
+            $this->shift($shift, $_startIndex, $_endIndex);
+        }
+
+        /* Sync timings with proportion */
+        for ($index = $_startIndex; $index <= $_endIndex; $index++) {
+            $cue = $this->getCue($index);
+            $cue->scale($_startTime, $factor);
+        }
+                
+        return true;
+    }
+
     /**
      * Saves the file
      *
@@ -270,32 +372,46 @@ abstract class File implements FileInterface
     /**
      * Computes reading speed statistics 
      */
-    public function calcStats(){
-        $keys = array_keys($this->subs);
-        $sub_count = sizeof($keys);
+    public function getStats()
+    {
+        $this->stats = array(
+            'tooSlow'        => 0,
+            'slowAcceptable' => 0,
+            'aBitSlow'       => 0,
+            'goodSlow'       => 0,
+            'perfect'        => 0,
+            'goodFast'       => 0,
+            'aBitFast'       => 0,
+            'fastAcceptable' => 0,
+            'tooFast'        => 0
+        );
 
         for ($i = 0; $i < $this->getCuesCount(); $i++) {
             $rs = $this->getCue($i)->getReadingSpeed();
 
+            echo $rs."\n";
+
             if ($rs < 5) {
                 $this->stats['tooSlow']++;
-            } elseif($rs < 10) {
+            } elseif ($rs < 10) {
                 $this->stats['slowAcceptable']++;
-            } elseif($rs < 13) {
+            } elseif ($rs < 13) {
                 $this->stats['aBitSlow']++;
-            } elseif($rs < 15) {
+            } elseif ($rs < 15) {
                 $this->stats['goodSlow']++;
-            } elseif($rs < 23) {
+            } elseif ($rs < 23) {
                 $this->stats['perfect']++;
-            } elseif($rs < 27) {
+            } elseif ($rs < 27) {
                 $this->stats['goodFast']++;
-            } elseif($rs < 31) {
+            } elseif ($rs < 31) {
                 $this->stats['aBitFast']++;
-            } elseif($rs < 35) {
+            } elseif ($rs < 35) {
                 $this->stats['fastAcceptable']++;
-            } else{
+            } else {
                 $this->stats['tooFast']++;
             }
         }
+
+        return $this->stats;
     }
 }

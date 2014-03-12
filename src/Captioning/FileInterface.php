@@ -4,8 +4,6 @@ namespace Captioning;
 
 interface FileInterface
 {
-    public function load();
-
     public function parse();
 
     public function build();

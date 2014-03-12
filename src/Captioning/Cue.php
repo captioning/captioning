@@ -11,9 +11,6 @@ abstract class Cue implements CueInterface
     protected $startMS;
     protected $stopMS;
     protected $text;
-    protected $duration;
-    protected $CPS;
-    protected $readingSpeed;
 
     public function __construct($_start, $_stop, $_text)
     {
@@ -104,5 +101,43 @@ abstract class Cue implements CueInterface
         $dur = ($dur <= 500) ? $dur : 501;
 
         return ($this->strlen() * 1000) / ($dur - 500);
+    }
+
+    /**
+     * Set a delay (positive or negative)
+     *
+     * @param int $_time Delay in milliseconds
+     */
+    public function shift($_time = 0)
+    {
+        if (!is_int($_time)) {
+            return false;
+        }
+        if ($_time == 0) {
+            return true;
+        }
+
+        $start = $this->getStartMS();
+        $stop = $this->getStopMS();
+
+        $this->setStartMS($start + $_time);
+        $this->setStopMS($stop + $_time);
+        
+        return true;
+    }
+
+    public function scale($_baseTime, $_factor = 1)
+    {
+        if ($_factor == 1) {
+            return;
+        }
+        
+        $new_start = $_baseTime + (($this->getStartMS() - $_baseTime) * $_factor);
+        $new_stop = $_baseTime + (($this->getStopMS() - $_baseTime) * $_factor);
+
+        $this->setStartMS($new_start);
+        $this->setStopMS($new_stop);
+        
+        return true;
     }
 }

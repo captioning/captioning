@@ -14,7 +14,7 @@ class SubripCue extends Cue
         return $durMS;
     }
     
-    public static function ms2tc($ms)
+    public static function ms2tc($ms, $_separator = ',')
     {
         $tc_ms = round((($ms / 1000) - intval($ms / 1000)) * 1000);
         $x = $ms / 1000;
@@ -26,7 +26,7 @@ class SubripCue extends Cue
 
         $timecode = str_pad($tc_h, 2, '0', STR_PAD_LEFT).':'
             .str_pad($tc_m, 2, '0', STR_PAD_LEFT).':'
-            .str_pad($tc_s, 2, '0', STR_PAD_LEFT).','
+            .str_pad($tc_s, 2, '0', STR_PAD_LEFT).$_separator
             .str_pad($tc_ms, 3, '0', STR_PAD_LEFT);
 
         return $timecode;
@@ -60,7 +60,7 @@ class SubripCue extends Cue
         $repl = "";
         $text = preg_replace($patterns, $repl, $text);
 
-        if(count($_replacements) > 0){
+        if (count($_replacements) > 0) {
             $text = str_replace(array_keys($_replacements), array_values($_replacements), $text);
             $text = iconv('UTF-8', 'UTF-8//IGNORE', $text);
         }
@@ -86,7 +86,7 @@ class SubripCue extends Cue
     public function getReadingSpeed()
     {
         $dur = $this->getDuration();
-        $dur = ($dur <= 500) ? $dur : 501;
+        $dur = ($dur <= 500) ? 501 : $dur;
 
         return ($this->strlen() * 1000) / ($dur - 500);
     }

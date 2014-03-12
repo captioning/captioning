@@ -21,7 +21,7 @@ class SubripFile extends File
 
         for ($i = 0; $i < $entries_count; $i++) {
             $cue = new SubripCue($matches[1][$i], $matches[2][$i], $matches[3][$i]);
-            $this->cues[] = $cue;
+            $this->addCue($cue);
         }
     }
 
