@@ -389,8 +389,6 @@ abstract class File implements FileInterface
         for ($i = 0; $i < $this->getCuesCount(); $i++) {
             $rs = $this->getCue($i)->getReadingSpeed();
 
-            echo $rs."\n";
-
             if ($rs < 5) {
                 $this->stats['tooSlow']++;
             } elseif ($rs < 10) {
