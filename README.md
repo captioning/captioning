@@ -5,8 +5,8 @@ Captioning is a collection of tools made to help you create and modify subtitles
 
 * Subrip (.srt)
 * WebVTT (.vtt)
-* Substation Alpha (.ssa / .ass)
-* Timed Text (.dfxp)
+* [TODO] Substation Alpha (.ssa / .ass)
+* [TODO] Timed Text (.dfxp)
 
 # Installation
 
