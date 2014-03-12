@@ -1,7 +1,7 @@
 Captioning
 ==========
 
-Captioning is a collection of tools made to help you create and modify subtitles in differents formats:
+Captioning is a collection of tools made to help you create and edit subtitles in differents formats:
 
 * Subrip (.srt)
 * WebVTT (.vtt)
