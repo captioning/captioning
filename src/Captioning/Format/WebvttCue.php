@@ -30,6 +30,11 @@ class WebvttCue extends Cue
         $this->note = $_note;
     }
 
+    public function setIdentifier($_identifier)
+    {
+        $this->identifier = $_identifier;
+    }
+
     public function getSetting($_name)
     {
         return isset($this->settings[$_name]) ? $this->settings[$_name] : false;
@@ -38,5 +43,33 @@ class WebvttCue extends Cue
     public function getSettings()
     {
         return $this->settings;
+    }
+
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * Get the full timecode of the entry
+     *
+     * @return string
+     */
+    public function getTimeCodeString()
+    {
+        return $this->start.' --> '.$this->stop;
+    }
+
+    public function __toString()
+    {
+        $buffer = '';
+        if ($this->identifier !== null) {
+            $buffer .= $this->identifier."\n";
+        }
+        
+        $buffer .= $this->getTimeCodeString()."\n";
+        $buffer .= $this->getText()."\n";
+
+        return $buffer;
     }
 }

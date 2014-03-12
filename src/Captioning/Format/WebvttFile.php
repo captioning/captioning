@@ -102,6 +102,10 @@ class WebvttFile extends File
                                 $cue->setSetting($tmp2[0], $tmp2[1]);
                             }
 
+                            if ($id !== null) {
+                            	$cue->setIdentifier($id);
+                            }
+
                             $this->addCue($cue);
                             unset($cue);
 
@@ -137,11 +141,32 @@ class WebvttFile extends File
 
     public function build()
     {
-
+    	$this->buildPart(0, $this->getCuesCount()-1);
     }
 
     public function buildPart($_from, $_to)
     {
+    	$this->sortCues();
+        
+        $buffer = "WEBVTT\n";
 
+       	foreach ($this->regions as $region) {
+       		$buffer .= $region."\n";
+       	}
+       	$buffer .= "\n";
+
+        if ($_from < 0 || $_from >= $this->getCuesCount()) {
+            $_from = 0;
+        }
+
+        if ($_to < 0 || $_to >= $this->getCuesCount()) {
+            $_to = $this->getCuesCount()-1;
+        }
+
+        for ($j = $_from; $j <= $_to; $j++) {
+        	$buffer .= $this->getCue($j)."\n";
+        }
+        
+        $this->file_content = $buffer;
     }
 }

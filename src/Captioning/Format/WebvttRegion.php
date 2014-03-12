@@ -126,6 +126,8 @@ class WebvttRegion
                 continue;
             }
 
+            $tmp2 = array_map('trim', $tmp2);
+
             switch ($tmp2[0]) {
                 case 'id':
                     $obj->setId($tmp2[1]);
@@ -152,5 +154,18 @@ class WebvttRegion
         }
 
         return $obj;
+    }
+
+    public function __toString()
+    {
+        $buffer = 'Region:';
+        $buffer .= !is_null($this->id)             ? ' id='.$this->id : '';
+        $buffer .= !is_null($this->width)          ? ' width='.$this->width : '';
+        $buffer .= !is_null($this->lines)          ? ' lines='.$this->lines : '';
+        $buffer .= !is_null($this->regionAnchor)   ? ' regionanchor='.$this->regionAnchor : '';
+        $buffer .= !is_null($this->viewportAnchor) ? ' viewportanchor='.$this->viewportAnchor : '';
+        $buffer .= !is_null($this->scroll)         ? ' scroll='.$this->scroll : '';
+
+        return $buffer;
     }
 }
