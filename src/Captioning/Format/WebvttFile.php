@@ -12,7 +12,6 @@ class WebvttFile extends File
 
     public function parse()
     {
-    	//$buffer = file($this->filename);
         $handle = fopen($this->filename, "r");
         $parsing_errors = [];
 
@@ -51,7 +50,7 @@ class WebvttFile extends File
                             // note continues until there is a blank line
                             $continue = true;
                             while (trim($line = fgets($handle)) !== '') {
-                            	$note .= trim($line)."\n";
+                                $note .= trim($line)."\n";
                                 $i++;
                             }
                             continue;
@@ -103,7 +102,12 @@ class WebvttFile extends File
                             }
 
                             if ($id !== null) {
-                            	$cue->setIdentifier($id);
+                                $cue->setIdentifier($id);
+                            }
+
+                            if (!empty($note)) {
+                                $cue->setNote($note);
+                                unset($note);
                             }
 
                             $this->addCue($cue);
@@ -141,19 +145,19 @@ class WebvttFile extends File
 
     public function build()
     {
-    	$this->buildPart(0, $this->getCuesCount()-1);
+        $this->buildPart(0, $this->getCuesCount()-1);
     }
 
     public function buildPart($_from, $_to)
     {
-    	$this->sortCues();
+        $this->sortCues();
         
         $buffer = "WEBVTT\n";
 
-       	foreach ($this->regions as $region) {
-       		$buffer .= $region."\n";
-       	}
-       	$buffer .= "\n";
+        foreach ($this->regions as $region) {
+            $buffer .= $region."\n";
+        }
+        $buffer .= "\n";
 
         if ($_from < 0 || $_from >= $this->getCuesCount()) {
             $_from = 0;
@@ -164,7 +168,7 @@ class WebvttFile extends File
         }
 
         for ($j = $_from; $j <= $_to; $j++) {
-        	$buffer .= $this->getCue($j)."\n";
+            $buffer .= $this->getCue($j)."\n";
         }
         
         $this->file_content = $buffer;

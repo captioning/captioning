@@ -27,7 +27,7 @@ class WebvttCue extends Cue
 
     public function setNote($_note)
     {
-        $this->note = $_note;
+        $this->note = rtrim($_note);
     }
 
     public function setIdentifier($_identifier)
@@ -60,14 +60,35 @@ class WebvttCue extends Cue
         return $this->start.' --> '.$this->stop;
     }
 
+    public function getSettingsString()
+    {
+        $buffer = '';
+        foreach ($this->settings as $setting => $value) {
+            $buffer .= $setting.':'.$value.' ';
+        }
+
+        return trim($buffer);
+    }
+
     public function __toString()
     {
         $buffer = '';
+
+        if ($this->note !== null) {
+            $buffer .= 'NOTE '.$this->note."\n\n";
+        }
+
         if ($this->identifier !== null) {
             $buffer .= $this->identifier."\n";
         }
         
-        $buffer .= $this->getTimeCodeString()."\n";
+        $buffer .= $this->getTimeCodeString();
+
+        if (count($this->settings) > 0) {
+            $buffer .= ' '.$this->getSettingsString();
+        }
+
+        $buffer .= "\n";
         $buffer .= $this->getText()."\n";
 
         return $buffer;
