@@ -22,17 +22,25 @@ class WebvttCue extends Cue
 
     public function setSetting($_name, $_value)
     {
-        $this->settings[$_name] = $_value;
+        if (self::checkSetting($_name, $_value)) {
+            $this->settings[$_name] = $_value;
+        }
+
+        return $this;
     }
 
     public function setNote($_note)
     {
         $this->note = rtrim($_note);
+
+        return $this;
     }
 
     public function setIdentifier($_identifier)
     {
         $this->identifier = $_identifier;
+
+        return $this;
     }
 
     public function getSetting($_name)
@@ -48,6 +56,33 @@ class WebvttCue extends Cue
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    public static function checkSetting($_name, $_value)
+    {
+        switch ($_name) {
+            case 'region':
+                return true; // TODO: check if region defined in WebvttFile object
+                break;
+            case 'vertical':
+                return in_array($_value, ['rl', 'lr']);
+                break;
+            case 'line':
+                return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value) || in_array($_value, ['start', 'middle', 'end']);
+                break;
+            case 'size':
+                return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value);
+                break;
+            case 'position':
+                return in_array($_value, ['start', 'middle', 'end']);
+                break;
+            case 'align':
+                return in_array($_value, ['start', 'middle', 'end', 'left', 'right']);
+                break;
+            default:
+                return false;
+                break;
+        }
     }
 
     /**

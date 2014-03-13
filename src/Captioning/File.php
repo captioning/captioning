@@ -46,11 +46,15 @@ abstract class File implements FileInterface
     public function setFilename($_filename)
     {
         $this->filename = file_exists($_filename) ? $_filename : null;
+
+        return $this;
     }
 
     public function setEncoding($_encoding)
     {
         $this->encoding = $_encoding;
+
+        return $this;
     }
 
     public function getFilename()
@@ -99,6 +103,8 @@ abstract class File implements FileInterface
 
         $this->file_content .= "\n\n"; // fixes files missing blank lines at the end
         $this->encode();
+
+        return $this;
     }
 
     protected function encode()
@@ -139,7 +145,7 @@ abstract class File implements FileInterface
             $i++;
         }
 
-        return (count($list) > 0)?$list:-1;
+        return (count($list) > 0) ? $list : -1;
     }
 
     public function getCueFromStart($_start)
@@ -201,6 +207,8 @@ abstract class File implements FileInterface
         if (isset($this->cues[$_index])) {
             unset($this->cues[$_index]);
         }
+
+        return $this;
     }
 
     /**
@@ -222,6 +230,8 @@ abstract class File implements FileInterface
         foreach ($tmp as $cue) {
             $this->cues[] = $cue;
         }
+
+        return $this;
     }
 
     /**
@@ -243,6 +253,8 @@ abstract class File implements FileInterface
             $cue->setStart($new_start);
             $cue->setStop($new_stop);
         }
+
+        return $this;
     }
 
     public function merge($_file)
@@ -253,6 +265,8 @@ abstract class File implements FileInterface
             $this->cues = array_merge($this->cues, $_file->getCues());
             $this->sortCues();
         }
+
+        return $this;
     }
 
     /**

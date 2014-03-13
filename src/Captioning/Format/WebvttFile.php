@@ -130,12 +130,14 @@ class WebvttFile extends File
             return false;
         }
 
-        return true;
+        return $this;
     }
 
     public function addRegion(WebvttRegion $_region)
     {
         $this->regions[] = $_region;
+
+        return $this;
     }
 
     public function getRegions()
@@ -146,6 +148,8 @@ class WebvttFile extends File
     public function build()
     {
         $this->buildPart(0, $this->getCuesCount()-1);
+
+        return $this;
     }
 
     public function buildPart($_from, $_to)
@@ -172,5 +176,7 @@ class WebvttFile extends File
         }
         
         $this->file_content = $buffer;
+
+        return $this;
     }
 }

@@ -23,6 +23,8 @@ class SubripFile extends File
             $cue = new SubripCue($matches[1][$i], $matches[2][$i], $matches[3][$i]);
             $this->addCue($cue);
         }
+
+        return $this;
     }
 
     /**
@@ -35,6 +37,8 @@ class SubripFile extends File
     public function build($_stripTags = false, $_stripBasic = false, $_replacements = array())
     {
         $this->buildPart(0, $this->getCuesCount()-1, $_stripTags, $_stripBasic, $_replacements);
+
+        return $this;
     }
 
     /**
@@ -69,5 +73,7 @@ class SubripFile extends File
         }
         
         $this->file_content = $buffer;
+
+        return $this;
     }
 }
