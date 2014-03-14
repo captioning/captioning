@@ -26,4 +26,4 @@ composer update
 
 # Usage
 
-Examples and snippets on the [wiki](https://github.com/captioning/captioning/wiki).
+Examples and snippets in the [wiki](https://github.com/captioning/captioning/wiki).
