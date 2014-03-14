@@ -23,3 +23,7 @@ Then run:
 ``` sh
 composer update
 ```
+
+# Usage
+
+Examples and snippets on the [wiki](https://github.com/captioning/captioning/wiki).
