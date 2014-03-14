@@ -2,7 +2,6 @@
 
 namespace Captioning;
 
-use Captioning\FileInterface;
 use ForceUTF8\Encoding;
 
 abstract class File implements FileInterface
@@ -425,5 +424,17 @@ abstract class File implements FileInterface
         }
 
         return $this->stats;
+    }
+
+    public function convertTo($_output_format)
+    {
+        $fileFormat = explode('File', end(explode('\\', get_class($this))))[0];
+        $method = strtolower($fileFormat).'2'.strtolower(rtrim($_output_format, 'File'));
+
+        if (method_exists(new Converter(), $method)) {
+            return Converter::$method($this);
+        } else {
+            throw new \Exception('Converter::'.$method.' is not defined.');
+        }
     }
 }
