@@ -360,6 +360,13 @@ abstract class File implements FileInterface
         return true;
     }
 
+    public function build()
+    {
+        $this->buildPart(0, $this->getCuesCount()-1);
+
+        return $this;
+    }
+
     /**
      * Saves the file
      *

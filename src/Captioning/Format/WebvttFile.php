@@ -145,13 +145,6 @@ class WebvttFile extends File
         return $this->regions;
     }
 
-    public function build()
-    {
-        $this->buildPart(0, $this->getCuesCount()-1);
-
-        return $this;
-    }
-
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
