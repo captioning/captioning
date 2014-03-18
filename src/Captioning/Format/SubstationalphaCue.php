@@ -34,7 +34,20 @@ class SubstationalphaCue extends Cue
 
     public static function ms2tc($ms)
     {
-        return SubripCue::ms2tc($ms, '.');
+        $tc_ms = round((($ms / 1000) - intval($ms / 1000)) * 1000);
+        $x = $ms / 1000;
+        $tc_s = intval($x % 60);
+        $x /= 60;
+        $tc_m = intval($x % 60);
+        $x /= 60;
+        $tc_h = intval($x % 24);
+
+        $timecode = $tc_h.':'
+            .str_pad($tc_m, 2, '0', STR_PAD_LEFT).':'
+            .str_pad($tc_s, 2, '0', STR_PAD_LEFT).'.'
+            .substr(str_pad($tc_ms, 3, '0', STR_PAD_LEFT), 0, -1);
+
+        return $timecode;
     }
 
     public function setText($_text)

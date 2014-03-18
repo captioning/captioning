@@ -48,7 +48,6 @@ class WebvttFile extends File
                                 $note = trim(ltrim($line, 'NOTE '))."\n";
                             }
                             // note continues until there is a blank line
-                            $continue = true;
                             while (trim($line = fgets($handle)) !== '') {
                                 $note .= trim($line)."\n";
                                 $i++;

@@ -15,8 +15,6 @@ class SubstationalphaFile extends File
 
     public function __construct($_filename = null, $_encoding = null)
     {
-        parent::__construct($_filename, $_encoding);
-
         $this->headers = array(
             'Title'                => '<untitled>',
             'Original Script'      => '<unknown>',
@@ -66,6 +64,8 @@ class SubstationalphaFile extends File
         );
 
         $this->comments = array();
+
+        parent::__construct($_filename, $_encoding);
     }
 
     public function setHeader($_name, $_value)
@@ -114,7 +114,60 @@ class SubstationalphaFile extends File
 
     public function parse()
     {
-        // TODO: add headers and styles parsing
+        $handle = fopen($this->filename, "r");
+        $parsing_errors = [];
+
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+
+                // parsing headers
+                if (strtolower(trim($line)) === '[script info]') {
+                    while (trim($line = fgets($handle)) !== '') {
+                        if ($line[0] == ';') {
+                            $this->addComment(trim(ltrim($line, '; ')));
+                        } else {
+                            $tmp = explode(':', $line);
+                            if (count($tmp) == 2) {
+                                $this->setHeader(trim($tmp[0]), trim($tmp[1]));
+                            }
+                        }
+                    }
+                }
+
+                // parsing styles
+                if (strtolower(trim($line)) === '[v4+ styles]') {
+                    $line = fgets($handle);
+                    $tmp_styles = array();
+                    $tmp = explode(':', $line);
+                    if ($tmp[0] == 'Format') {
+                        $tmp2 = explode(',', $tmp[1]);
+
+                        foreach ($tmp2 as $s) {
+                            $tmp_styles[trim($s)] = null;
+                        }
+                    } else {
+                        return false;
+                    }
+
+                    $line = fgets($handle);
+                    $tmp = explode(':', $line);
+                    if ($tmp[0] == 'Style') {
+                        $tmp2 = explode(',', $tmp[1]);
+                        $i = 0;
+                        foreach ($tmp_styles as $s => $v) {
+                            $this->setStyle($s, trim($tmp2[$i]));
+                            $i++;
+                        }
+                    } else {
+                        return false;
+                    }
+                    break;
+                }
+            }
+        }
+        fclose($handle);
+
+        // TODO: dynamic parsing if events format is not the default one
         $matches = array();
         preg_match_all(self::PATTERN, $this->file_content, $matches);
         for ($i=0; $i < count($matches[1]); $i++) {
