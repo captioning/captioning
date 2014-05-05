@@ -14,7 +14,7 @@
     "license": "MIT",
     "type": "project",
     "description": "A collection of tools to manipulate subtitles",
-    "keywords": ["subrip","webvtt","subtitle"],
+    "keywords": ["subrip", "webvtt", "subtation", "srt", "vtt", "ssa", "ass", "subtitle"],
     "autoload": {
         "psr-0": {
             "Captioning": "src/"
