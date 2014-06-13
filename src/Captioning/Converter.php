@@ -55,10 +55,36 @@ class Converter
         return $srt;
     }
 
-    public static function webvtt2substationalpha(SubripFile $_srt)
+    public static function webvtt2substationalpha(WebvttFile $_vtt)
     {
-        return self::subrip2substationalpha($_srt);
+        return self::subrip2substationalpha(self::webvtt2subrip($_vtt));
     }
 
     /* substation alpha converters */
+    public static function substationalpha2subrip(SubstationalphaFile $_ass)
+    {
+        $srt = new SubripFile();
+        foreach ($_ass->getCues() as $cue) {
+            $search = array('\N', '\N', '\N', '{\i1}', '{\i0}', '{\b1}', '{\b0}', '{\u1}', '{\u0}');
+            $replace = array("\r\n", "\r", "\n", '<i>', '</i>', '<b>', '</b>', '<u>', '</u>');
+            $text = str_replace($search, $replace, $cue->getText());
+
+            $search_regex = array(
+                '#{\\c&H([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})\}(.+)#is'
+            );
+            $replace_regex = array(
+                '<font color="#$3$2$1">$4</font>'
+            );
+            $text = preg_replace($search_regex, $replace_regex, $text);
+
+            $srt->addCue($text, SubripCue::ms2tc($cue->getStartMS()), SubripCue::ms2tc($cue->getStopMS()));
+        }
+
+        return $srt;
+    }
+
+    public static function substationalpha2webvtt(SubstationalphaFile $_ass)
+    {
+        return self::subrip2webvtt(self::substationalpha2subrip($_ass));
+    }
 }
