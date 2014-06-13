@@ -5,7 +5,7 @@ Captioning is a collection of tools made to help you create and edit subtitles i
 
 * Subrip (.srt)
 * WebVTT (.vtt)
-* [WIP] Substation Alpha (.ass)
+* Substation Alpha (.ass)
 * [TODO] Timed Text (.dfxp)
 
 # Installation
@@ -21,7 +21,7 @@ Add the following to your composer.json file:
 Then run:
 
 ``` sh
-composer update
+composer install
 ```
 
 # Usage
