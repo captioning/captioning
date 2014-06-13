@@ -378,6 +378,10 @@ abstract class File implements FileInterface
             $filename = $this->filename;
         }
         
+        if (trim($this->file_content) == '') {
+            $this->build();
+        }
+
         $file_content = $this->file_content;
         if (strtolower($this->encoding) != 'utf-8') {
             $file_content = mb_convert_encoding($file_content, $this->encoding, 'UTF-8');
