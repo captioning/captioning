@@ -2,8 +2,6 @@
 
 namespace Captioning;
 
-use ForceUTF8\Encoding;
-
 abstract class File implements FileInterface
 {
     protected $cues;
@@ -108,7 +106,7 @@ abstract class File implements FileInterface
 
     protected function encode()
     {
-        $this->file_content = Encoding::toUTF8($this->file_content);
+        $this->file_content = mb_convert_encoding($this->file_content, 'UTF-8', $this->encoding);
     }
 
     /**

@@ -2,8 +2,7 @@
     "name": "captioning/captioning",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
-        "neitanod/forceutf8": "dev-master"
+        "php": ">=5.4.0"
     },
     "authors": [
         {

@@ -12,13 +12,9 @@ Captioning is a collection of tools made to help you create and edit subtitles i
 
 Add the following to your composer.json file:
 ``` json
+"require":
 {
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require":
-    {
-        "captioning/captioning": "1.*"
-    }
+    "captioning/captioning": "1.*"
 }
 ```
 
