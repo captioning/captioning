@@ -59,16 +59,8 @@ class WebvttRegion
         $x = intval($tmp[0]);
         $y = intval($tmp[1]);
 
-        if ($x < 0) {
-            $x = 0;
-        } elseif ($x > 100) {
-            $x = 100;
-        }
-        if ($y < 0) {
-            $y = 0;
-        } elseif ($y > 100) {
-            $y = 100;
-        }
+        $x = $x < 0 ? 0 : ($x > 100 ? 100 : $x);
+        $y = $y < 0 ? 0 : ($y > 100 ? 100 : $y);
 
         return $x.'%,'.$y.'%';
     }
@@ -108,7 +100,7 @@ class WebvttRegion
 
     public static function parseFromString($_string)
     {
-        $obj = new WebvttRegion();
+        $obj = new self();
 
         $tmp = explode(' ', $_string);
         if (count($tmp) == 1) {
