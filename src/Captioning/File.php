@@ -8,7 +8,7 @@ abstract class File implements FileInterface
     protected $filename;
     protected $encoding;
 
-    protected $file_content;
+    protected $fileContent;
 
     protected $stats;
 
@@ -61,7 +61,7 @@ abstract class File implements FileInterface
 
     public function getFileContent()
     {
-        return $this->file_content;
+        return $this->fileContent;
     }
 
     public function getEncoding()
@@ -94,11 +94,11 @@ abstract class File implements FileInterface
             throw new \Exception('File "'.$_filename.'" not found.');
         }
 
-        if (!($this->file_content = file_get_contents($this->filename))) {
+        if (!($this->fileContent = file_get_contents($this->filename))) {
             throw new \Exception('Cound not read file content ('.$_filename.').');
         }
 
-        $this->file_content .= "\n\n"; // fixes files missing blank lines at the end
+        $this->fileContent .= "\n\n"; // fixes files missing blank lines at the end
         $this->encode();
 
         return $this;
@@ -106,7 +106,7 @@ abstract class File implements FileInterface
 
     protected function encode()
     {
-        $this->file_content = mb_convert_encoding($this->file_content, 'UTF-8', $this->encoding);
+        $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
     }
 
     /**
@@ -241,11 +241,12 @@ abstract class File implements FileInterface
     {
         for ($i = 0; $i < $this->getCuesCount(); $i++) {
             $cue = $this->getCue($i);
+
             $old_start = $cue->getStart();
-            $old_stop = $cue->getStop();
+            $old_stop  = $cue->getStop();
 
             $new_start = $old_start * ($_new_fps / $_old_fps);
-            $new_stop = $old_stop * ($_new_fps / $_old_fps);
+            $new_stop  = $old_stop * ($_new_fps / $_old_fps);
 
             $cue->setStart($new_start);
             $cue->setStop($new_stop);
@@ -288,9 +289,9 @@ abstract class File implements FileInterface
         if (!$_endIndex) {
             $_endIndex = $this->getCuesCount() - 1;
         }
-        
+
         $startCue = $this->getCue($_startIndex);
-        $endCue = $this->getCue($_endIndex);
+        $endCue   = $this->getCue($_endIndex);
         
         //check subtitles do exist
         if (!$startCue || !$endCue) {
@@ -332,7 +333,7 @@ abstract class File implements FileInterface
     
         //check subtitles do exist
         $startSubtitle = $this->getCue($_startIndex);
-        $endSubtitle = $this->getCue($_endIndex);
+        $endSubtitle   = $this->getCue($_endIndex);
         if (!$startSubtitle || !$endSubtitle) {
             return false;
         }
@@ -376,11 +377,11 @@ abstract class File implements FileInterface
             $filename = $this->filename;
         }
         
-        if (trim($this->file_content) == '') {
+        if (trim($this->fileContent) == '') {
             $this->build();
         }
 
-        $file_content = $this->file_content;
+        $file_content = $this->fileContent;
         if (strtolower($this->encoding) != 'utf-8') {
             $file_content = mb_convert_encoding($file_content, $this->encoding, 'UTF-8');
         }

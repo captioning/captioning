@@ -26,9 +26,9 @@ class Converter
     {
         $ass = new SubstationalphaFile();
         foreach ($_srt->getCues() as $cue) {
-            $search = array("\r\n", "\r", "\n", '<i>', '</i>', '<b>', '</b>', '<u>', '</u>');
+            $search  = array("\r\n", "\r", "\n", '<i>', '</i>', '<b>', '</b>', '<u>', '</u>');
             $replace = array('\N', '\N', '\N', '{\i1}', '{\i0}', '{\b1}', '{\b0}', '{\u1}', '{\u0}');
-            $text = str_replace($search, $replace, $cue->getText());
+            $text    = str_replace($search, $replace, $cue->getText());
 
             $search_regex = array(
                 '#<font color="?\#?([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})"?>(.+)</font>#is'
@@ -65,9 +65,9 @@ class Converter
     {
         $srt = new SubripFile();
         foreach ($_ass->getCues() as $cue) {
-            $search = array('\N', '\N', '\N', '{\i1}', '{\i0}', '{\b1}', '{\b0}', '{\u1}', '{\u0}');
+            $search  = array('\N', '\N', '\N', '{\i1}', '{\i0}', '{\b1}', '{\b0}', '{\u1}', '{\u0}');
             $replace = array("\r\n", "\r", "\n", '<i>', '</i>', '<b>', '</b>', '<u>', '</u>');
-            $text = str_replace($search, $replace, $cue->getText());
+            $text    = str_replace($search, $replace, $cue->getText());
 
             $search_regex = array(
                 '#{\\c&H([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})\}(.+)#is'

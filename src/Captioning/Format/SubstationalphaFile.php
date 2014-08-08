@@ -169,7 +169,7 @@ class SubstationalphaFile extends File
 
         // TODO: dynamic parsing if events format is not the default one
         $matches = array();
-        preg_match_all(self::PATTERN, $this->file_content, $matches);
+        preg_match_all(self::PATTERN, $this->fileContent, $matches);
         for ($i=0; $i < count($matches[1]); $i++) {
             $cue = new SubstationalphaCue(
                 $matches[2][$i],
@@ -216,6 +216,6 @@ class SubstationalphaFile extends File
             $buffer .= $cue."\n";
         }
 
-        $this->file_content = $buffer;
+        $this->fileContent = $buffer;
     }
 }

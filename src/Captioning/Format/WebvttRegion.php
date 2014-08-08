@@ -64,10 +64,10 @@ class WebvttRegion
         } elseif ($x > 100) {
             $x = 100;
         }
-        if ($x < 0) {
-            $x = 0;
-        } elseif ($x > 100) {
-            $x = 100;
+        if ($y < 0) {
+            $y = 0;
+        } elseif ($y > 100) {
+            $y = 100;
         }
 
         return $x.'%,'.$y.'%';

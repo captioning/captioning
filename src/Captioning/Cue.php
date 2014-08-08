@@ -21,29 +21,29 @@ abstract class Cue implements CueInterface
 
     public function setStart($_start)
     {
-        $this->start = $_start;
-        $cueClass = get_class($this);
+        $this->start   = $_start;
+        $cueClass      = get_class($this);
         $this->startMS = $cueClass::tc2ms($this->start);
     }
 
     public function setStop($_stop)
     {
-        $this->stop = $_stop;
-        $cueClass = get_class($this);
+        $this->stop   = $_stop;
+        $cueClass     = get_class($this);
         $this->stopMS = $cueClass::tc2ms($this->stop);
     }
 
     public function setStartMS($_startMS)
     {
         $this->startMS = $_startMS;
-        $cueClass = get_class($this);
-        $this->start = $cueClass::ms2tc($this->startMS);
+        $cueClass      = get_class($this);
+        $this->start   = $cueClass::ms2tc($this->startMS);
     }
 
     public function setStopMS($_stop)
     {
-        $this->stop = $_stop;
-        $cueClass = get_class($this);
+        $this->stop   = $_stop;
+        $cueClass     = get_class($this);
         $this->stopMS = $cueClass::ms2tc($this->stop);
     }
 
@@ -118,7 +118,7 @@ abstract class Cue implements CueInterface
         }
 
         $start = $this->getStartMS();
-        $stop = $this->getStopMS();
+        $stop  = $this->getStopMS();
 
         $this->setStartMS($start + $_time);
         $this->setStopMS($stop + $_time);
@@ -133,7 +133,7 @@ abstract class Cue implements CueInterface
         }
         
         $new_start = $_baseTime + (($this->getStartMS() - $_baseTime) * $_factor);
-        $new_stop = $_baseTime + (($this->getStopMS() - $_baseTime) * $_factor);
+        $new_stop  = $_baseTime + (($this->getStopMS() - $_baseTime) * $_factor);
 
         $this->setStartMS($new_start);
         $this->setStopMS($new_stop);

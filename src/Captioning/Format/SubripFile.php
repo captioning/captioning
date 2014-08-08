@@ -11,7 +11,7 @@ class SubripFile extends File
     public function parse()
     {
         $matches = array();
-        $res = preg_match_all(self::PATTERN, $this->file_content, $matches);
+        $res = preg_match_all(self::PATTERN, $this->fileContent, $matches);
 
         if (!$res || $res == 0) {
             throw new \Exception($this->filename.' is not a proper .srt file.');
@@ -72,7 +72,7 @@ class SubripFile extends File
             $i++;
         }
         
-        $this->file_content = $buffer;
+        $this->fileContent = $buffer;
 
         return $this;
     }

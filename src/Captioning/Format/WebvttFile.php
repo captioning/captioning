@@ -167,7 +167,7 @@ class WebvttFile extends File
             $buffer .= $this->getCue($j)."\n";
         }
         
-        $this->file_content = $buffer;
+        $this->fileContent = $buffer;
 
         return $this;
     }
