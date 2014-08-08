@@ -4,6 +4,8 @@ namespace Captioning;
 
 abstract class File implements FileInterface
 {
+    const DEFAULT_ENCODING = 'UTF-8';
+
     protected $cues;
     protected $filename;
     protected $encoding;
@@ -20,6 +22,8 @@ abstract class File implements FileInterface
         
         if ($_encoding !== null) {
             $this->setEncoding($_encoding);
+        } else {
+            $this->encoding = self::DEFAULT_ENCODING;
         }
 
         if ($this->getFilename() !== null) {
