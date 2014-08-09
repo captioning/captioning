@@ -1,4 +1,4 @@
-Captioning
+Captioning [![Build Status](https://secure.travis-ci.org/captioning/captioning.png)](http://travis-ci.org/captioning/captioning)
 ==========
 
 Captioning is a collection of tools made to help you create and edit subtitles in different formats:
