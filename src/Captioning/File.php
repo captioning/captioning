@@ -28,7 +28,6 @@ abstract class File implements FileInterface
 
         if ($this->getFilename() !== null) {
             $this->load();
-            $this->parse();
         }
 
         $this->stats = array(
@@ -75,7 +74,19 @@ abstract class File implements FileInterface
 
     public function getCue($_index)
     {
-        return isset($this->cues[$_index]) ? $this->cues[$_index] : false;
+        return isset($this->cues[$_index]) ? $this->cues[$_index] : null;
+    }
+
+    public function getFirstCue()
+    {
+        return isset($this->cues[0]) ? $this->cues[0] : null;
+    }
+
+    public function getLastCue()
+    {
+        $count = count($this->cues);
+
+        return ($count > 0) ? $this->cues[$count - 1] : null;
     }
 
     public function getCues()
@@ -88,7 +99,7 @@ abstract class File implements FileInterface
         return count($this->cues);
     }
 
-    public function load($_filename = null)
+    private function load($_filename = null)
     {
         if ($_filename === null) {
             $_filename = $this->filename;
@@ -98,12 +109,21 @@ abstract class File implements FileInterface
             throw new \Exception('File "'.$_filename.'" not found.');
         }
 
-        if (!($this->fileContent = file_get_contents($this->filename))) {
+        if (!($content = file_get_contents($this->filename))) {
             throw new \Exception('Cound not read file content ('.$_filename.').');
         }
 
-        $this->fileContent .= "\n\n"; // fixes files missing blank lines at the end
+        $this->loadFromString($content);
+
+        return $this;
+    }
+
+    public function loadFromString($_str)
+    {
+        $this->fileContent = trim($_str)."\n\n";
+
         $this->encode();
+        $this->parse();
 
         return $this;
     }
