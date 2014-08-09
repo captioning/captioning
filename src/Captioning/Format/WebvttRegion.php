@@ -98,6 +98,54 @@ class WebvttRegion
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getLines()
+    {
+        return $this->lines;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegionAnchor()
+    {
+        return $this->regionAnchor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getScroll()
+    {
+        return $this->scroll;
+    }
+
+    /**
+     * @return string
+     */
+    public function getViewportAnchor()
+    {
+        return $this->viewportAnchor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
     public static function parseFromString($_string)
     {
         $obj = new self();

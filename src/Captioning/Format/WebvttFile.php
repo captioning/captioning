@@ -139,6 +139,15 @@ class WebvttFile extends File
         return $this;
     }
 
+    public function getRegion($_index)
+    {
+        if (!isset($this->regions[$_index])) {
+            return;
+        }
+
+        return $this->regions[$_index];
+    }
+
     public function getRegions()
     {
         return $this->regions;
