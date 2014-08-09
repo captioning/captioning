@@ -34,6 +34,8 @@ class SubripCue extends Cue
 
     public function getText($_stripTags = false, $_stripBasic = false, $_replacements = array())
     {
+        parent::getText();
+
         if ($_stripTags) {
             return $this->getStrippedText($_stripBasic, $_replacements);
         } else {

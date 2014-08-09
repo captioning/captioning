@@ -53,7 +53,9 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
         $filename = __DIR__.'/../../Fixtures/example-1.vtt';
         $file = new WebvttFile($filename);
 
-        $expectedCue =  new WebvttCue('00:00:00.000', '00:00:20.000', '<v Fred>Hi, my name is Fred');
+        $expectedCue = new WebvttCue('00:00:00.000', '00:00:20.000');
+        $expectedCue->addTextLine('<v Fred>Hi, my name is Fred,');
+        $expectedCue->addTextLine('nice to meet you.');
         $expectedCue->setSetting('region', 'fred');
         $expectedCue->setSetting('align', 'left');
 
@@ -66,7 +68,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
         $filename = __DIR__.'/../../Fixtures/example-1.vtt';
         $file = new WebvttFile($filename);
 
-        $expectedCue =  new WebvttCue('00:00:12.500', '00:00:32.500', "<v Fred>OK, let's go.");
+        $expectedCue = new WebvttCue('00:00:12.500', '00:00:32.500', "<v Fred>OK, let's go.");
         $expectedCue->setSetting('region', 'fred');
         $expectedCue->setSetting('align', 'left');
 

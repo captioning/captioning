@@ -43,13 +43,13 @@ class WebvttFile extends File
                         // parsing notes
                         if (substr($line, 0, 4) === 'NOTE') {
                             if (trim($line) === 'NOTE') {
-                                $note = "\n";
+                                $note = $this->lineEnding;
                             } else {
-                                $note = trim(ltrim($line, 'NOTE '))."\n";
+                                $note = trim(ltrim($line, 'NOTE ')).$this->lineEnding;
                             }
                             // note continues until there is a blank line
                             while (trim($line = fgets($handle)) !== '') {
-                                $note .= trim($line)."\n";
+                                $note .= trim($line).$this->lineEnding;
                                 $i++;
                             }
                             continue;
@@ -84,7 +84,7 @@ class WebvttFile extends File
 
                             // cue continues until there is a blank line
                             while (trim($line = fgets($handle)) !== '') {
-                                $text .= trim($line)."\n";
+                                $text .= trim($line).$this->lineEnding;
                             }
 
                             // make the cue object and add it to the file
@@ -157,12 +157,12 @@ class WebvttFile extends File
     {
         $this->sortCues();
         
-        $buffer = "WEBVTT\n";
+        $buffer = "WEBVTT".$this->lineEnding;
 
         foreach ($this->regions as $region) {
-            $buffer .= $region."\n";
+            $buffer .= $region.$this->lineEnding;
         }
-        $buffer .= "\n";
+        $buffer .= $this->lineEnding;
 
         if ($_from < 0 || $_from >= $this->getCuesCount()) {
             $_from = 0;
@@ -173,7 +173,7 @@ class WebvttFile extends File
         }
 
         for ($j = $_from; $j <= $_to; $j++) {
-            $buffer .= $this->getCue($j)."\n";
+            $buffer .= $this->getCue($j).$this->lineEnding;
         }
         
         $this->fileContent = $buffer;

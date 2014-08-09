@@ -6,9 +6,14 @@ abstract class File implements FileInterface
 {
     const DEFAULT_ENCODING = 'UTF-8';
 
+    const UNIX_LINE_ENDING    = "\n";
+    const MAC_LINE_ENDING     = "\r";
+    const WINDOWS_LINE_ENDING = "\r\n";
+
     protected $cues;
     protected $filename;
     protected $encoding;
+    protected $lineEnding;
 
     protected $fileContent;
 
@@ -16,10 +21,12 @@ abstract class File implements FileInterface
 
     public function __construct($_filename = null, $_encoding = null)
     {
+        $this->lineEnding = self::UNIX_LINE_ENDING;
+
         if ($_filename !== null) {
             $this->setFilename($_filename);
         }
-        
+
         if ($_encoding !== null) {
             $this->setEncoding($_encoding);
         } else {
@@ -55,6 +62,26 @@ abstract class File implements FileInterface
         $this->encoding = $_encoding;
 
         return $this;
+    }
+
+    public function setLineEnding($_lineEnding)
+    {
+        $lineEndings = [
+            self::UNIX_LINE_ENDING,
+            self::MAC_LINE_ENDING,
+            self::WINDOWS_LINE_ENDING
+        ];
+        if (!in_array($_lineEnding, $lineEndings)) {
+            return;
+        }
+
+        $this->lineEnding = $_lineEnding;
+
+        if ($this->getCuesCount() > 0) {
+            foreach ($this->cues as $cue) {
+                $cue->setLineEnding($this->lineEnding);
+            }
+        }
     }
 
     public function getFilename()
@@ -120,7 +147,7 @@ abstract class File implements FileInterface
 
     public function loadFromString($_str)
     {
-        $this->fileContent = trim($_str)."\n\n";
+        $this->fileContent = trim($_str).$this->lineEnding.$this->lineEnding;
 
         $this->encode();
         $this->parse();
@@ -207,12 +234,15 @@ abstract class File implements FileInterface
             if ($cueFormat !== $fileFormat) {
                 throw new \Exception("Can't add a $cueFormat cue in a $fileFormat file.");
             }
+            $_mixed->setLineEnding($this->lineEnding);
             $this->cues[] = $_mixed;
 
         } else {
             array_pop($fileClass);
             $cueClass = implode('\\', $fileClass).'\\'.$fileFormat.'Cue';
-            $this->cues[] = new $cueClass($_start, $_stop, $_mixed);
+            $cue = new $cueClass($_start, $_stop, $_mixed);
+            $cue->setLineEnding($this->lineEnding);
+            $this->cues[] = $cue;
         }
 
         return $this;

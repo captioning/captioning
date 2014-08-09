@@ -191,29 +191,29 @@ class SubstationalphaFile extends File
     public function buildPart($_from, $_to)
     {
         // headers
-        $buffer = '[Script Info]'."\n";
+        $buffer = '[Script Info]'.$this->lineEnding;
         foreach ($this->comments as $comment) {
-            $buffer .= '; '.str_replace("\n", "\n; ", $comment)."\n";
+            $buffer .= '; '.str_replace($this->lineEnding, $this->lineEnding."; ", $comment).$this->lineEnding;
         }
         foreach ($this->headers as $key => $value) {
             if ($value !==  null) {
-                $buffer .= $key.': '.$value."\n";
+                $buffer .= $key.': '.$value.$this->lineEnding;
             }
         }
-        $buffer .= "\n";
+        $buffer .= $this->lineEnding;
                 
         // styles
-        $buffer .= '[v4+ Styles]'."\n";
-        $buffer .= 'Format: '.implode(', ', array_keys($this->styles))."\n";
-        $buffer .= 'Style: '.implode(', ', array_values($this->styles))."\n";
+        $buffer .= '[v4+ Styles]'.$this->lineEnding;
+        $buffer .= 'Format: '.implode(', ', array_keys($this->styles)).$this->lineEnding;
+        $buffer .= 'Style: '.implode(', ', array_values($this->styles)).$this->lineEnding;
             
         // events (= cues)
-        $buffer .= "\n";
-        $buffer .= '[Events]'."\n";
-        $buffer .= 'Format: '.implode(', ', $this->events)."\n";
+        $buffer .= $this->lineEnding;
+        $buffer .= '[Events]'.$this->lineEnding;
+        $buffer .= 'Format: '.implode(', ', $this->events).$this->lineEnding;
 
         foreach ($this->cues as $cue) {
-            $buffer .= $cue."\n";
+            $buffer .= $cue.$this->lineEnding;
         }
 
         $this->fileContent = $buffer;

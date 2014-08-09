@@ -110,11 +110,11 @@ class WebvttCue extends Cue
         $buffer = '';
 
         if ($this->note !== null) {
-            $buffer .= 'NOTE '.$this->note."\n\n";
+            $buffer .= 'NOTE '.$this->note.$this->lineEnding.$this->lineEnding;
         }
 
         if ($this->identifier !== null) {
-            $buffer .= $this->identifier."\n";
+            $buffer .= $this->identifier.$this->lineEnding;
         }
         
         $buffer .= $this->getTimeCodeString();
@@ -123,8 +123,8 @@ class WebvttCue extends Cue
             $buffer .= ' '.$this->getSettingsString();
         }
 
-        $buffer .= "\n";
-        $buffer .= $this->getText()."\n";
+        $buffer .= $this->lineEnding;
+        $buffer .= $this->getText().$this->lineEnding;
 
         return $buffer;
     }

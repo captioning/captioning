@@ -14,7 +14,7 @@ class SubstationalphaCue extends Cue
     private $marginV;
     private $effect;
     
-    public function __construct($_start, $_stop, $_text, $_layer = 0, $_style = 'Default', $_name = '', $_marginL = '0000', $_marginR = '0000', $_marginV = '0000', $_effect = '')
+    public function __construct($_start, $_stop, $_text = null, $_layer = 0, $_style = 'Default', $_name = '', $_marginL = '0000', $_marginR = '0000', $_marginV = '0000', $_effect = '')
     {
         parent::__construct($_start, $_stop, $_text);
 

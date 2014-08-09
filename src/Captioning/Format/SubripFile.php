@@ -8,6 +8,8 @@ class SubripFile extends File
 {
     const PATTERN = '#[0-9]+(?:\r\n|\r|\n)([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3})(?:\r\n|\r|\n)((?:.*(?:\r\n|\r|\n))*?)(?:\r\n|\r|\n)#';
 
+    protected $lineEnding = File::WINDOWS_LINE_ENDING;
+
     public function parse()
     {
         $matches = array();
@@ -17,10 +19,11 @@ class SubripFile extends File
             throw new \Exception($this->filename.' is not a proper .srt file.');
         }
 
-        $entries_count = sizeof($matches[1]);
+        $entries_count = count($matches[1]);
 
         for ($i = 0; $i < $entries_count; $i++) {
             $cue = new SubripCue($matches[1][$i], $matches[2][$i], $matches[3][$i]);
+            $cue->setLineEnding($this->lineEnding);
             $this->addCue($cue);
         }
 
@@ -65,10 +68,10 @@ class SubripFile extends File
         }
 
         for ($j = $_from; $j <= $_to; $j++) {
-            $buffer .= $i."\r\n";
-            $buffer .= $this->getCue($j)->getTimeCodeString()."\r\n";
-            $buffer .= $this->getCue($j)->getText($_stripTags, $_stripBasic, $_replacements)."\r\n";
-            $buffer .= "\r\n";
+            $buffer .= $i.$this->lineEnding;
+            $buffer .= $this->getCue($j)->getTimeCodeString().$this->lineEnding;
+            $buffer .= $this->getCue($j)->getText($_stripTags, $_stripBasic, $_replacements).$this->lineEnding;
+            $buffer .= $this->lineEnding;
             $i++;
         }
         

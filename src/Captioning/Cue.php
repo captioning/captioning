@@ -11,12 +11,22 @@ abstract class Cue implements CueInterface
     protected $startMS;
     protected $stopMS;
     protected $text;
+    protected $textLines = array();
+    protected $lineEnding;
 
-    public function __construct($_start, $_stop, $_text)
+    public function __construct($_start, $_stop, $_text = '')
     {
+        $this->lineEnding = File::UNIX_LINE_ENDING;
+
         $this->setStart($_start);
         $this->setStop($_stop);
-        $this->setText($_text);
+
+        if (trim($_text) !== '') {
+            $this->setText($_text);
+        } else {
+            $this->text = '';
+        }
+
     }
 
     public function setStart($_start)
@@ -24,6 +34,8 @@ abstract class Cue implements CueInterface
         $this->start   = $_start;
         $cueClass      = get_class($this);
         $this->startMS = $cueClass::tc2ms($this->start);
+
+        return $this;
     }
 
     public function setStop($_stop)
@@ -31,6 +43,8 @@ abstract class Cue implements CueInterface
         $this->stop   = $_stop;
         $cueClass     = get_class($this);
         $this->stopMS = $cueClass::tc2ms($this->stop);
+
+        return $this;
     }
 
     public function setStartMS($_startMS)
@@ -38,6 +52,8 @@ abstract class Cue implements CueInterface
         $this->startMS = $_startMS;
         $cueClass      = get_class($this);
         $this->start   = $cueClass::ms2tc($this->startMS);
+
+        return $this;
     }
 
     public function setStopMS($_stop)
@@ -45,11 +61,31 @@ abstract class Cue implements CueInterface
         $this->stop   = $_stop;
         $cueClass     = get_class($this);
         $this->stopMS = $cueClass::ms2tc($this->stop);
+
+        return $this;
     }
 
     public function setText($_text)
     {
-        $this->text = trim($_text);
+        $this->parseTextLines($_text);
+        $this->getText();
+
+        return $this;
+    }
+
+    public function setLineEnding($_lineEnding)
+    {
+        $lineEndings = [
+            File::UNIX_LINE_ENDING,
+            File::MAC_LINE_ENDING,
+            File::WINDOWS_LINE_ENDING
+        ];
+
+        if (!in_array($_lineEnding, $lineEndings)) {
+            return;
+        }
+
+        $this->lineEnding = $_lineEnding;
     }
 
     public function getStart()
@@ -74,12 +110,49 @@ abstract class Cue implements CueInterface
 
     public function getText()
     {
+        $this->text = implode($this->lineEnding, $this->textLines);
+
         return $this->text;
     }
 
     public function getDuration()
     {
         return $this->stopMS - $this->startMS;
+    }
+
+    private function parseTextLines($_text)
+    {
+        if (trim($_text) === '') {
+            throw new \Exception('No text provided.');
+        }
+
+        $this->textLines = array_map('trim', preg_split('/$\R?^/m', $_text));
+    }
+
+    public function addTextLine($_line)
+    {
+        $split = array_map('trim', preg_split('/$\R?^/m', $_line));
+
+        if (count($split) > 1) {
+            foreach ($split as $splittedLine) {
+                $this->addTextLine($splittedLine);
+            }
+        } elseif (trim($_line) !== '') {
+            $this->textLines[] = $_line;
+            $this->getText();
+        }
+
+        return $this;
+    }
+
+    public function getTextLines()
+    {
+        return $this->textLines;
+    }
+
+    public function getTextLine($_index)
+    {
+        return isset($this->textLines[$_index]) ? $this->textLines[$_index] : null;
     }
 
     public function strlen()
