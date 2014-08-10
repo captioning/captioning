@@ -492,7 +492,8 @@ abstract class File implements FileInterface
 
     public function convertTo($_output_format)
     {
-        $fileFormat = explode('File', end(explode('\\', get_class($this))))[0];
+        $tmp = explode('\\', get_class($this));
+        $fileFormat = explode('File', end($tmp))[0];
         $method = strtolower($fileFormat).'2'.strtolower(rtrim($_output_format, 'File'));
 
         if (method_exists(new Converter(), $method)) {
