@@ -9,6 +9,7 @@ class SubstationalphaFile extends File
     const PATTERN = '#Dialogue: ([0-9]),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),(.*),(.*),([0-9]{4}),([0-9]{4}),([0-9]{4}),([^,]*),(.+)#';
 
     protected $headers;
+    protected $styleVersion;
     protected $styles;
     protected $events;
     protected $comments;
@@ -32,6 +33,8 @@ class SubstationalphaFile extends File
             'Timer'                => '100.0',
             'WrapStyle'            => 0
         );
+
+        $this->styleVersion = 'v4+';
 
         $this->styles = array(
             'Name'            => 'Default',
@@ -83,6 +86,16 @@ class SubstationalphaFile extends File
     public function getHeaders()
     {
         return $this->headers;
+    }
+
+    public function setStyleVersion($styleVersion)
+    {
+        $this->styleVersion = $styleVersion;
+    }
+
+    public function getStyleVersion()
+    {
+        return $this->styleVersion;
     }
 
     public function setStyle($_name, $_value)
@@ -220,7 +233,7 @@ class SubstationalphaFile extends File
         $buffer .= $this->lineEnding;
                 
         // styles
-        $buffer .= '[v4+ Styles]'.$this->lineEnding;
+        $buffer .= '['.$this->styleVersion.' Styles]'.$this->lineEnding;
         $buffer .= 'Format: '.implode(', ', array_keys($this->styles)).$this->lineEnding;
         $buffer .= 'Style: '.implode(', ', array_values($this->styles)).$this->lineEnding;
             
