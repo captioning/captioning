@@ -425,7 +425,7 @@ abstract class File implements FileInterface
      *
      * @param string $filename
      */
-    public function save($filename = null)
+    public function save($filename = null, $writeBOM = false)
     {
         if ($filename == null) {
             $filename = $this->filename;
@@ -439,7 +439,11 @@ abstract class File implements FileInterface
         if (strtolower($this->encoding) != 'utf-8') {
             $file_content = mb_convert_encoding($file_content, $this->encoding, 'UTF-8');
         }
-               
+
+        if ($writeBOM) {
+            $file_content = "\xef\xbb\xbf" . $file_content;
+        }
+
         $res = file_put_contents($filename, $file_content);
         if (!$res) {
             throw new \Exception('Unable to save the file.');
