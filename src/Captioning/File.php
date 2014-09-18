@@ -443,6 +443,7 @@ abstract class File implements FileInterface
      * Saves the file
      *
      * @param string $filename
+     * @param bool $writeBOM
      */
     public function save($filename = null, $writeBOM = false)
     {
