@@ -13,13 +13,14 @@ abstract class File implements FileInterface
     protected $cues;
     protected $filename;
     protected $encoding;
+    protected $useIconv;
     protected $lineEnding;
 
     protected $fileContent;
 
     protected $stats;
 
-    public function __construct($_filename = null, $_encoding = null)
+    public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
         $this->lineEnding = self::UNIX_LINE_ENDING;
 
@@ -32,6 +33,8 @@ abstract class File implements FileInterface
         } else {
             $this->encoding = self::DEFAULT_ENCODING;
         }
+
+        $this->useIconv = $_useIconv;
 
         if ($this->getFilename() !== null) {
             $this->load();
@@ -60,6 +63,13 @@ abstract class File implements FileInterface
     public function setEncoding($_encoding)
     {
         $this->encoding = $_encoding;
+
+        return $this;
+    }
+
+    public function setUseIconv($_useIconv)
+    {
+        $this->useIconv = $_useIconv;
 
         return $this;
     }
@@ -97,6 +107,11 @@ abstract class File implements FileInterface
     public function getEncoding()
     {
         return $this->encoding;
+    }
+
+    public function getUseIconv()
+    {
+        return $this->useIconv;
     }
 
     public function getCue($_index)
@@ -157,7 +172,11 @@ abstract class File implements FileInterface
 
     protected function encode()
     {
-        $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
+        if ($this->useIconv) {
+            $this->fileContent = iconv($this->encoding, 'UTF-8', $this->fileContent);
+        } else {
+            $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
+        }
     }
 
     /**
@@ -437,7 +456,11 @@ abstract class File implements FileInterface
 
         $file_content = $this->fileContent;
         if (strtolower($this->encoding) != 'utf-8') {
-            $file_content = mb_convert_encoding($file_content, $this->encoding, 'UTF-8');
+            if ($this->useIconv) {
+                $file_content = iconv('UTF-8', $this->encoding, $file_content);
+            } else {
+                $file_content = mb_convert_encoding($file_content, $this->encoding, 'UTF-8');
+            }
         }
                
         $res = file_put_contents($filename, $file_content);
