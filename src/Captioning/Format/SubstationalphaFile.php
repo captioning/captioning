@@ -9,11 +9,12 @@ class SubstationalphaFile extends File
     const PATTERN = '#Dialogue: ([0-9]),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),(.*),(.*),([0-9]{4}),([0-9]{4}),([0-9]{4}),([^,]*),(.+)#';
 
     protected $headers;
+    protected $styleVersion;
     protected $styles;
     protected $events;
     protected $comments;
 
-    public function __construct($_filename = null, $_encoding = null)
+    public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
         $this->headers = array(
             'Title'                => '<untitled>',
@@ -32,6 +33,8 @@ class SubstationalphaFile extends File
             'Timer'                => '100.0',
             'WrapStyle'            => 0
         );
+
+        $this->styleVersion = 'v4+';
 
         $this->styles = array(
             'Name'            => 'Default',
@@ -56,6 +59,7 @@ class SubstationalphaFile extends File
             'MarginL'         => 15,
             'MarginR'         => 15,
             'MarginV'         => 15,
+            'AlphaLevel'      => 0,
             'Encoding'        => 0
         );
         
@@ -65,7 +69,7 @@ class SubstationalphaFile extends File
 
         $this->comments = array();
 
-        parent::__construct($_filename, $_encoding);
+        parent::__construct($_filename, $_encoding, $_useIconv);
     }
 
     public function setHeader($_name, $_value)
@@ -85,6 +89,28 @@ class SubstationalphaFile extends File
         return $this->headers;
     }
 
+    public function setStyleVersion($styleVersion)
+    {
+        $this->styleVersion = $styleVersion;
+    }
+
+    public function getStyleVersion()
+    {
+        return $this->styleVersion;
+    }
+
+    public function setEvents($_events)
+    {
+        if (!empty($_events) && is_array($_events)) {
+            $this->events = $_events;
+        }
+    }
+
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
     public function setStyle($_name, $_value)
     {
         if (isset($this->styles[$_name])) {
@@ -100,6 +126,11 @@ class SubstationalphaFile extends File
     public function getStyles()
     {
         return $this->styles;
+    }
+
+    public function setStyles($_styles)
+    {
+        $this->styles = $_styles;
     }
 
     public function addComment($_comment)
@@ -203,7 +234,7 @@ class SubstationalphaFile extends File
         $buffer .= $this->lineEnding;
                 
         // styles
-        $buffer .= '[v4+ Styles]'.$this->lineEnding;
+        $buffer .= '['.$this->styleVersion.' Styles]'.$this->lineEnding;
         $buffer .= 'Format: '.implode(', ', array_keys($this->styles)).$this->lineEnding;
         $buffer .= 'Style: '.implode(', ', array_values($this->styles)).$this->lineEnding;
             
