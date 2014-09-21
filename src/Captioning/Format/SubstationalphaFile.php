@@ -59,6 +59,7 @@ class SubstationalphaFile extends File
             'MarginL'         => 15,
             'MarginR'         => 15,
             'MarginV'         => 15,
+            'AlphaLevel'      => 0,
             'Encoding'        => 0
         );
         
@@ -98,6 +99,18 @@ class SubstationalphaFile extends File
         return $this->styleVersion;
     }
 
+    public function setEvents($_events)
+    {
+        if (!empty($_events) && is_array($_events)) {
+            $this->events = $_events;
+        }
+    }
+
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
     public function setStyle($_name, $_value)
     {
         if (isset($this->styles[$_name])) {
@@ -113,6 +126,11 @@ class SubstationalphaFile extends File
     public function getStyles()
     {
         return $this->styles;
+    }
+
+    public function setStyles($_styles)
+    {
+        $this->styles = $_styles;
     }
 
     public function addComment($_comment)
