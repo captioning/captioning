@@ -13,7 +13,7 @@ class SubstationalphaFile extends File
     protected $events;
     protected $comments;
 
-    public function __construct($_filename = null, $_encoding = null)
+    public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
         $this->headers = array(
             'Title'                => '<untitled>',
@@ -65,7 +65,7 @@ class SubstationalphaFile extends File
 
         $this->comments = array();
 
-        parent::__construct($_filename, $_encoding);
+        parent::__construct($_filename, $_encoding, $_useIconv);
     }
 
     public function setHeader($_name, $_value)
