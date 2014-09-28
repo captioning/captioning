@@ -56,7 +56,6 @@ class SubstationalphaFile extends File
             'MarginL'         => 15,
             'MarginR'         => 15,
             'MarginV'         => 15,
-            'AlphaLevel'      => 0,
             'Encoding'        => 0
         );
         
