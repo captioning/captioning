@@ -65,19 +65,19 @@ class WebvttCue extends Cue
                 return true;
                 break;
             case 'vertical':
-                return in_array($_value, ['rl', 'lr']);
+                return in_array($_value, array('rl', 'lr'));
                 break;
             case 'line':
-                return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value) || in_array($_value, ['start', 'middle', 'end']);
+                return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value) || in_array($_value, array('start', 'middle', 'end'));
                 break;
             case 'size':
                 return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value);
                 break;
             case 'position':
-                return in_array($_value, ['start', 'middle', 'end']);
+                return in_array($_value, array('start', 'middle', 'end'));
                 break;
             case 'align':
-                return in_array($_value, ['start', 'middle', 'end', 'left', 'right']);
+                return in_array($_value, array('start', 'middle', 'end', 'left', 'right'));
                 break;
             default:
                 return false;

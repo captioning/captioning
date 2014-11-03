@@ -13,7 +13,7 @@ class SubstationalphaCue extends Cue
     private $marginR;
     private $marginV;
     private $effect;
-    
+
     public function __construct($_start, $_stop, $_text = null, $_layer = 0, $_style = 'Default', $_name = '', $_marginL = '0000', $_marginR = '0000', $_marginV = '0000', $_effect = '')
     {
         parent::__construct($_start, $_stop, $_text);
@@ -115,7 +115,7 @@ class SubstationalphaCue extends Cue
 
     public function __toString()
     {
-        $params = [
+        $params = array(
             $this->layer,
             $this->start,
             $this->stop,
@@ -126,8 +126,8 @@ class SubstationalphaCue extends Cue
             $this->marginV,
             $this->effect,
             $this->text
-        ];
-        
+        );
+
         $buffer = 'Dialogue: ';
         $buffer .= implode(',', $params);
 
