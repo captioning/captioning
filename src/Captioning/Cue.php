@@ -75,11 +75,11 @@ abstract class Cue implements CueInterface
 
     public function setLineEnding($_lineEnding)
     {
-        $lineEndings = [
+        $lineEndings = array(
             File::UNIX_LINE_ENDING,
             File::MAC_LINE_ENDING,
             File::WINDOWS_LINE_ENDING
-        ];
+        );
 
         if (!in_array($_lineEnding, $lineEndings)) {
             return;
@@ -195,7 +195,7 @@ abstract class Cue implements CueInterface
 
         $this->setStartMS($start + $_time);
         $this->setStopMS($stop + $_time);
-        
+
         return true;
     }
 
@@ -204,13 +204,13 @@ abstract class Cue implements CueInterface
         if ($_factor == 1) {
             return;
         }
-        
+
         $new_start = $_baseTime + (($this->getStartMS() - $_baseTime) * $_factor);
         $new_stop  = $_baseTime + (($this->getStopMS() - $_baseTime) * $_factor);
 
         $this->setStartMS($new_start);
         $this->setStopMS($new_stop);
-        
+
         return true;
     }
 }
