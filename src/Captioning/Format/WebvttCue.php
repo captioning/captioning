@@ -62,7 +62,7 @@ class WebvttCue extends Cue
     {
         switch ($_name) {
             case 'region':
-                return true; // TODO: check if region defined in WebvttFile object
+                return true;
                 break;
             case 'vertical':
                 return in_array($_value, ['rl', 'lr']);
@@ -116,7 +116,7 @@ class WebvttCue extends Cue
         if ($this->identifier !== null) {
             $buffer .= $this->identifier.$this->lineEnding;
         }
-        
+
         $buffer .= $this->getTimeCodeString();
 
         if (count($this->settings) > 0) {
