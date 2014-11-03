@@ -92,7 +92,7 @@ class WebvttFile extends File
                             $tmp = explode(' ', trim($settings));
                             foreach ($tmp as $setting) {
                                 $tmp2 = explode(':', $setting);
-                                
+
                                 if (count($tmp2) !== 2) {
                                     continue;
                                 }
@@ -126,7 +126,6 @@ class WebvttFile extends File
 
         if (count($parsing_errors) > 0) {
             throw new \Exception('The following errors were found while parsing the file:'."\n".print_r($parsing_errors, true));
-            return false;
         }
 
         return $this;
@@ -156,7 +155,7 @@ class WebvttFile extends File
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
-        
+
         $buffer = "WEBVTT".$this->lineEnding;
 
         foreach ($this->regions as $region) {
@@ -175,7 +174,7 @@ class WebvttFile extends File
         for ($j = $_from; $j <= $_to; $j++) {
             $buffer .= $this->getCue($j).$this->lineEnding;
         }
-        
+
         $this->fileContent = $buffer;
 
         return $this;
