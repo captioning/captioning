@@ -67,9 +67,13 @@ class WebvttRegion
 
     public function setRegionAnchor($_regionAnchor)
     {
+        if (null === $_regionAnchor) {
+            return;
+        }
+
         $_value = self::checkAnchorValues($_regionAnchor);
         if (!$_value) {
-            throw new \Exception('Invalid region anchor value, must be "XX%,YY%"');
+            throw new \Exception('Invalid region anchor value, must be "XX%,YY%", "'.$_regionAnchor.'" given.');
         }
         $this->regionAnchor = $_value;
 
@@ -78,6 +82,10 @@ class WebvttRegion
 
     public function setViewportAnchor($_viewportAnchor)
     {
+        if (null === $_viewportAnchor) {
+            return;
+        }
+
         $_value = self::checkAnchorValues($_viewportAnchor);
         if (!$_value) {
             throw new \Exception('Invalid viewport anchor value, must be "XX%,YY%"');
