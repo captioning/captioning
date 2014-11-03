@@ -76,11 +76,11 @@ abstract class File implements FileInterface
 
     public function setLineEnding($_lineEnding)
     {
-        $lineEndings = [
+        $lineEndings = array(
             self::UNIX_LINE_ENDING,
             self::MAC_LINE_ENDING,
             self::WINDOWS_LINE_ENDING
-        ];
+        );
         if (!in_array($_lineEnding, $lineEndings)) {
             return;
         }
@@ -241,12 +241,14 @@ abstract class File implements FileInterface
      */
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
-        $fileClass = explode('\\', get_class($this));
-        $fileFormat = explode('File', end($fileClass))[0];
+        $fileClass  = explode('\\', get_class($this));
+        $tmp        = explode('File', end($fileClass));
+        $fileFormat = $tmp[0];
 
         if (is_subclass_of($_mixed, __NAMESPACE__.'\Cue')) {
-            $cueClass = explode('\\', get_class($_mixed));
-            $cueFormat = explode('Cue', end($cueClass))[0];
+            $cueClass  = explode('\\', get_class($_mixed));
+            $tmp       = explode('Cue', end($cueClass));
+            $cueFormat = $tmp[0];
 
             if ($cueFormat !== $fileFormat) {
                 throw new \Exception("Can't add a $cueFormat cue in a $fileFormat file.");
@@ -520,9 +522,10 @@ abstract class File implements FileInterface
 
     public function convertTo($_output_format)
     {
-        $tmp = explode('\\', get_class($this));
-        $fileFormat = explode('File', end($tmp))[0];
-        $method = strtolower($fileFormat).'2'.strtolower(rtrim($_output_format, 'File'));
+        $tmp        = explode('\\', get_class($this));
+        $tmp2       = explode('File', end($tmp));
+        $fileFormat = $tmp2[0];
+        $method     = strtolower($fileFormat).'2'.strtolower(rtrim($_output_format, 'File'));
 
         if (method_exists(new Converter(), $method)) {
             return Converter::$method($this);
