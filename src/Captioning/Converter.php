@@ -5,7 +5,6 @@ namespace Captioning;
 use Captioning\Format\SubripFile;
 use Captioning\Format\SubripCue;
 use Captioning\Format\WebvttFile;
-use Captioning\Format\WebvttCue;
 use Captioning\Format\SubstationalphaFile;
 use Captioning\Format\SubstationalphaCue;
 
