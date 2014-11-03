@@ -183,7 +183,6 @@ class SubstationalphaFile extends File
         }
         fclose($handle);
 
-        // TODO: dynamic parsing if events format is not the default one
         $matches = array();
         preg_match_all(self::PATTERN, $this->fileContent, $matches);
         $matchesCount = count($matches[1]);
