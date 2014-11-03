@@ -135,7 +135,7 @@ abstract class File implements FileInterface
     {
         return $this->cues;
     }
-    
+
     public function getCuesCount()
     {
         return count($this->cues);
@@ -203,7 +203,7 @@ abstract class File implements FileInterface
         if (!$_case_sensitive) {
             $pattern .= 'i';
         }
-        
+
         $i = 0;
         foreach ($this->cues as $cue) {
             if (preg_match($pattern, $cue->getText())) {
@@ -220,11 +220,9 @@ abstract class File implements FileInterface
         $start = is_int($_start) ? $_start : self::tc2ms($_start);
 
         $prev_stop = 0;
-        $res = false;
         $i = 0;
         foreach ($this->cues as $cue) {
             if (($start > $prev_stop && $start < $cue->getStart()) || ($start >= $cue->getStart() && $start < $cue->getStop())) {
-                $res = $cue;
                 break;
             }
             $prev_stop = $cue->getStop();
@@ -312,7 +310,8 @@ abstract class File implements FileInterface
      */
     public function changeFPS($_old_fps, $_new_fps)
     {
-        for ($i = 0; $i < $this->getCuesCount(); $i++) {
+        $cuesCount = $this->getCuesCount();
+        for ($i = 0; $i < $cuesCount; $i++) {
             $cue = $this->getCue($i);
 
             $old_start = $cue->getStart();
@@ -365,27 +364,27 @@ abstract class File implements FileInterface
 
         $startCue = $this->getCue($_startIndex);
         $endCue   = $this->getCue($_endIndex);
-        
+
         //check subtitles do exist
         if (!$startCue || !$endCue) {
             return false;
         }
-        
+
         for ($i = $_startIndex; $i < $_endIndex; $i++) {
                 $cue = $this->getCue($i);
                 $cue->shift($_time);
         }
-        
+
         return true;
     }
 
     /**
      * Auto syncs a range of subtitles given their first and last correct times.
-     * The subtitles are first shifted to the first subtitle's correct time, and then proportionally 
+     * The subtitles are first shifted to the first subtitle's correct time, and then proportionally
      * adjusted using the last subtitle's correct time.
-     * 
+     *
      * Based on gnome-subtitles (https://git.gnome.org/browse/gnome-subtitles/)
-     * 
+     *
      * @param int $_startIndex The subtitle index to start the adjustment with.
      * @param int $_startTime The correct start time for the first subtitle.
      * @param int $_endIndex The subtitle index to end the adjustment with.
@@ -393,7 +392,7 @@ abstract class File implements FileInterface
      * @param bool $_syncLast Whether to sync the last subtitle.
      * @return bool Whether the subtitles could be adjusted
     */
-    
+
     public function sync($_startIndex, $_startTime, $_endIndex, $_endTime, $_syncLast = true)
     {
         //set first and last subtitles index
@@ -403,18 +402,18 @@ abstract class File implements FileInterface
         if (!$_endIndex) {
             $_endIndex = $this->getCuesCount() - 1;
         }
-    
+
         //check subtitles do exist
         $startSubtitle = $this->getCue($_startIndex);
         $endSubtitle   = $this->getCue($_endIndex);
         if (!$startSubtitle || !$endSubtitle) {
             return false;
         }
-        
+
         if (!($_startTime < $_endTime)) {
             return false;
         }
-        
+
         $shift = $_startTime - $startSubtitle->getStartMS();
         $factor = ($_endTime - $_startTime) / ($endSubtitle->getStartMS() - $startSubtitle->getStartMS());
 
@@ -428,7 +427,7 @@ abstract class File implements FileInterface
             $cue = $this->getCue($index);
             $cue->scale($_startTime, $factor);
         }
-                
+
         return true;
     }
 
@@ -447,10 +446,10 @@ abstract class File implements FileInterface
      */
     public function save($filename = null, $writeBOM = false)
     {
-        if ($filename == null) {
+        if ($filename === null) {
             $filename = $this->filename;
         }
-        
+
         if (trim($this->fileContent) == '') {
             $this->build();
         }
@@ -475,7 +474,7 @@ abstract class File implements FileInterface
     }
 
     /**
-     * Computes reading speed statistics 
+     * Computes reading speed statistics
      */
     public function getStats()
     {
@@ -491,7 +490,8 @@ abstract class File implements FileInterface
             'tooFast'        => 0
         );
 
-        for ($i = 0; $i < $this->getCuesCount(); $i++) {
+        $cuesCount = $this->getCuesCount();
+        for ($i = 0; $i < $cuesCount; $i++) {
             $rs = $this->getCue($i)->getReadingSpeed();
 
             if ($rs < 5) {

@@ -58,7 +58,7 @@ class SubstationalphaFile extends File
             'MarginV'         => 15,
             'Encoding'        => 0
         );
-        
+
         $this->events = array(
             'Layer', 'Start', 'End', 'Style', 'Name', 'MarginL', 'MarginR', 'MarginV', 'Effect', 'Text'
         );
@@ -115,7 +115,6 @@ class SubstationalphaFile extends File
     public function parse()
     {
         $handle = fopen($this->filename, "r");
-        $parsing_errors = [];
 
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
@@ -170,7 +169,8 @@ class SubstationalphaFile extends File
         // TODO: dynamic parsing if events format is not the default one
         $matches = array();
         preg_match_all(self::PATTERN, $this->fileContent, $matches);
-        for ($i=0; $i < count($matches[1]); $i++) {
+        $matchesCount = count($matches[1]);
+        for ($i=0; $i < $matchesCount; $i++) {
             $cue = new SubstationalphaCue(
                 $matches[2][$i],
                 $matches[3][$i],
@@ -201,12 +201,12 @@ class SubstationalphaFile extends File
             }
         }
         $buffer .= $this->lineEnding;
-                
+
         // styles
         $buffer .= '[v4+ Styles]'.$this->lineEnding;
         $buffer .= 'Format: '.implode(', ', array_keys($this->styles)).$this->lineEnding;
         $buffer .= 'Style: '.implode(', ', array_values($this->styles)).$this->lineEnding;
-            
+
         // events (= cues)
         $buffer .= $this->lineEnding;
         $buffer .= '[Events]'.$this->lineEnding;
