@@ -13,7 +13,7 @@ class WebvttFile extends File
     public function parse()
     {
         $handle = fopen($this->filename, "r");
-        $parsing_errors = [];
+        $parsing_errors = array();
 
         if ($handle) {
             $case = 'header';
@@ -57,7 +57,7 @@ class WebvttFile extends File
 
                         // parsing cues
                         $id_match = !strstr($line, '-->') && trim($line) != '';
-                        $matches = [];
+                        $matches = array();
                         $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
                         if ($id_match || $timecode_match) {
                             $id       = null;
@@ -70,7 +70,7 @@ class WebvttFile extends File
                                 $id = $line;
 
                                 $line = fgets($handle);
-                                $matches = [];
+                                $matches = array();
                                 $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
                             }
 
