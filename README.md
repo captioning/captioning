@@ -1,4 +1,4 @@
-Captioning [![Build Status](https://secure.travis-ci.org/captioning/captioning.png)](http://travis-ci.org/captioning/captioning)
+Captioning [![Build Status](https://secure.travis-ci.org/captioning/captioning.png)](http://travis-ci.org/captioning/captioning) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c6cb7b96-0629-45e5-9f9f-a256a5866cb0/mini.png)](https://insight.sensiolabs.com/projects/c6cb7b96-0629-45e5-9f9f-a256a5866cb0)
 ==========
 
 Captioning is a collection of tools made to help you create and edit subtitles in different formats:
