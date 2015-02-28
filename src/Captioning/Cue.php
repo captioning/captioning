@@ -202,7 +202,7 @@ abstract class Cue implements CueInterface
     public function scale($_baseTime, $_factor = 1)
     {
         if ($_factor == 1) {
-            return;
+            return false;
         }
 
         $new_start = $_baseTime + (($this->getStartMS() - $_baseTime) * $_factor);
