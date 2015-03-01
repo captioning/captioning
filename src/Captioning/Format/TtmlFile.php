@@ -65,10 +65,25 @@ class TtmlFile extends File
         $head = $xml->head;
 
         // parsing styles
-        $this->styles = $this->parseAttributes($head->styling->style);
+        foreach ($head->styling->style as $style) {
+            $styleData = $this->parseAttributes($style);
+            $this->styles[$styleData['id']] = $styleData;
+        }
 
         // parsing regions
-        $this->regions = $this->parseAttributes($head->layout->region);
+        $regions = $head->layout->region;
+        foreach($regions as $region) {
+            $regionData = $this->parseAttributes($region);
+            $this->regions[$regionData['id']] = $regionData;
+
+            if ($region->style) {
+                $regionAttr = array();
+                foreach ($region->style as $regionStyle) {
+                    $regionAttr = array_merge($regionAttr, $this->parseAttributes($regionStyle));
+                }
+                $this->regions[$regionData['id']] = array_merge($this->regions[$regionData['id']], $regionAttr);
+            }
+        }
 
         // parsing cues
         $this->parseCues($xml->body);
@@ -76,20 +91,17 @@ class TtmlFile extends File
 
     private function parseAttributes($_node, $_namespace = 'tts')
     {
-        $res = array();
+        $attributes = array();
 
-        foreach($_node as $child) {
-            $attributes = array();
-            $id         = (string)$child->attributes('xml', true)->id;
-
-            foreach($child->attributes($_namespace, true) as $property => $value) {
-                $attributes[(string)$property] = (string)$value;
-            }
-
-            $res[$id] = $attributes;
+        foreach ($_node->attributes($_namespace, true) as $property => $value) {
+            $attributes[(string)$property] = (string)$value;
         }
 
-        return $res;
+        if ($_node->attributes('xml', true)->id) {
+            $attributes['id'] = (string)$_node->attributes('xml', true)->id;
+        }
+
+        return $attributes;
     }
 
     private function parseCues($_xml)
@@ -110,9 +122,14 @@ class TtmlFile extends File
 
             $cue->setStartMS($startMS);
             $cue->setStopMS($stopMS);
-
-            $cue->setStyle((string)$p->attributes()->style);
             $cue->setId((string)$p->attributes('xml', true)->id);
+
+            if ($p->attributes()->style) {
+                $cue->setStyle((string)$p->attributes()->style);
+            }
+            if ($p->attributes()->region) {
+                $cue->setRegion((string)$p->attributes()->region);
+            }
 
             $this->addCue($cue);
         }
@@ -130,6 +147,11 @@ class TtmlFile extends File
             throw new \InvalidArgumentException(sprintf('Invalid cue style "%s"', $_mixed->getStyle()));
         }
 
+        if (__NAMESPACE__.'\TtmlCue' === get_class($_mixed)
+            && null !== $_mixed->getRegion() && !isset($this->regions[$_mixed->getRegion()])) {
+            throw new \InvalidArgumentException(sprintf('Invalid cue region "%s"', $_mixed->getRegion()));
+        }
+
         return parent::addCue($_mixed, $_start, $_stop);
     }
 
@@ -145,6 +167,20 @@ class TtmlFile extends File
         }
 
         return $this->styles[$_style_id];
+    }
+
+    public function getRegions()
+    {
+        return $this->regions;
+    }
+
+    public function getRegion($_region_id)
+    {
+        if (!isset($this->regions[$_region_id])) {
+            throw new \InvalidArgumentException;
+        }
+
+        return $this->regions[$_region_id];
     }
 
 
