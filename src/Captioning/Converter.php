@@ -4,6 +4,8 @@ namespace Captioning;
 
 use Captioning\Format\SubripFile;
 use Captioning\Format\SubripCue;
+use Captioning\Format\TtmlFile;
+use Captioning\Format\TtmlCue;
 use Captioning\Format\WebvttFile;
 use Captioning\Format\SubstationalphaFile;
 use Captioning\Format\SubstationalphaCue;
@@ -85,5 +87,29 @@ class Converter
     public static function substationalpha2webvtt(SubstationalphaFile $_ass)
     {
         return self::subrip2webvtt(self::substationalpha2subrip($_ass));
+    }
+
+    /* ttml converters */
+    public static function ttml2subrip(TtmlFile $_ttml)
+    {
+        $srt = new SubripFile();
+        foreach ($_ttml->getCues() as $cue) {
+            $text = $cue->getText();
+
+            $cueStyle = $_ttml->getStyle($cue->getStyle());
+            if (isset($cueStyle['fontStyle']) && 'italic' === $cueStyle['fontStyle']) {
+                $text = '<i>'.$text.'</i>';
+            }
+            if (isset($cueStyle['fontWeight']) && 'bold' === $cueStyle['fontWeight']) {
+                $text = '<b>'.$text.'</b>';
+            }
+            if (isset($cueStyle['textDecoration']) && 'underline' === $cueStyle['textDecoration']) {
+                $text = '<u>'.$text.'</u>';
+            }
+
+            $srt->addCue($text, SubripCue::ms2tc($cue->getStartMS()), SubripCue::ms2tc($cue->getStopMS()));
+        }
+
+        return $srt;
     }
 }

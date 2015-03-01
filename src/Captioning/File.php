@@ -372,7 +372,7 @@ abstract class File implements FileInterface
             return false;
         }
 
-        for ($i = $_startIndex; $i < $_endIndex; $i++) {
+        for ($i = $_startIndex; $i <= $_endIndex; $i++) {
                 $cue = $this->getCue($i);
                 $cue->shift($_time);
         }
