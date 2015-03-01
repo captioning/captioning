@@ -10,6 +10,8 @@ class TtmlCue extends Cue
 
     private $id;
 
+    private $region;
+
     /**
      * Converts timecode format into milliseconds
      *
@@ -39,7 +41,7 @@ class TtmlCue extends Cue
         return $this;
     }
 
-    public function getStyle ()
+    public function getStyle()
     {
         return $this->style;
     }
@@ -51,8 +53,20 @@ class TtmlCue extends Cue
         return $this;
     }
 
-    public function getId ()
+    public function getId()
     {
         return $this->id;
+    }
+
+    public function setRegion($_region)
+    {
+        $this->region = $_region;
+
+        return $this;
+    }
+
+    public function getRegion()
+    {
+        return $this->region;
     }
 }
