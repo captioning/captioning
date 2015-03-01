@@ -97,6 +97,7 @@ class Converter
             $text = $cue->getText();
 
             $cueStyle = $_ttml->getStyle($cue->getStyle());
+            // global cue style
             if (isset($cueStyle['fontStyle']) && 'italic' === $cueStyle['fontStyle']) {
                 $text = '<i>'.$text.'</i>';
             }
@@ -106,6 +107,32 @@ class Converter
             if (isset($cueStyle['textDecoration']) && 'underline' === $cueStyle['textDecoration']) {
                 $text = '<u>'.$text.'</u>';
             }
+
+            // span styles
+            $matches = array();
+            preg_match_all('#<span[^>]*style="([^>"]+)"[^>]*>(.+)</span>#isU', $text, $matches);
+            $spanCount = count($matches[0]);
+            if ($spanCount > 0) {
+                for ($i = 0; $i < $spanCount; $i++) {
+                    $spanStr     = $matches[0][$i];
+                    $spanStyleId = $matches[1][$i];
+                    $spanText    = $matches[2][$i];
+
+                    $spanStyle = $_ttml->getStyle($spanStyleId);
+
+                    if (isset($spanStyle['fontStyle']) && 'italic' === $spanStyle['fontStyle']) {
+                        $text = str_replace($spanStr, '<i>'.$spanText.'</i>', $text);
+                    }
+                    if (isset($spanStyle['fontWeight']) && 'bold' === $spanStyle['fontWeight']) {
+                        $text = str_replace($spanStr, '<b>'.$spanText.'</b>', $text);
+                    }
+                    if (isset($spanStyle['textDecoration']) && 'underline' === $spanStyle['textDecoration']) {
+                        $text = str_replace($spanStr, '<u>'.$spanText.'</u>', $text);
+                    }
+                }
+            }
+
+            $text = str_ireplace(array('<br>', '<br/>', '<br />'), SubripFile::UNIX_LINE_ENDING, $text);
 
             $srt->addCue($text, SubripCue::ms2tc($cue->getStartMS()), SubripCue::ms2tc($cue->getStopMS()));
         }

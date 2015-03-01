@@ -102,7 +102,9 @@ class TtmlFile extends File
                 $stopMS  = (int)rtrim($stop, 't') / $this->tickRate * 1000;
             }
 
-            $text = strip_tags(str_ireplace(array('<br/>', '<br />', '<br>'), $this->lineEnding, $p->asXml()));
+            $text = $p->asXml();
+
+            $text = preg_replace('#^<p[^>]+>(.+)</p>$#isU', '$1', $text);
 
             $cue = new TtmlCue($start, $stop, $text);
 
