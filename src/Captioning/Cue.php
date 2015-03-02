@@ -56,11 +56,11 @@ abstract class Cue implements CueInterface
         return $this;
     }
 
-    public function setStopMS($_stop)
+    public function setStopMS($_stopMS)
     {
-        $this->stop   = $_stop;
+        $this->stopMS = $_stopMS;
         $cueClass     = get_class($this);
-        $this->stopMS = $cueClass::ms2tc($this->stop);
+        $this->stop   = $cueClass::ms2tc($this->stopMS);
 
         return $this;
     }
