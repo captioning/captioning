@@ -182,6 +182,4 @@ class TtmlFile extends File
 
         return $this->regions[$_region_id];
     }
-
-
-} 
+}
