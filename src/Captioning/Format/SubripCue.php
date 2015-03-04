@@ -84,12 +84,4 @@ class SubripCue extends Cue
     {
         return mb_strlen($this->getText(true, true), 'UTF-8');
     }
-
-    public function getReadingSpeed()
-    {
-        $dur = $this->getDuration();
-        $dur = ($dur <= 500) ? 501 : $dur;
-
-        return ($this->strlen() * 1000) / ($dur - 500);
-    }
 }
