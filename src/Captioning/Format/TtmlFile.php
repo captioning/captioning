@@ -142,14 +142,13 @@ class TtmlFile extends File
 
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
-        if (__NAMESPACE__.'\TtmlCue' === get_class($_mixed)
-            && null !== $_mixed->getStyle() && !isset($this->styles[$_mixed->getStyle()])) {
-            throw new \InvalidArgumentException(sprintf('Invalid cue style "%s"', $_mixed->getStyle()));
-        }
-
-        if (__NAMESPACE__.'\TtmlCue' === get_class($_mixed)
-            && null !== $_mixed->getRegion() && !isset($this->regions[$_mixed->getRegion()])) {
-            throw new \InvalidArgumentException(sprintf('Invalid cue region "%s"', $_mixed->getRegion()));
+        if (get_class($_mixed) === self::getExpectedCueClass($this)) {
+            if (null !== $_mixed->getStyle() && !isset($this->styles[$_mixed->getStyle()])) {
+                throw new \InvalidArgumentException(sprintf('Invalid cue style "%s"', $_mixed->getStyle()));
+            }
+            if (null !== $_mixed->getRegion() && !isset($this->regions[$_mixed->getRegion()])) {
+                throw new \InvalidArgumentException(sprintf('Invalid cue region "%s"', $_mixed->getRegion()));
+            }
         }
 
         return parent::addCue($_mixed, $_start, $_stop);
