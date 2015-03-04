@@ -404,6 +404,9 @@ abstract class File implements FileInterface
         if (!$_endIndex) {
             $_endIndex = $this->getCuesCount() - 1;
         }
+        if (!$_syncLast) {
+            $_endIndex--;
+        }
 
         //check subtitles do exist
         $startSubtitle = $this->getCue($_startIndex);
