@@ -184,7 +184,7 @@ abstract class File implements FileInterface
      *
      * @param string $_word
      * @param boolean $_case_sensitive
-     * @param boolean $strict
+     * @param boolean $_strict
      * @return array containing ids of entries
      */
     public function search($_word, $_case_sensitive = false, $_strict = false)
