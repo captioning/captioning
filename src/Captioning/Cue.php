@@ -171,7 +171,7 @@ abstract class Cue implements CueInterface
     public function getReadingSpeed()
     {
         $dur = $this->getDuration();
-        $dur = ($dur <= 500) ? $dur : 501;
+        $dur = ($dur <= 500) ? 501 : $dur;
 
         return ($this->strlen() * 1000) / ($dur - 500);
     }
