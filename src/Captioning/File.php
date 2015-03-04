@@ -217,7 +217,8 @@ abstract class File implements FileInterface
 
     public function getCueFromStart($_start)
     {
-        $start = is_int($_start) ? $_start : self::tc2ms($_start);
+        $cueClass = self::getExpectedCueClass($this);
+        $start = is_int($_start) ? $_start : $cueClass::tc2ms($_start);
 
         $prev_stop = 0;
         $i = 0;
@@ -241,24 +242,18 @@ abstract class File implements FileInterface
      */
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
-        $fileClass  = explode('\\', get_class($this));
-        $tmp        = explode('File', end($fileClass));
-        $fileFormat = $tmp[0];
+        $fileFormat = self::getFormat($this);
 
+        // if $_mixed is a Cue
         if (is_subclass_of($_mixed, __NAMESPACE__.'\Cue')) {
-            $cueClass  = explode('\\', get_class($_mixed));
-            $tmp       = explode('Cue', end($cueClass));
-            $cueFormat = $tmp[0];
-
+            $cueFormat = Cue::getFormat($_mixed);
             if ($cueFormat !== $fileFormat) {
                 throw new \Exception("Can't add a $cueFormat cue in a $fileFormat file.");
             }
             $_mixed->setLineEnding($this->lineEnding);
             $this->cues[] = $_mixed;
-
         } else {
-            array_pop($fileClass);
-            $cueClass = implode('\\', $fileClass).'\\'.$fileFormat.'Cue';
+            $cueClass = self::getExpectedCueClass($this);
             $cue = new $cueClass($_start, $_stop, $_mixed);
             $cue->setLineEnding($this->lineEnding);
             $this->cues[] = $cue;
@@ -332,7 +327,7 @@ abstract class File implements FileInterface
     public function merge($_file)
     {
         if (!is_a($_file, get_class($this))) {
-            throw new \Exception('Can\'t merge! Wrong type: '.end(explode('\\', get_class($_file))));
+            throw new \Exception('Can\'t merge! Wrong format: '.$this->getFormat($_file));
         } else {
             $this->cues = array_merge($this->cues, $_file->getCues());
             $this->sortCues();
@@ -523,11 +518,34 @@ abstract class File implements FileInterface
         return $this->stats;
     }
 
+    public static function getFormat($_file)
+    {
+        if (!is_subclass_of($_file, __NAMESPACE__.'\File')) {
+            throw new \InvalidArgumentException('Expected subclass of File');
+        }
+
+        $fullNamespace = explode('\\', get_class($_file));
+        $tmp           = explode('File', end($fullNamespace));
+
+        return $tmp[0];
+    }
+
+    public static function getExpectedCueClass($_file, $_full_namespace = true)
+    {
+        $format = self::getFormat($_file).'Cue';
+
+        if ($_full_namespace) {
+            $tmp    = explode('\\', get_class($_file));
+            array_pop($tmp);
+            $format = implode('\\', $tmp).'\\'.$format;
+        }
+
+        return $format;
+    }
+
     public function convertTo($_output_format)
     {
-        $tmp        = explode('\\', get_class($this));
-        $tmp2       = explode('File', end($tmp));
-        $fileFormat = $tmp2[0];
+        $fileFormat = self::getFormat($this);
         $method     = strtolower($fileFormat).'2'.strtolower(rtrim($_output_format, 'File'));
 
         if (method_exists(new Converter(), $method)) {

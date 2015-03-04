@@ -213,4 +213,16 @@ abstract class Cue implements CueInterface
 
         return true;
     }
+
+    public static function getFormat($_cue)
+    {
+        if (!is_subclass_of($_cue, __NAMESPACE__.'\Cue')) {
+            throw new \InvalidArgumentException('Invalid $_cue parameter, subclass of Cue expected.');
+        }
+
+        $fullNamespace = explode('\\', get_class($_cue));
+        $tmp           = explode('Cue', end($fullNamespace));
+
+        return $tmp[0];
+    }
 }
