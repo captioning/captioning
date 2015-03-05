@@ -157,12 +157,8 @@ class WebvttRegion
         $obj = new self();
 
         $tmp = explode(' ', $_string);
-        if (count($tmp) == 1) {
-            return false;
-        }
-
-        if ($tmp[0] !== 'Region:') {
-            return false;
+        if (count($tmp) == 1 || $tmp[0] !== 'Region:') {
+            throw new \InvalidArgumentException('Unable to parse the string as WebvttRegion');
         }
 
         $tmpCount = count($tmp);
