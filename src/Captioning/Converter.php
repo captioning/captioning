@@ -154,7 +154,7 @@ class Converter
                 '</b>'.SubripFile::UNIX_LINE_ENDING.'<b>',
                 '</u>'.SubripFile::UNIX_LINE_ENDING.'<u>'
             );
-            $text = str_ireplace($cleaningPatterns, SubripFile::UNIX_LINE_ENDING, $text);
+            $text = html_entity_decode(str_ireplace($cleaningPatterns, SubripFile::UNIX_LINE_ENDING, $text));
 
             $srt->addCue($text, SubripCue::ms2tc($cue->getStartMS()), SubripCue::ms2tc($cue->getStopMS()));
         }
