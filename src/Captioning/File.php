@@ -343,7 +343,7 @@ abstract class File implements FileInterface
     * @param int $_startIndex The subtitle index the range begins with.
     * @param int $_endIndex The subtitle index the range ends with.
     */
-    public function shift($_time, $_startIndex = false, $_endIndex = false)
+    public function shift($_time, $_startIndex = null, $_endIndex = null)
     {
         if (!is_int($_time)) {
             return false;
@@ -352,10 +352,10 @@ abstract class File implements FileInterface
             return true;
         }
 
-        if (!$_startIndex) {
+        if (null === $_startIndex) {
             $_startIndex = 0;
         }
-        if (!$_endIndex) {
+        if (null === $_endIndex) {
             $_endIndex = $this->getCuesCount() - 1;
         }
 
@@ -389,7 +389,6 @@ abstract class File implements FileInterface
      * @param bool $_syncLast Whether to sync the last subtitle.
      * @return bool Whether the subtitles could be adjusted
     */
-
     public function sync($_startIndex, $_startTime, $_endIndex, $_endTime, $_syncLast = true)
     {
         //set first and last subtitles index
