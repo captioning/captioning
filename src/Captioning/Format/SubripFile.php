@@ -39,7 +39,7 @@ class SubripFile extends File
      */
     public function build($_stripTags = false, $_stripBasic = false, $_replacements = array())
     {
-        $this->buildPart(0, $this->getCuesCount()-1, $_stripTags, $_stripBasic, $_replacements);
+        $this->buildPart(0, $this->getCuesCount() - 1, $_stripTags, $_stripBasic, $_replacements);
 
         return $this;
     }
@@ -64,7 +64,7 @@ class SubripFile extends File
         }
 
         if ($_to < 0 || $_to >= $this->getCuesCount()) {
-            $_to = $this->getCuesCount()-1;
+            $_to = $this->getCuesCount() - 1;
         }
 
         for ($j = $_from; $j <= $_to; $j++) {
