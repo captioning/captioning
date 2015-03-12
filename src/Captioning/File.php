@@ -337,12 +337,12 @@ abstract class File implements FileInterface
     }
 
     /**
-    * Shifts a range of subtitles a specified amount of time.
-    *
-    * @param $_time The time to use (ms), which can be positive or negative.
-    * @param int $_startIndex The subtitle index the range begins with.
-    * @param int $_endIndex The subtitle index the range ends with.
-    */
+     * Shifts a range of subtitles a specified amount of time.
+     *
+     * @param $_time The time to use (ms), which can be positive or negative.
+     * @param int $_startIndex The subtitle index the range begins with.
+     * @param int $_endIndex The subtitle index the range ends with.
+     */
     public function shift($_time, $_startIndex = null, $_endIndex = null)
     {
         if (!is_int($_time)) {
@@ -388,7 +388,7 @@ abstract class File implements FileInterface
      * @param int $_endTime The correct start time for the last subtitle.
      * @param bool $_syncLast Whether to sync the last subtitle.
      * @return bool Whether the subtitles could be adjusted
-    */
+     */
     public function sync($_startIndex, $_startTime, $_endIndex, $_endTime, $_syncLast = true)
     {
         //set first and last subtitles index
@@ -432,7 +432,7 @@ abstract class File implements FileInterface
 
     public function build()
     {
-        $this->buildPart(0, $this->getCuesCount()-1);
+        $this->buildPart(0, $this->getCuesCount() - 1);
 
         return $this;
     }
@@ -463,7 +463,7 @@ abstract class File implements FileInterface
         }
 
         if ($writeBOM) {
-            $file_content = "\xef\xbb\xbf" . $file_content;
+            $file_content = "\xef\xbb\xbf".$file_content;
         }
 
         $res = file_put_contents($filename, $file_content);
