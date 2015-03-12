@@ -14,7 +14,7 @@ class Converter
     /* fallback converter in case specific converter isn't implemented */
     public static function defaultConverter(FileInterface $_file, $_convertTo)
     {
-        $subtitleClass = __NAMESPACE__.'\\Format\\'.ucfirst($_convertTo) . 'File';
+        $subtitleClass = __NAMESPACE__.'\\Format\\'.ucfirst($_convertTo).'File';
 
         if (!class_exists($subtitleClass)) {
             throw new \InvalidArgumentException(sprintf('Unable to convert to "%s", this format does not exists.', $_convertTo));
@@ -118,13 +118,13 @@ class Converter
                 $cueStyle = $_ttml->getStyle($cue->getStyle());
                 // global cue style
                 if (isset($cueStyle['fontStyle']) && 'italic' === $cueStyle['fontStyle']) {
-                    $text = '<i>' . $text . '</i>';
+                    $text = '<i>'.$text.'</i>';
                 }
                 if (isset($cueStyle['fontWeight']) && 'bold' === $cueStyle['fontWeight']) {
-                    $text = '<b>' . $text . '</b>';
+                    $text = '<b>'.$text.'</b>';
                 }
                 if (isset($cueStyle['textDecoration']) && 'underline' === $cueStyle['textDecoration']) {
-                    $text = '<u>' . $text . '</u>';
+                    $text = '<u>'.$text.'</u>';
                 }
 
                 // span styles
@@ -140,13 +140,13 @@ class Converter
                         $spanStyle = $_ttml->getStyle($spanStyleId);
 
                         if (isset($spanStyle['fontStyle']) && 'italic' === $spanStyle['fontStyle']) {
-                            $text = str_replace($spanStr, '<i>' . $spanText . '</i>', $text);
+                            $text = str_replace($spanStr, '<i>'.$spanText.'</i>', $text);
                         }
                         if (isset($spanStyle['fontWeight']) && 'bold' === $spanStyle['fontWeight']) {
-                            $text = str_replace($spanStr, '<b>' . $spanText . '</b>', $text);
+                            $text = str_replace($spanStr, '<b>'.$spanText.'</b>', $text);
                         }
                         if (isset($spanStyle['textDecoration']) && 'underline' === $spanStyle['textDecoration']) {
-                            $text = str_replace($spanStr, '<u>' . $spanText . '</u>', $text);
+                            $text = str_replace($spanStr, '<u>'.$spanText.'</u>', $text);
                         }
                     }
                 }
@@ -156,13 +156,13 @@ class Converter
                 $cueRegion = $_ttml->getRegion($cue->getRegion());
                 // global cue style
                 if (isset($cueRegion['fontStyle']) && 'italic' === $cueRegion['fontStyle']) {
-                    $text = '<i>' . $text . '</i>';
+                    $text = '<i>'.$text.'</i>';
                 }
                 if (isset($cueRegion['fontWeight']) && 'bold' === $cueRegion['fontWeight']) {
-                    $text = '<b>' . $text . '</b>';
+                    $text = '<b>'.$text.'</b>';
                 }
                 if (isset($cueRegion['textDecoration']) && 'underline' === $cueRegion['textDecoration']) {
-                    $text = '<u>' . $text . '</u>';
+                    $text = '<u>'.$text.'</u>';
                 }
             }
 

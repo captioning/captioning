@@ -9,7 +9,7 @@ class SubripCue extends Cue
     public static function tc2ms($tc)
     {
         $tab = explode(':', $tc);
-        $durMS = $tab[0]*60*60*1000 + $tab[1]*60*1000 + floatval(str_replace(',', '.', $tab[2]))*1000;
+        $durMS = $tab[0] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + floatval(str_replace(',', '.', $tab[2])) * 1000;
 
         return $durMS;
     }
