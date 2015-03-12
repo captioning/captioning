@@ -169,7 +169,7 @@ class SubstationalphaFile extends File
         $matches = array();
         preg_match_all(self::PATTERN, $this->fileContent, $matches);
         $matchesCount = count($matches[1]);
-        for ($i=0; $i < $matchesCount; $i++) {
+        for ($i = 0; $i < $matchesCount; $i++) {
             $cue = new SubstationalphaCue(
                 $matches[2][$i],
                 $matches[3][$i],
@@ -195,7 +195,7 @@ class SubstationalphaFile extends File
             $buffer .= '; '.str_replace($this->lineEnding, $this->lineEnding."; ", $comment).$this->lineEnding;
         }
         foreach ($this->headers as $key => $value) {
-            if ($value !==  null) {
+            if ($value !== null) {
                 $buffer .= $key.': '.$value.$this->lineEnding;
             }
         }
