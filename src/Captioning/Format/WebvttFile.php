@@ -168,7 +168,7 @@ class WebvttFile extends File
         }
 
         if ($_to < 0 || $_to >= $this->getCuesCount()) {
-            $_to = $this->getCuesCount()-1;
+            $_to = $this->getCuesCount() - 1;
         }
 
         for ($j = $_from; $j <= $_to; $j++) {

@@ -18,6 +18,9 @@ class TtmlFile extends File
 
     private $regions = array();
 
+    /**
+     * @param string $_timeBase
+     */
     public function setTimeBase($_timeBase)
     {
         $matchingTable = array(
@@ -44,6 +47,9 @@ class TtmlFile extends File
         return $this->timeBase;
     }
 
+    /**
+     * @param string $_tickRate
+     */
     public function setTickRate($_tickRate)
     {
         $this->tickRate = $_tickRate;
@@ -72,7 +78,7 @@ class TtmlFile extends File
 
         // parsing regions
         $regions = $head->layout->region;
-        foreach($regions as $region) {
+        foreach ($regions as $region) {
             $regionData = $this->parseAttributes($region);
             $this->regions[$regionData['id']] = $regionData;
 
@@ -140,6 +146,9 @@ class TtmlFile extends File
         // TODO: Implement buildPart() method.
     }
 
+    /**
+     * @param TtmlCue $_mixed
+     */
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
         if (get_class($_mixed) === self::getExpectedCueClass($this)) {
