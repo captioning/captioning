@@ -63,25 +63,18 @@ class WebvttCue extends Cue
         switch ($_name) {
             case 'region':
                 return true;
-                break;
             case 'vertical':
                 return in_array($_value, array('rl', 'lr'));
-                break;
             case 'line':
                 return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value) || in_array($_value, array('start', 'middle', 'end'));
-                break;
             case 'size':
                 return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value);
-                break;
             case 'position':
                 return in_array($_value, array('start', 'middle', 'end'));
-                break;
             case 'align':
                 return in_array($_value, array('start', 'middle', 'end', 'left', 'right'));
-                break;
             default:
                 return false;
-                break;
         }
     }
 
