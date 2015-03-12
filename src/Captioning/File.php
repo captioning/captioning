@@ -550,7 +550,7 @@ abstract class File implements FileInterface
         if (method_exists(new Converter(), $method)) {
             return Converter::$method($this);
         } else {
-            throw new \InvalidArgumentException('Converter::'.$method.' is not defined.');
+            return Converter::defaultConverter($this, $_output_format);
         }
     }
 }

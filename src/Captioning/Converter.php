@@ -11,6 +11,25 @@ use Captioning\Format\SubstationalphaCue;
 
 class Converter
 {
+    /* fallback converter in case specific converter isn't implemented */
+    public static function defaultConverter(FileInterface $_file, $_convertTo)
+    {
+        $subtitleClass = __NAMESPACE__.'\\Format\\'.ucfirst($_convertTo) . 'File';
+
+        if (!class_exists($subtitleClass)) {
+            throw new \InvalidArgumentException(sprintf('Unable to convert to "%s", this format does not exists.', $_convertTo));
+        }
+
+        $newSub        = new $subtitleClass();
+        $cueClass      = File::getExpectedCueClass($newSub);
+
+        foreach ($_file->getCues() as $cue) {
+            $newSub->addCue($cue->getText(), $cueClass::ms2tc($cue->getStartMS()), $cueClass::ms2tc($cue->getStopMS()));
+        }
+
+        return $newSub;
+    }
+
     /* subrip converters */
     public static function subrip2webvtt(SubripFile $_srt)
     {
