@@ -167,6 +167,7 @@ class Converter
             }
 
             $text = str_ireplace(array('<br>', '<br/>', '<br />'), SubripFile::UNIX_LINE_ENDING, $text);
+            $text = preg_replace('#<\/?span[^>]*>#i', '', $text);
 
             $cleaningPatterns = array(
                 '</i>'.SubripFile::UNIX_LINE_ENDING.'<i>',
