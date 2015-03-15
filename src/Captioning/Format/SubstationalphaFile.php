@@ -14,6 +14,7 @@ class SubstationalphaFile extends File
     protected $headers;
     protected $stylesVersion;
     protected $styles;
+    protected $excludedStyles;
     protected $events;
     protected $comments;
 
@@ -45,6 +46,7 @@ class SubstationalphaFile extends File
             'Fontsize'        => 20,
             'PrimaryColour'   => '&H00FFFFFF',
             'SecondaryColour' => '&H00000000',
+            'TertiaryColour'  => '&0000000',
             'OutlineColour'   => '&H00000000',
             'BackColour'      => '&H00000000',
             'Bold'            => 0,
@@ -62,7 +64,13 @@ class SubstationalphaFile extends File
             'MarginL'         => 15,
             'MarginR'         => 15,
             'MarginV'         => 15,
+            'AlphaLevel'      => 0,
             'Encoding'        => 0
+        );
+
+        $this->excludedStyles = array(
+            self::STYLES_V4      => array('OutlineColour', 'Underline', 'StrikeOut', 'ScaleX', 'ScaleY', 'Spacing', 'Angle'),
+            self::STYLES_V4_PLUS => array('TertiaryColour', 'AlphaLevel')
         );
 
         $this->events = array(
@@ -120,6 +128,34 @@ class SubstationalphaFile extends File
     public function getStyles()
     {
         return $this->styles;
+    }
+
+    public function getNeededStyles()
+    {
+        $styles = $this->styles;
+
+        foreach ($this->excludedStyles[$this->stylesVersion] as $styleName) {
+            unset($styles[$styleName]);
+        }
+
+        return $styles;
+    }
+
+    public function setStyles($_styles)
+    {
+        $this->styles = $_styles;
+    }
+
+    public function setEvents($_events)
+    {
+        if (!empty($_events) && is_array($_events)) {
+            $this->events = $_events;
+        }
+    }
+
+    public function getEvents()
+    {
+        return $this->events;
     }
 
     public function addComment($_comment)
@@ -223,8 +259,10 @@ class SubstationalphaFile extends File
 
         // styles
         $buffer .= '['.$this->stylesVersion.' Styles]'.$this->lineEnding;
-        $buffer .= 'Format: '.implode(', ', array_keys($this->styles)).$this->lineEnding;
-        $buffer .= 'Style: '.implode(', ', array_values($this->styles)).$this->lineEnding;
+
+        $styles = $this->getNeededStyles();
+        $buffer .= 'Format: '.implode(', ', array_keys($styles)).$this->lineEnding;
+        $buffer .= 'Style: '.implode(', ', array_values($styles)).$this->lineEnding;
 
         // events (= cues)
         $buffer .= $this->lineEnding;
