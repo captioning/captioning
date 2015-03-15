@@ -8,7 +8,11 @@ class SubstationalphaFile extends File
 {
     const PATTERN = '#Dialogue: ([0-9]),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),(.*),(.*),([0-9]{4}),([0-9]{4}),([0-9]{4}),([^,]*),(.+)#';
 
+    const STYLES_V4      = 'v4';
+    const STYLES_V4_PLUS = 'v4+';
+
     protected $headers;
+    protected $stylesVersion;
     protected $styles;
     protected $events;
     protected $comments;
@@ -32,6 +36,8 @@ class SubstationalphaFile extends File
             'Timer'                => '100.0',
             'WrapStyle'            => 0
         );
+
+        $this->stylesVersion = self::STYLES_V4_PLUS;
 
         $this->styles = array(
             'Name'            => 'Default',
@@ -83,6 +89,20 @@ class SubstationalphaFile extends File
     public function getHeaders()
     {
         return $this->headers;
+    }
+
+    public function setStylesVersion($stylesVersion)
+    {
+        if (!in_array($stylesVersion, array(self::STYLES_V4, self::STYLES_V4_PLUS))) {
+            throw new \InvalidArgumentException('Invalid styles version');
+        }
+
+        $this->stylesVersion = $stylesVersion;
+    }
+
+    public function getStylesVersion()
+    {
+        return $this->stylesVersion;
     }
 
     public function setStyle($_name, $_value)
@@ -202,7 +222,7 @@ class SubstationalphaFile extends File
         $buffer .= $this->lineEnding;
 
         // styles
-        $buffer .= '[v4+ Styles]'.$this->lineEnding;
+        $buffer .= '['.$this->stylesVersion.' Styles]'.$this->lineEnding;
         $buffer .= 'Format: '.implode(', ', array_keys($this->styles)).$this->lineEnding;
         $buffer .= 'Style: '.implode(', ', array_values($this->styles)).$this->lineEnding;
 
