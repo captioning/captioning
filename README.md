@@ -6,7 +6,8 @@ Captioning is a collection of tools made to help you create and edit subtitles i
 * Subrip (.srt)
 * WebVTT (.vtt)
 * Substation Alpha (.ass)
-* [WIP] Timed Text (.dfxp)
+* Youtube Subtitles (.sbv)
+* [WIP] TTML (.dfxp)
 
 # Installation
 
