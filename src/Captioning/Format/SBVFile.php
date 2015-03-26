@@ -35,15 +35,11 @@ class SBVFile extends File
      *
      * @param int $_from Id of the first entry
      * @param int $_to Id of the last entry
-     * @param boolean $_stripTags If true, {\...} tags will be stripped
-     * @param boolean $_stripBasic If true, <i>, <b> and <u> tags will be stripped
-     * @param array $_replacements
      */
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
-        
-        $i = 1;
+
         $buffer = "";
         if ($_from < 0 || $_from >= $this->getCuesCount()) {
             $_from = 0;
