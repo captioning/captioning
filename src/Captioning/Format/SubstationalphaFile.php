@@ -194,27 +194,25 @@ class SubstationalphaFile extends File
                     $line = fgets($handle);
                     $tmp_styles = array();
                     $tmp = explode(':', $line);
-                    if ($tmp[0] == 'Format') {
-                        $tmp2 = explode(',', $tmp[1]);
-
-                        foreach ($tmp2 as $s) {
-                            $tmp_styles[trim($s)] = null;
-                        }
-                    } else {
+                    if ($tmp[0] !== 'Format') {
                         return false;
+                    }
+                    $tmp2 = explode(',', $tmp[1]);
+
+                    foreach ($tmp2 as $s) {
+                        $tmp_styles[trim($s)] = null;
                     }
 
                     $line = fgets($handle);
                     $tmp = explode(':', $line);
-                    if ($tmp[0] == 'Style') {
-                        $tmp2 = explode(',', $tmp[1]);
-                        $i = 0;
-                        foreach ($tmp_styles as $s => $v) {
-                            $this->setStyle($s, trim($tmp2[$i]));
-                            $i++;
-                        }
-                    } else {
+                    if ($tmp[0] !== 'Style') {
                         return false;
+                    }
+                    $tmp2 = explode(',', $tmp[1]);
+                    $i = 0;
+                    foreach ($tmp_styles as $s => $v) {
+                        $this->setStyle($s, trim($tmp2[$i]));
+                        $i++;
                     }
                     break;
                 }

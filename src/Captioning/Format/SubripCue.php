@@ -38,9 +38,9 @@ class SubripCue extends Cue
 
         if ($_stripTags) {
             return $this->getStrippedText($_stripBasic, $_replacements);
-        } else {
-            return $this->text;
         }
+
+        return $this->text;
     }
 
     /**
@@ -52,10 +52,10 @@ class SubripCue extends Cue
      */
     public function getStrippedText($_stripBasic = false, $_replacements = array())
     {
+        $text = $this->text;
+
         if ($_stripBasic) {
-            $text = strip_tags($this->text);
-        } else {
-            $text = $this->text;
+            $text = strip_tags($text);
         }
 
         $patterns = "/{[^}]+}/";
