@@ -172,53 +172,58 @@ class SubstationalphaFile extends File
     {
         $handle = fopen($this->filename, "r");
 
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
+        try {
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
 
-                // parsing headers
-                if (strtolower(trim($line)) === '[script info]') {
-                    while (trim($line = fgets($handle)) !== '') {
-                        if ($line[0] == ';') {
-                            $this->addComment(trim(ltrim($line, '; ')));
-                        } else {
-                            $tmp = explode(':', $line);
-                            if (count($tmp) == 2) {
-                                $this->setHeader(trim($tmp[0]), trim($tmp[1]));
+                    // parsing headers
+                    if (strtolower(trim($line)) === '[script info]') {
+                        while (trim($line = fgets($handle)) !== '') {
+                            if ($line[0] == ';') {
+                                $this->addComment(trim(ltrim($line, '; ')));
+                            } else {
+                                $tmp = explode(':', $line);
+                                if (count($tmp) == 2) {
+                                    $this->setHeader(trim($tmp[0]), trim($tmp[1]));
+                                }
                             }
                         }
                     }
-                }
 
-                // parsing styles
-                if (strtolower(trim($line)) === '[v4+ styles]') {
-                    $line = fgets($handle);
-                    $tmp_styles = array();
-                    $tmp = explode(':', $line);
-                    if ($tmp[0] == 'Format') {
-                        $tmp2 = explode(',', $tmp[1]);
+                    // parsing styles
+                    if (strtolower(trim($line)) === '[v4+ styles]') {
+                        $line = fgets($handle);
+                        $tmp_styles = array();
+                        $tmp = explode(':', $line);
+                        if ($tmp[0] == 'Format') {
+                            $tmp2 = explode(',', $tmp[1]);
 
-                        foreach ($tmp2 as $s) {
-                            $tmp_styles[trim($s)] = null;
+                            foreach ($tmp2 as $s) {
+                                $tmp_styles[trim($s)] = null;
+                            }
+                        } else {
+                            throw new \Exception($this->filename.' is not valid file.');
                         }
-                    } else {
-                        return false;
-                    }
 
-                    $line = fgets($handle);
-                    $tmp = explode(':', $line);
-                    if ($tmp[0] == 'Style') {
-                        $tmp2 = explode(',', $tmp[1]);
-                        $i = 0;
-                        foreach (array_keys($tmp_styles) as $s) {
-                            $this->setStyle($s, trim($tmp2[$i]));
-                            $i++;
+                        $line = fgets($handle);
+                        $tmp = explode(':', $line);
+                        if ($tmp[0] == 'Style') {
+                            $tmp2 = explode(',', $tmp[1]);
+                            $i = 0;
+                            foreach (array_keys($tmp_styles) as $s) {
+                                $this->setStyle($s, trim($tmp2[$i]));
+                                $i++;
+                            }
+                        } else {
+                            throw new \Exception($this->filename.' is not valid file.');
                         }
-                    } else {
-                        return false;
+                        break;
                     }
-                    break;
                 }
             }
+        } catch (\Exception $e) {
+            fclose($handle);
+            throw $e;
         }
         fclose($handle);
 

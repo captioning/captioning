@@ -10,7 +10,7 @@ class SubripFile extends File
 
     protected $lineEnding = File::WINDOWS_LINE_ENDING;
 
-    private $defaultOptions = array ('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
+    private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
 
     private $options = array();
 
@@ -83,10 +83,11 @@ class SubripFile extends File
     /**
      * @param array $options array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false)
      * @return SubripFile
+     * @throws \UnexpectedValueException
      */
     public function setOptions(array $options)
     {
-        if($this->validateOptions($options)) {
+        if ($this->validateOptions($options)) {
             $this->options = array_merge($this->defaultOptions, $options);
         } else {
             throw new \UnexpectedValueException('Options consists not allowed keys');
@@ -109,7 +110,7 @@ class SubripFile extends File
      */
     private function validateOptions(array $options)
     {
-        foreach(array_keys($options) as $key) {
+        foreach (array_keys($options) as $key) {
             if (!array_key_exists($key, $this->defaultOptions)) {
                 return false;
             }
