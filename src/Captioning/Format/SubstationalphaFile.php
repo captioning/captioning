@@ -209,7 +209,7 @@ class SubstationalphaFile extends File
                     if ($tmp[0] == 'Style') {
                         $tmp2 = explode(',', $tmp[1]);
                         $i = 0;
-                        foreach ($tmp_styles as $s => $v) {
+                        foreach (array_keys($tmp_styles) as $s) {
                             $this->setStyle($s, trim($tmp2[$i]));
                             $i++;
                         }
@@ -241,6 +241,7 @@ class SubstationalphaFile extends File
 
             $this->addCue($cue);
         }
+        return $this;
     }
 
     public function buildPart($_from, $_to)
@@ -274,5 +275,6 @@ class SubstationalphaFile extends File
         }
 
         $this->fileContent = $buffer;
+        return $this;
     }
 }

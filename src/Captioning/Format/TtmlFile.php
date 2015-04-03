@@ -93,6 +93,8 @@ class TtmlFile extends File
 
         // parsing cues
         $this->parseCues($xml->body);
+
+        return $this;
     }
 
     private function parseAttributes($_node, $_namespace = 'tts')
@@ -144,6 +146,7 @@ class TtmlFile extends File
     public function buildPart($_from, $_to)
     {
         // TODO: Implement buildPart() method.
+        return $this;
     }
 
     /**
