@@ -115,17 +115,9 @@ class Converter
             $text = $cue->getText();
 
             if (null !== $cue->getStyle()) {
-                $cueStyle = $_ttml->getStyle($cue->getStyle());
+
                 // global cue style
-                if (isset($cueStyle['fontStyle']) && 'italic' === $cueStyle['fontStyle']) {
-                    $text = '<i>'.$text.'</i>';
-                }
-                if (isset($cueStyle['fontWeight']) && 'bold' === $cueStyle['fontWeight']) {
-                    $text = '<b>'.$text.'</b>';
-                }
-                if (isset($cueStyle['textDecoration']) && 'underline' === $cueStyle['textDecoration']) {
-                    $text = '<u>'.$text.'</u>';
-                }
+                $text = self::applyStyles($text, $_ttml->getStyle($cue->getStyle()));
 
                 // span styles
                 $matches = array();
@@ -139,31 +131,18 @@ class Converter
 
                         $spanStyle = $_ttml->getStyle($spanStyleId);
 
-                        if (isset($spanStyle['fontStyle']) && 'italic' === $spanStyle['fontStyle']) {
-                            $text = str_replace($spanStr, '<i>'.$spanText.'</i>', $text);
-                        }
-                        if (isset($spanStyle['fontWeight']) && 'bold' === $spanStyle['fontWeight']) {
-                            $text = str_replace($spanStr, '<b>'.$spanText.'</b>', $text);
-                        }
-                        if (isset($spanStyle['textDecoration']) && 'underline' === $spanStyle['textDecoration']) {
-                            $text = str_replace($spanStr, '<u>'.$spanText.'</u>', $text);
+                        $textForReplace = self::applyStyles($spanText, $spanStyle);
+
+                        if ($textForReplace != $spanText) {
+                            $text = str_replace($spanStr, $textForReplace, $text);
                         }
                     }
                 }
             }
 
             if (null !== $cue->getRegion()) {
-                $cueRegion = $_ttml->getRegion($cue->getRegion());
-                // global cue style
-                if (isset($cueRegion['fontStyle']) && 'italic' === $cueRegion['fontStyle']) {
-                    $text = '<i>'.$text.'</i>';
-                }
-                if (isset($cueRegion['fontWeight']) && 'bold' === $cueRegion['fontWeight']) {
-                    $text = '<b>'.$text.'</b>';
-                }
-                if (isset($cueRegion['textDecoration']) && 'underline' === $cueRegion['textDecoration']) {
-                    $text = '<u>'.$text.'</u>';
-                }
+                // cue region style
+                $text = self::applyStyles($text, $_ttml->getRegion($cue->getRegion()));
             }
 
             $text = str_ireplace(array('<br>', '<br/>', '<br />'), SubripFile::UNIX_LINE_ENDING, $text);
@@ -180,5 +159,20 @@ class Converter
         }
 
         return $srt;
+    }
+
+    private static function applyStyles($text, array $styles)
+    {
+        if (isset($styles['fontStyle']) && 'italic' === $styles['fontStyle']) {
+            $text = '<i>'.$text.'</i>';
+        }
+        if (isset($styles['fontWeight']) && 'bold' === $styles['fontWeight']) {
+            $text = '<b>'.$text.'</b>';
+        }
+        if (isset($styles['textDecoration']) && 'underline' === $styles['textDecoration']) {
+            $text = '<u>'.$text.'</u>';
+        }
+
+        return $text;
     }
 }
