@@ -37,7 +37,7 @@ abstract class File implements FileInterface
         $this->useIconv = $_useIconv;
 
         if ($this->getFilename() !== null) {
-            $this->load();
+            $this->loadFromFile();
         }
 
         $this->stats = array(
@@ -141,7 +141,7 @@ abstract class File implements FileInterface
         return count($this->cues);
     }
 
-    private function load($_filename = null)
+    public  function loadFromFile($_filename = null)
     {
         if ($_filename === null) {
             $_filename = $this->filename;
@@ -168,15 +168,6 @@ abstract class File implements FileInterface
         $this->parse();
 
         return $this;
-    }
-
-    protected function encode()
-    {
-        if ($this->useIconv) {
-            $this->fileContent = iconv($this->encoding, 'UTF-8', $this->fileContent);
-        } else {
-            $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
-        }
     }
 
     /**
@@ -551,6 +542,15 @@ abstract class File implements FileInterface
             return Converter::$method($this);
         } else {
             return Converter::defaultConverter($this, $_output_format);
+        }
+    }
+
+    protected function encode()
+    {
+        if ($this->useIconv) {
+            $this->fileContent = iconv($this->encoding, 'UTF-8', $this->fileContent);
+        } else {
+            $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
         }
     }
 }
