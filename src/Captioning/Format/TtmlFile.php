@@ -95,52 +95,6 @@ class TtmlFile extends File
         $this->parseCues($xml->body);
     }
 
-    private function parseAttributes($_node, $_namespace = 'tts')
-    {
-        $attributes = array();
-
-        foreach ($_node->attributes($_namespace, true) as $property => $value) {
-            $attributes[(string)$property] = (string)$value;
-        }
-
-        if ($_node->attributes('xml', true)->id) {
-            $attributes['id'] = (string)$_node->attributes('xml', true)->id;
-        }
-
-        return $attributes;
-    }
-
-    private function parseCues($_xml)
-    {
-        foreach ($_xml->div->p as $p) {
-            if (self::TIMEBASE_MEDIA === $this->timeBase) {
-                $start   = (string)$p->attributes()->begin;
-                $stop    = (string)$p->attributes()->end;
-                $startMS = (int)rtrim($start, 't') / $this->tickRate * 1000;
-                $stopMS  = (int)rtrim($stop, 't') / $this->tickRate * 1000;
-            }
-
-            $text = $p->asXml();
-
-            $text = preg_replace('#^<p[^>]+>(.+)</p>$#isU', '$1', $text);
-
-            $cue = new TtmlCue($start, $stop, $text);
-
-            $cue->setStartMS($startMS);
-            $cue->setStopMS($stopMS);
-            $cue->setId((string)$p->attributes('xml', true)->id);
-
-            if ($p->attributes()->style) {
-                $cue->setStyle((string)$p->attributes()->style);
-            }
-            if ($p->attributes()->region) {
-                $cue->setRegion((string)$p->attributes()->region);
-            }
-
-            $this->addCue($cue);
-        }
-    }
-
     public function buildPart($_from, $_to)
     {
         // TODO: Implement buildPart() method.
@@ -189,5 +143,51 @@ class TtmlFile extends File
         }
 
         return $this->regions[$_region_id];
+    }
+
+    private function parseAttributes($_node, $_namespace = 'tts')
+    {
+        $attributes = array();
+
+        foreach ($_node->attributes($_namespace, true) as $property => $value) {
+            $attributes[(string)$property] = (string)$value;
+        }
+
+        if ($_node->attributes('xml', true)->id) {
+            $attributes['id'] = (string)$_node->attributes('xml', true)->id;
+        }
+
+        return $attributes;
+    }
+
+    private function parseCues($_xml)
+    {
+        foreach ($_xml->div->p as $p) {
+            if (self::TIMEBASE_MEDIA === $this->timeBase) {
+                $start   = (string)$p->attributes()->begin;
+                $stop    = (string)$p->attributes()->end;
+                $startMS = (int)rtrim($start, 't') / $this->tickRate * 1000;
+                $stopMS  = (int)rtrim($stop, 't') / $this->tickRate * 1000;
+            }
+
+            $text = $p->asXml();
+
+            $text = preg_replace('#^<p[^>]+>(.+)</p>$#isU', '$1', $text);
+
+            $cue = new TtmlCue($start, $stop, $text);
+
+            $cue->setStartMS($startMS);
+            $cue->setStopMS($stopMS);
+            $cue->setId((string)$p->attributes('xml', true)->id);
+
+            if ($p->attributes()->style) {
+                $cue->setStyle((string)$p->attributes()->style);
+            }
+            if ($p->attributes()->region) {
+                $cue->setRegion((string)$p->attributes()->region);
+            }
+
+            $this->addCue($cue);
+        }
     }
 }
