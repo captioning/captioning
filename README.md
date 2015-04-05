@@ -12,7 +12,7 @@ Captioning is a collection of tools made to help you create and edit subtitles i
 # Installation
 
 ``` sh
-composer require captioning/captioning "1.*"
+composer require captioning/captioning "2.*"
 ```
 
 # Usage
