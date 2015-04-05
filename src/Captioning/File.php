@@ -12,7 +12,7 @@ abstract class File implements FileInterface
 
     protected $cues;
     protected $filename;
-    protected $encoding;
+    protected $encoding = self::DEFAULT_ENCODING;
     protected $useIconv;
     protected $lineEnding;
 
@@ -30,8 +30,6 @@ abstract class File implements FileInterface
 
         if ($_encoding !== null) {
             $this->setEncoding($_encoding);
-        } else {
-            $this->encoding = self::DEFAULT_ENCODING;
         }
 
         $this->useIconv = $_useIconv;
@@ -319,10 +317,10 @@ abstract class File implements FileInterface
     {
         if (!is_a($_file, get_class($this))) {
             throw new \Exception('Can\'t merge! Wrong format: '.$this->getFormat($_file));
-        } else {
-            $this->cues = array_merge($this->cues, $_file->getCues());
-            $this->sortCues();
         }
+
+        $this->cues = array_merge($this->cues, $_file->getCues());
+        $this->sortCues();
 
         return $this;
     }
@@ -540,9 +538,8 @@ abstract class File implements FileInterface
 
         if (method_exists(new Converter(), $method)) {
             return Converter::$method($this);
-        } else {
-            return Converter::defaultConverter($this, $_output_format);
         }
+        return Converter::defaultConverter($this, $_output_format);
     }
 
     protected function encode()
