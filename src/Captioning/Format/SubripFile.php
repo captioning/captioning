@@ -10,6 +10,16 @@ class SubripFile extends File
 
     protected $lineEnding = File::WINDOWS_LINE_ENDING;
 
+    private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
+
+    private $options = array();
+
+    public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
+    {
+        $this->options = $this->defaultOptions;
+        parent::__construct($_filename, $_encoding, $_useIconv);
+    }
+
     public function parse()
     {
         $matches = array();
@@ -30,30 +40,14 @@ class SubripFile extends File
         return $this;
     }
 
-    /**
-     * Builds file content
-     *
-     * @param boolean $_stripTags If true, {\...} tags will be stripped
-     * @param boolean $_stripBasic If true, <i>, <b> and <u> tags will be stripped
-     * @param array $_replacements
-     */
-    public function build($_stripTags = false, $_stripBasic = false, $_replacements = array())
+    public function build()
     {
-        $this->buildPart(0, $this->getCuesCount() - 1, $_stripTags, $_stripBasic, $_replacements);
+        $this->buildPart(0, $this->getCuesCount() - 1);
 
         return $this;
     }
 
-    /**
-     * Builds file content from entry $_from to entry $_to
-     *
-     * @param int $_from Id of the first entry
-     * @param int $_to Id of the last entry
-     * @param boolean $_stripTags If true, {\...} tags will be stripped
-     * @param boolean $_stripBasic If true, <i>, <b> and <u> tags will be stripped
-     * @param array $_replacements
-     */
-    public function buildPart($_from, $_to, $_stripTags = false, $_stripBasic = false, $_replacements = array())
+    public function buildPart($_from, $_to)
     {
         $this->sortCues();
         
@@ -68,9 +62,15 @@ class SubripFile extends File
         }
 
         for ($j = $_from; $j <= $_to; $j++) {
+            $cue = $this->getCue($j);
             $buffer .= $i.$this->lineEnding;
-            $buffer .= $this->getCue($j)->getTimeCodeString().$this->lineEnding;
-            $buffer .= $this->getCue($j)->getText($_stripTags, $_stripBasic, $_replacements).$this->lineEnding;
+            $buffer .= $cue->getTimeCodeString().$this->lineEnding;
+            $buffer .= $cue->getText(
+                    $this->options['_stripTags'],
+                    $this->options['_stripBasic'],
+                    $this->options['_replacements']
+                );
+            $buffer .= $this->lineEnding;
             $buffer .= $this->lineEnding;
             $i++;
         }
@@ -78,5 +78,43 @@ class SubripFile extends File
         $this->fileContent = $buffer;
 
         return $this;
+    }
+
+    /**
+     * @param array $options array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false)
+     * @return SubripFile
+     * @throws \UnexpectedValueException
+     */
+    public function setOptions(array $options)
+    {
+        if ($this->validateOptions($options)) {
+            $this->options = array_merge($this->defaultOptions, $options);
+        } else {
+            throw new \UnexpectedValueException('Options consists not allowed keys');
+        }
+        return $this;
+    }
+
+    /**
+     * @return SubripFile
+     */
+    public function resetOptions()
+    {
+        $this->options = $this->defaultOptions;
+        return $this;
+    }
+
+    /**
+     * @param array $options
+     * @return bool
+     */
+    private function validateOptions(array $options)
+    {
+        foreach (array_keys($options) as $key) {
+            if (!array_key_exists($key, $this->defaultOptions)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

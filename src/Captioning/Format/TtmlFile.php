@@ -93,11 +93,14 @@ class TtmlFile extends File
 
         // parsing cues
         $this->parseCues($xml->body);
+
+        return $this;
     }
 
     public function buildPart($_from, $_to)
     {
         // TODO: Implement buildPart() method.
+        return $this;
     }
 
     /**
