@@ -117,7 +117,7 @@ class Converter
             if (null !== $cue->getStyle()) {
 
                 // global cue style
-                $text = self::applyStyles($text, $_ttml->getStyle($cue->getStyle()));
+                $text = self::applyTtmlStyles($text, $_ttml->getStyle($cue->getStyle()));
 
                 // span styles
                 $matches = array();
@@ -131,7 +131,7 @@ class Converter
 
                         $spanStyle = $_ttml->getStyle($spanStyleId);
 
-                        $textForReplace = self::applyStyles($spanText, $spanStyle);
+                        $textForReplace = self::applyTtmlStyles($spanText, $spanStyle);
 
                         if ($textForReplace != $spanText) {
                             $text = str_replace($spanStr, $textForReplace, $text);
@@ -142,7 +142,7 @@ class Converter
 
             if (null !== $cue->getRegion()) {
                 // cue region style
-                $text = self::applyStyles($text, $_ttml->getRegion($cue->getRegion()));
+                $text = self::applyTtmlStyles($text, $_ttml->getRegion($cue->getRegion()));
             }
 
             $text = str_ireplace(array('<br>', '<br/>', '<br />'), SubripFile::UNIX_LINE_ENDING, $text);
@@ -161,7 +161,7 @@ class Converter
         return $srt;
     }
 
-    private static function applyStyles($text, array $styles)
+    private static function applyTtmlStyles($text, array $styles)
     {
         if (isset($styles['fontStyle']) && 'italic' === $styles['fontStyle']) {
             $text = '<i>'.$text.'</i>';
