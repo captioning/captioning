@@ -170,62 +170,54 @@ class SubstationalphaFile extends File
 
     public function parse()
     {
-        $handle = fopen($this->filename, "r");
 
-        try {
-            if ($handle) {
-                while (($line = fgets($handle)) !== false) {
+        $fileContentArray = $this->getFileContentAsArray();
 
-                    // parsing headers
-                    if (strtolower(trim($line)) === '[script info]') {
-                        while (trim($line = fgets($handle)) !== '') {
-                            if ($line[0] == ';') {
-                                $this->addComment(trim(ltrim($line, '; ')));
-                            } else {
-                                $tmp = explode(':', $line);
-                                if (count($tmp) == 2) {
-                                    $this->setHeader(trim($tmp[0]), trim($tmp[1]));
-                                }
-                            }
-                        }
-                    }
+        while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
 
-                    // parsing styles
-                    if (strtolower(trim($line)) === '[v4+ styles]') {
-                        $line = fgets($handle);
-                        $tmp_styles = array();
+            // parsing headers
+            if ($line === '[script info]') {
+                while (($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
+                    if ($line[0] == ';') {
+                        $this->addComment(ltrim($line, '; '));
+                    } else {
                         $tmp = explode(':', $line);
-                        if ($tmp[0] == 'Format') {
-                            $tmp2 = explode(',', $tmp[1]);
-
-                            foreach ($tmp2 as $s) {
-                                $tmp_styles[trim($s)] = null;
-                            }
-                        } else {
-                            throw new \Exception($this->filename.' is not valid file.');
+                        if (count($tmp) == 2) {
+                            $this->setHeader(trim($tmp[0]), trim($tmp[1]));
                         }
-
-                        $line = fgets($handle);
-                        $tmp = explode(':', $line);
-                        if ($tmp[0] == 'Style') {
-                            $tmp2 = explode(',', $tmp[1]);
-                            $i = 0;
-                            foreach (array_keys($tmp_styles) as $s) {
-                                $this->setStyle($s, trim($tmp2[$i]));
-                                $i++;
-                            }
-                        } else {
-                            throw new \Exception($this->filename.' is not valid file.');
-                        }
-                        break;
                     }
                 }
             }
-        } catch (\Exception $e) {
-            fclose($handle);
-            throw $e;
+
+            // parsing styles
+            if ($line === '[v4+ styles]') {
+                $line = $this->getNextValueFromArray($fileContentArray);
+                $tmp_styles = array();
+                $tmp = explode(':', $line);
+                if ($tmp[0] !== 'Format') {
+                    throw new \Exception($this->filename.' is not valid file.');
+                }
+                $tmp2 = explode(',', $tmp[1]);
+
+                foreach ($tmp2 as $s) {
+                    $tmp_styles[trim($s)] = null;
+                }
+
+                $line = $this->getNextValueFromArray($fileContentArray);
+                $tmp = explode(':', $line);
+                if ($tmp[0] !== 'Style') {
+                    throw new \Exception($this->filename.' is not valid file.');
+                }
+                $tmp2 = explode(',', $tmp[1]);
+                $i = 0;
+                foreach (array_keys($tmp_styles) as $s) {
+                    $this->setStyle($s, trim($tmp2[$i]));
+                    $i++;
+                }
+
+                break;
+            }
         }
-        fclose($handle);
 
         $matches = array();
         preg_match_all(self::PATTERN, $this->fileContent, $matches);
