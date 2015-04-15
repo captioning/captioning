@@ -149,7 +149,7 @@ abstract class File implements FileInterface
             throw new \Exception('File "'.$_filename.'" not found.');
         }
 
-        if (!($content = file_get_contents($this->filename))) {
+        if (!($content = file_get_contents($_filename))) {
             throw new \Exception('Cound not read file content ('.$_filename.').');
         }
 
