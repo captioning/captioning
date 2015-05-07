@@ -87,11 +87,10 @@ class SubripFile extends File
      */
     public function setOptions(array $options)
     {
-        if ($this->validateOptions($options)) {
-            $this->options = array_merge($this->defaultOptions, $options);
-        } else {
+        if (!$this->validateOptions($options)) {
             throw new \UnexpectedValueException('Options consists not allowed keys');
         }
+        $this->options = array_merge($this->defaultOptions, $options);
         return $this;
     }
 

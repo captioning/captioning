@@ -149,8 +149,8 @@ abstract class File implements FileInterface
             throw new \Exception('File "'.$_filename.'" not found.');
         }
 
-        if (!($content = file_get_contents($_filename))) {
-            throw new \Exception('Cound not read file content ('.$_filename.').');
+        if (!($content = file_get_contents($this->filename))) {
+            throw new \Exception('Could not read file content ('.$_filename.').');
         }
 
         $this->loadFromString($content);
@@ -549,5 +549,40 @@ abstract class File implements FileInterface
         } else {
             $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
         }
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    protected function getFileContentAsArray()
+    {
+        if (empty($this->fileContent)) {
+            $this->loadFromFile($this->filename);
+        }
+        $fileContent = str_replace( // So we change line endings to one format
+            array(
+                self::WINDOWS_LINE_ENDING,
+                self::MAC_LINE_ENDING,
+            ),
+            self::UNIX_LINE_ENDING,
+            $this->fileContent
+        );
+        $fileContentArray = explode(self::UNIX_LINE_ENDING, $fileContent); // Create array from file content
+
+        return $fileContentArray;
+    }
+
+    /**
+     * @param array $array
+     * @return mixed
+     */
+    protected function getNextValueFromArray(array &$array)
+    {
+        $element = each($array);
+        if (is_array($element)) {
+            return $element['value'];
+        }
+        return false;
     }
 }

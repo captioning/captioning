@@ -12,16 +12,13 @@ class WebvttFile extends File
 
     public function parse()
     {
-        $handle = fopen($this->filename, "r");
-        $parsing_errors = array();
+        $fileContentArray = $this->getFileContentAsArray();
 
-        if (!$handle) {
-            throw new \Exception('Could not read the file "'.$this->filename.'".');
-        }
+        $parsing_errors = array();
 
         $case = 'header';
         $i = 1;
-        while (($line = fgets($handle)) !== false) {
+        while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
             // checking header
             if ($case === 'header' && trim($line) != 'WEBVTT') {
                 $parsing_errors[] = 'Missing "WEBVTT" at the beginning of the file';
@@ -44,15 +41,15 @@ class WebvttFile extends File
 
                 if ($case === 'body') {
                     // parsing notes
-                    if (substr($line, 0, 4) === 'NOTE') {
+                    if (strpos($line, 'NOTE') === 0) {
                         if (trim($line) === 'NOTE') {
                             $note = $this->lineEnding;
                         } else {
                             $note = trim(ltrim($line, 'NOTE ')).$this->lineEnding;
                         }
                         // note continues until there is a blank line
-                        while (trim($line = fgets($handle)) !== '') {
-                            $note .= trim($line).$this->lineEnding;
+                        while (trim($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
+                            $note .= $line.$this->lineEnding;
                             $i++;
                         }
                         continue;
@@ -72,7 +69,7 @@ class WebvttFile extends File
                         if ($id_match) {
                             $id = $line;
 
-                            $line = fgets($handle);
+                            $line = $this->getNextValueFromArray($fileContentArray);
                             $matches = array();
                             $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
                         }
@@ -86,7 +83,7 @@ class WebvttFile extends File
                         }
 
                         // cue continues until there is a blank line
-                        while (trim($line = fgets($handle)) !== '') {
+                        while (trim($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
                             $text .= trim($line).$this->lineEnding;
                         }
 
@@ -121,8 +118,6 @@ class WebvttFile extends File
             }
             $i++;
         }
-
-        fclose($handle);
 
         if (count($parsing_errors) > 0) {
             throw new \Exception('The following errors were found while parsing the file:'."\n".print_r($parsing_errors, true));
