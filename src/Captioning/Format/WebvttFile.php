@@ -32,7 +32,7 @@ class WebvttFile extends File
 
                 if ('region' === $case) {
                     // parsing regions
-                    if (strpos($line,'Region:') === 0) {
+                    if (strpos($line, 'Region:') === 0) {
                         $this->addRegion(WebvttRegion::parseFromString($line));
                     } else if (trim($line) === '') {
                         $case = 'body';
