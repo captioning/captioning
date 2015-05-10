@@ -34,20 +34,7 @@ class SubstationalphaCue extends Cue
 
     public static function ms2tc($ms)
     {
-        $tc_ms = round((($ms / 1000) - intval($ms / 1000)) * 1000);
-        $x = $ms / 1000;
-        $tc_s = intval($x % 60);
-        $x /= 60;
-        $tc_m = intval($x % 60);
-        $x /= 60;
-        $tc_h = intval($x % 24);
-
-        $timecode = $tc_h.':'
-            .str_pad($tc_m, 2, '0', STR_PAD_LEFT).':'
-            .str_pad($tc_s, 2, '0', STR_PAD_LEFT).'.'
-            .substr(str_pad($tc_ms, 3, '0', STR_PAD_LEFT), 0, -1);
-
-        return $timecode;
+        return parent::ms2tc($ms, '.', false);
     }
 
     public function setText($_text)
@@ -132,5 +119,14 @@ class SubstationalphaCue extends Cue
         $buffer .= implode(',', $params);
 
         return $buffer;
+    }
+
+    /**
+     * @param int $tc_ms
+     * @return string
+     */
+    protected static function getLasTimeCodePart($tc_ms)
+    {
+        return substr(str_pad($tc_ms, 3, '0', STR_PAD_LEFT), 0, -1);
     }
 }
