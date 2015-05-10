@@ -4,6 +4,9 @@ namespace Captioning\Format;
 
 class WebvttRegion
 {
+    const ANCHOR_TYPE_REGION = 1;
+    const ANCHOR_TYPE_VIEWPORT = 2;
+
     private $id;
     private $width;
     private $lines;
@@ -67,32 +70,12 @@ class WebvttRegion
 
     public function setRegionAnchor($_regionAnchor)
     {
-        if (null === $_regionAnchor) {
-            return;
-        }
-
-        $_value = self::checkAnchorValues($_regionAnchor);
-        if (null === $_value) {
-            throw new \Exception('Invalid region anchor value, must be "XX%,YY%", "'.$_regionAnchor.'" given.');
-        }
-        $this->regionAnchor = $_value;
-
-        return $this;
+        return $this->setAnchor($_regionAnchor, self::ANCHOR_TYPE_REGION);
     }
 
     public function setViewportAnchor($_viewportAnchor)
     {
-        if (null === $_viewportAnchor) {
-            return;
-        }
-
-        $_value = self::checkAnchorValues($_viewportAnchor);
-        if (null === $_value) {
-            throw new \Exception('Invalid viewport anchor value, must be "XX%,YY%"');
-        }
-        $this->viewportAnchor = $_value;
-
-        return $this;
+        return $this->setAnchor($_viewportAnchor, self::ANCHOR_TYPE_VIEWPORT);
     }
 
     public function setScroll($_scroll)
@@ -210,5 +193,28 @@ class WebvttRegion
         $buffer .= !is_null($this->scroll)         ? ' scroll='.$this->scroll : '';
 
         return $buffer;
+    }
+
+    private function setAnchor($anchor, $anchorType)
+    {
+        if (null === $anchor) {
+            return;
+        }
+        $_value = self::checkAnchorValues($anchor);
+        if (null === $_value) {
+            throw new \Exception('Invalid anchor value, must be "XX%,YY%", "'.$anchor.'" given.');
+        }
+        switch ($anchorType) {
+            case self::ANCHOR_TYPE_REGION:
+                $this->regionAnchor = $_value;
+                break;
+            case self::ANCHOR_TYPE_VIEWPORT:
+                $this->viewportAnchor = $_value;
+                break;
+            default:
+                throw new \RuntimeException('Invalid anchor type supplied');
+        }
+
+        return $this;
     }
 }
