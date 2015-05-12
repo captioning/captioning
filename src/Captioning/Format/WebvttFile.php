@@ -64,6 +64,7 @@ class WebvttFile extends File
                         $stop     = null;
                         $settings = null;
                         $text     = '';
+                        $note     = '';
 
                         if ($id_match) {
                             $id = $line;
@@ -86,12 +87,7 @@ class WebvttFile extends File
                         }
 
                         // make the cue object and add it to the file
-                        $cue = $this->createCue($start, $stop, $text, $settings, $id);
-
-                        if (!empty($note)) {
-                            $cue->setNote($note);
-                            unset($note);
-                        }
+                        $cue = $this->createCue($start, $stop, $text, $settings, $id, $note);
 
                         $this->addCue($cue);
                         unset($cue);
@@ -165,9 +161,10 @@ class WebvttFile extends File
      * @param string $text
      * @param string $settings
      * @param string $id
+     * @param string $note
      * @return WebvttCue
      */
-    private function createCue($start, $stop, $text, $settings, $id)
+    private function createCue($start, $stop, $text, $settings, $id, $note)
     {
         $cue = new WebvttCue($start, $stop, $text);
         $tmp = explode(' ', trim($settings));
@@ -183,6 +180,9 @@ class WebvttFile extends File
 
         if ($id !== null) {
             $cue->setIdentifier($id);
+        }
+        if (!empty($note)) {
+            $cue->setNote($note);
         }
 
         return $cue;
