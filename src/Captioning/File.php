@@ -394,11 +394,7 @@ abstract class File implements FileInterface
         //check subtitles do exist
         $startSubtitle = $this->getCue($_startIndex);
         $endSubtitle   = $this->getCue($_endIndex);
-        if (!$startSubtitle || !$endSubtitle) {
-            return false;
-        }
-
-        if (!($_startTime < $_endTime)) {
+        if (!$startSubtitle || !$endSubtitle || ($_startTime >= $_endTime)) {
             return false;
         }
 

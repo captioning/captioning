@@ -20,33 +20,32 @@ class WebvttFile extends File
         $i = 1;
         while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
             // checking header
-            if ($case === 'header' && trim($line) != 'WEBVTT') {
+            if ('header' === $case) {
+                if (trim($line) == 'WEBVTT') {
+                    $case = 'region';
+                    continue;
+                }
                 $parsing_errors[] = 'Missing "WEBVTT" at the beginning of the file';
-            } elseif ($case === 'header') {
-                $case = 'region';
-                continue;
             }
 
             if ($case !== 'header') {
-                // parsing regions
-                if ($case === 'region' && substr($line, 0, 7) == 'Region:') {
-                    $this->addRegion(WebvttRegion::parseFromString($line));
-                    continue;
-                }
 
-                if ($case === 'region' && trim($line) === '') {
-                    $case = 'body';
+                if ('region' === $case) {
+                    // parsing regions
+                    if (strpos($line, 'Region:') === 0) {
+                        $this->addRegion(WebvttRegion::parseFromString($line));
+                    } else if (trim($line) === '') {
+                        $case = 'body';
+                    }
                     continue;
-                }
-
-                if ($case === 'body') {
+                } else if ($case === 'body') {
                     // parsing notes
                     if (strpos($line, 'NOTE') === 0) {
-                        if (trim($line) === 'NOTE') {
-                            $note = $this->lineEnding;
-                        } else {
-                            $note = trim(ltrim($line, 'NOTE ')).$this->lineEnding;
+                        $note = '';
+                        if (trim($line) !== 'NOTE') {
+                            $note = trim(ltrim($line, 'NOTE '));
                         }
+                        $note .= $this->lineEnding;
                         // note continues until there is a blank line
                         while (trim($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
                             $note .= $line.$this->lineEnding;
@@ -65,21 +64,21 @@ class WebvttFile extends File
                         $stop     = null;
                         $settings = null;
                         $text     = '';
+                        $note     = '';
 
                         if ($id_match) {
                             $id = $line;
-
                             $line = $this->getNextValueFromArray($fileContentArray);
                             $matches = array();
                             $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
                         }
 
-                        if (!$timecode_match) {
-                            $parsing_errors[] = 'Malformed cue detected at line '.$i;
-                        } else {
+                        if ($timecode_match) {
                             $start = $matches[1];
                             $stop = $matches[2];
                             $settings = trim($matches[3]);
+                        } else {
+                            $parsing_errors[] = 'Malformed cue detected at line '.$i;
                         }
 
                         // cue continues until there is a blank line
@@ -88,26 +87,7 @@ class WebvttFile extends File
                         }
 
                         // make the cue object and add it to the file
-                        $cue = new WebvttCue($start, $stop, $text);
-                        $tmp = explode(' ', trim($settings));
-                        foreach ($tmp as $setting) {
-                            $tmp2 = explode(':', $setting);
-
-                            if (count($tmp2) !== 2) {
-                                continue;
-                            }
-
-                            $cue->setSetting($tmp2[0], $tmp2[1]);
-                        }
-
-                        if ($id !== null) {
-                            $cue->setIdentifier($id);
-                        }
-
-                        if (!empty($note)) {
-                            $cue->setNote($note);
-                            unset($note);
-                        }
+                        $cue = $this->createCue($start, $stop, $text, $settings, $id, $note);
 
                         $this->addCue($cue);
                         unset($cue);
@@ -173,5 +153,38 @@ class WebvttFile extends File
         $this->fileContent = $buffer;
 
         return $this;
+    }
+
+    /**
+     * @param string $start
+     * @param string $stop
+     * @param string $text
+     * @param string $settings
+     * @param string $id
+     * @param string $note
+     * @return WebvttCue
+     */
+    private function createCue($start, $stop, $text, $settings, $id, $note)
+    {
+        $cue = new WebvttCue($start, $stop, $text);
+        $tmp = explode(' ', trim($settings));
+        foreach ($tmp as $setting) {
+            $tmp2 = explode(':', $setting);
+
+            if (count($tmp2) !== 2) {
+                continue;
+            }
+
+            $cue->setSetting($tmp2[0], $tmp2[1]);
+        }
+
+        if ($id !== null) {
+            $cue->setIdentifier($id);
+        }
+        if (!empty($note)) {
+            $cue->setNote($note);
+        }
+
+        return $cue;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Captioning;
 
-use Captioning\CueInterface;
-
 abstract class Cue implements CueInterface
 {
     protected $start;
@@ -224,5 +222,41 @@ abstract class Cue implements CueInterface
         $tmp           = explode('Cue', end($fullNamespace));
 
         return $tmp[0];
+    }
+
+    /**
+     * @param int $ms
+     * @param string $_separator
+     * @return string
+     */
+    public static function ms2tc($ms, $_separator = '.', $isHoursPaddingEnabled = true)
+    {
+        $tc_ms = round((($ms / 1000) - intval($ms / 1000)) * 1000);
+        $x = $ms / 1000;
+        $tc_s = intval($x % 60);
+        $x /= 60;
+        $tc_m = intval($x % 60);
+        $x /= 60;
+        $tc_h = intval($x % 24);
+
+        if ($isHoursPaddingEnabled) {
+            $timecode = str_pad($tc_h, 2, '0', STR_PAD_LEFT).':';
+        } else {
+            $timecode = $tc_h.':';
+        }
+        $timecode .= str_pad($tc_m, 2, '0', STR_PAD_LEFT).':'
+            .str_pad($tc_s, 2, '0', STR_PAD_LEFT).$_separator
+            .static::getLasTimeCodePart($tc_ms);
+
+        return $timecode;
+    }
+
+    /**
+     * @param int $tc_ms
+     * @return string
+     */
+    protected static function getLasTimeCodePart($tc_ms)
+    {
+        return str_pad($tc_ms, 3, '0', STR_PAD_LEFT);
     }
 }

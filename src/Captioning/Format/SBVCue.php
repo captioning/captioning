@@ -13,23 +13,15 @@ class SBVCue extends Cue
 
         return $durMS;
     }
-    
+
+    /**
+     * @param int $ms
+     * @param string $_separator
+     * @return string
+     */
     public static function ms2tc($ms, $_separator = '.')
     {
-        $tc_ms = round((($ms / 1000) - intval($ms / 1000)) * 1000);
-        $x = $ms / 1000;
-        $tc_s = intval($x % 60);
-        $x /= 60;
-        $tc_m = intval($x % 60);
-        $x /= 60;
-        $tc_h = intval($x % 24);
-
-        $timecode = str_pad($tc_h, 2, '0', STR_PAD_LEFT).':'
-            .str_pad($tc_m, 2, '0', STR_PAD_LEFT).':'
-            .str_pad($tc_s, 2, '0', STR_PAD_LEFT).$_separator
-            .str_pad($tc_ms, 3, '0', STR_PAD_LEFT);
-
-        return $timecode;
+        return parent::ms2tc($ms, $_separator);
     }
 
     /**

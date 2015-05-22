@@ -3,6 +3,7 @@
 namespace Captioning\Format;
 
 use Captioning\File;
+use Captioning\FileInterface;
 
 class TtmlFile extends File
 {
@@ -20,6 +21,7 @@ class TtmlFile extends File
 
     /**
      * @param string $_timeBase
+     * @return TtmlFile
      */
     public function setTimeBase($_timeBase)
     {
@@ -105,6 +107,7 @@ class TtmlFile extends File
 
     /**
      * @param TtmlCue $_mixed
+     * @return FileInterface
      */
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
@@ -165,6 +168,10 @@ class TtmlFile extends File
 
     private function parseCues($_xml)
     {
+        $start = '';
+        $stop = '';
+        $startMS = 0;
+        $stopMS = 0;
         foreach ($_xml->div->p as $p) {
             if (self::TIMEBASE_MEDIA === $this->timeBase) {
                 $start   = (string)$p->attributes()->begin;
