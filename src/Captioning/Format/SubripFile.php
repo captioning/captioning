@@ -8,15 +8,15 @@ class SubripFile extends File
 {
     const PATTERN =
         '/^
-        ([\d])+                                  # Subtitle order.
+        ([\d]+)                                  # Subtitle order.
         (?:\r\n|\r|\n)                           # Line end.
         ([\d]{2}:[\d]{2}:[\d]{2},[\d]{3})        # Start time.
         \s-->\s                                  # Time delimiter.
         ([\d]{2}:[\d]{2}:[\d]{2},[\d]{3})        # End time.
         (?:\r\n|\r|\n)                           # Line end.
-        (?:.|\n)*?                               # Subtitle text.
+        ((?:.|\n)*?)                             # Subtitle text.
         (?:\r\n|\r|\n)                           # End blank line.
-        $/mux'
+        $/mx'
     ;
 
     protected $lineEnding = File::WINDOWS_LINE_ENDING;
@@ -42,8 +42,11 @@ class SubripFile extends File
 
         $entries_count = count($matches[1]);
 
-        for ($i = 0; $i < $entries_count; $i++) {
-            $cue = new SubripCue($matches[1][$i], $matches[2][$i], $matches[3][$i]);
+        for ($i = 0, $subtitleOrder = 1; $i < $entries_count; $i++, $subtitleOrder++) {
+            if ($matches[1][$i] != $subtitleOrder) {
+                throw new \Exception($this->filename.' is not a proper .srt file.');
+            }
+            $cue = new SubripCue($matches[2][$i], $matches[3][$i], $matches[4][$i]);
             $cue->setLineEnding($this->lineEnding);
             $this->addCue($cue);
         }
