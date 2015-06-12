@@ -6,7 +6,18 @@ use Captioning\File;
 
 class SubripFile extends File
 {
-    const PATTERN = '#[0-9]+(?:\r\n|\r|\n)([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3})(?:\r\n|\r|\n)((?:.*(?:\r\n|\r|\n))*?)(?:\r\n|\r|\n)#';
+    const PATTERN =
+        '/^
+        ([\d])+                                  # Subtitle order.
+        (?:\r\n|\r|\n)                           # Line end.
+        ([\d]{2}:[\d]{2}:[\d]{2},[\d]{3})        # Start time.
+        \s-->\s                                  # Time delimiter.
+        ([\d]{2}:[\d]{2}:[\d]{2},[\d]{3})        # End time.
+        (?:\r\n|\r|\n)                           # Line end.
+        (?:.|\n)*?                               # Subtitle text.
+        (?:\r\n|\r|\n)                           # End blank line.
+        $/mux'
+    ;
 
     protected $lineEnding = File::WINDOWS_LINE_ENDING;
 
@@ -50,7 +61,7 @@ class SubripFile extends File
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
-        
+
         $i = 1;
         $buffer = "";
         if ($_from < 0 || $_from >= $this->getCuesCount()) {
@@ -74,7 +85,7 @@ class SubripFile extends File
             $buffer .= $this->lineEnding;
             $i++;
         }
-        
+
         $this->fileContent = $buffer;
 
         return $this;
