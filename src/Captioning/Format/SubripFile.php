@@ -8,18 +8,25 @@ class SubripFile extends File
 {
     const PATTERN =
         '/^
-        ([\d]+)                                  # Subtitle order.
-        (?:\r\n|\r|\n)                           # Line end.
-        ([\d]{2}:[\d]{2}:[\d]{2},[\d]{3})        # Start time.
-        \s-->\s                                  # Time delimiter.
-        ([\d]{2}:[\d]{2}:[\d]{2},[\d]{3})        # End time.
-        (?:\r\n|\r|\n)                           # Line end.
-        ((?:.|\n)*?)                             # Subtitle text.
-        (?:\r\n|\r|\n)                           # End blank line.
-        $/mx'
+                       ### First subtitle ###
+        [\d]+                                   # Subtitle order.
+        ((?:\r\n|\r|\n))                        # Line end.
+        [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # Start time.
+        [ ]-->[ ]                               # Time delimiter.
+        [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # End time.
+        \1                                      # Line end.
+        (?:[\S ]+\1)+                           # Subtitle text.
+                       ### Other subtitles ###
+        (?:
+            \1(?<=\r\n|\r|\n)[\d]+\1
+            [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
+            [ ]-->[ ]
+            [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
+            \1(?:[\S ]+\1)+
+        )*
+        \1?
+        $/x'
     ;
-
-    protected $lineEnding = File::WINDOWS_LINE_ENDING;
 
     private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
 
@@ -27,26 +34,32 @@ class SubripFile extends File
 
     public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
-        $this->options = $this->defaultOptions;
         parent::__construct($_filename, $_encoding, $_useIconv);
+        $this->options = $this->defaultOptions;
     }
 
     public function parse()
     {
         $matches = array();
-        $res = preg_match_all(self::PATTERN, $this->fileContent, $matches);
+        $res = preg_match(self::PATTERN, $this->fileContent, $matches);
 
-        if (!$res || $res == 0) {
+        if ($res === false || $res === 0) {
             throw new \Exception($this->filename.' is not a proper .srt file.');
         }
 
-        $entries_count = count($matches[1]);
+        $this->setLineEnding($matches[1]);
+        $matches = explode($this->lineEnding . $this->lineEnding, rtrim($matches[0]));
+        $subtitleOrder = 1;
 
-        for ($i = 0, $subtitleOrder = 1; $i < $entries_count; $i++, $subtitleOrder++) {
-            if ($matches[1][$i] != $subtitleOrder) {
+        foreach ($matches as $match) {
+            $subtitle = explode($this->lineEnding, $match, 3);
+
+            if ($subtitle[0] != $subtitleOrder++) {
                 throw new \Exception($this->filename.' is not a proper .srt file.');
             }
-            $cue = new SubripCue($matches[2][$i], $matches[3][$i], $matches[4][$i]);
+
+            $timeline = explode(' --> ', $subtitle[1]);
+            $cue = new SubripCue($timeline[0], $timeline[1], $subtitle[2]);
             $cue->setLineEnding($this->lineEnding);
             $this->addCue($cue);
         }
