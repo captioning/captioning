@@ -49,16 +49,26 @@ class SubripFile extends File
 
         $this->setLineEnding($matches[1]);
         $matches = explode($this->lineEnding . $this->lineEnding, rtrim($matches[0]));
+
         $subtitleOrder = 1;
+        $subtitleTime = \DateTime::createFromFormat('H:i:s,u', '00:00:00,000');
 
         foreach ($matches as $match) {
             $subtitle = explode($this->lineEnding, $match, 3);
+            $timeline = explode(' --> ', $subtitle[1]);
 
-            if ($subtitle[0] != $subtitleOrder++) {
+            $subtitleTimeStart = \DateTime::createFromFormat('H:i:s,u', $timeline[0]);
+            $subtitleTimeEnd = \DateTime::createFromFormat('H:i:s,u', $timeline[1]);
+
+            if (
+                $subtitle[0] != $subtitleOrder++ ||
+                !$this->validateTimelines($subtitleTime, $subtitleTimeStart) ||
+                !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
+            ) {
                 throw new \Exception($this->filename.' is not a proper .srt file.');
             }
 
-            $timeline = explode(' --> ', $subtitle[1]);
+            $subtitleTime = $subtitleTimeEnd;
             $cue = new SubripCue($timeline[0], $timeline[1], $subtitle[2]);
             $cue->setLineEnding($this->lineEnding);
             $this->addCue($cue);
@@ -141,6 +151,20 @@ class SubripFile extends File
                 return false;
             }
         }
+        return true;
+    }
+
+    /**
+     * @param \DateTime $startTimeline
+     * @param \DateTime $endTimeline
+     * @return boolean
+     */
+    private function validateTimelines(\DateTime $startTimeline, \DateTime $endTimeline)
+    {
+        if ($startTimeline >= $endTimeline) {
+            return false;
+        }
+
         return true;
     }
 }
