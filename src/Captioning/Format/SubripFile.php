@@ -9,7 +9,7 @@ class SubripFile extends File
     const PATTERN =
         '/^
                        ### First subtitle ###
-        [\d]+                                   # Subtitle order.
+        [\p{C}]{0,3}[\d]+                       # Subtitle order.
         ((?:\r\n|\r|\n))                        # Line end.
         [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # Start time.
         [ ]-->[ ]                               # Time delimiter.
@@ -25,7 +25,7 @@ class SubripFile extends File
             \1(?:[\S ]+\1)+
         )*
         \1?
-        $/x'
+        $/xu'
     ;
 
     private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
@@ -48,7 +48,8 @@ class SubripFile extends File
         }
 
         $this->setLineEnding($matches[1]);
-        $matches = explode($this->lineEnding.$this->lineEnding, rtrim($matches[0]));
+        $bom = pack('CCC', 0xef, 0xbb, 0xbf);
+        $matches = explode($this->lineEnding.$this->lineEnding, trim($matches[0], $bom.$this->lineEnding));
 
         $subtitleOrder = 1;
         $subtitleTime = \DateTime::createFromFormat('H:i:s,u', '00:00:00,000');
