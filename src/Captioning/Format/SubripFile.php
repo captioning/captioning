@@ -48,7 +48,7 @@ class SubripFile extends File
         }
 
         $this->setLineEnding($matches[1]);
-        $matches = explode($this->lineEnding . $this->lineEnding, rtrim($matches[0]));
+        $matches = explode($this->lineEnding.$this->lineEnding, rtrim($matches[0]));
 
         $subtitleOrder = 1;
         $subtitleTime = \DateTime::createFromFormat('H:i:s,u', '00:00:00,000');
