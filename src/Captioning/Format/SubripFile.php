@@ -9,7 +9,8 @@ class SubripFile extends File
     const PATTERN =
         '/^
                        ### First subtitle ###
-        [\p{C}]{0,3}[\d]+                       # Subtitle order.
+        [\p{C}]{0,3}                            # BOM
+        [\d]+                                   # Subtitle order.
         ((?:\r\n|\r|\n))                        # Line end.
         [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # Start time.
         [ ]-->[ ]                               # Time delimiter.
