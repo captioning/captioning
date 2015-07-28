@@ -163,10 +163,6 @@ class SubripFile extends File
      */
     private function validateTimelines(\DateTime $startTimeline, \DateTime $endTimeline)
     {
-        if ($startTimeline >= $endTimeline) {
-            return false;
-        }
-
-        return true;
+        return !($startTimeline >= $endTimeline);
     }
 }
