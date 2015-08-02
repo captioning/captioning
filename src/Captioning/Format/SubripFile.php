@@ -6,9 +6,28 @@ use Captioning\File;
 
 class SubripFile extends File
 {
-    const PATTERN = '#[0-9]+(?:\r\n|\r|\n)([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3})(?:\r\n|\r|\n)((?:.*(?:\r\n|\r|\n))*?)(?:\r\n|\r|\n)#';
-
-    protected $lineEnding = File::WINDOWS_LINE_ENDING;
+    const PATTERN =
+        '/^
+                       ### First subtitle ###
+        [\p{C}]{0,3}                            # BOM
+        [\d]+                                   # Subtitle order.
+        ((?:\r\n|\r|\n))                        # Line end.
+        [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # Start time.
+        [ ]-->[ ]                               # Time delimiter.
+        [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # End time.
+        \1                                      # Line end.
+        (?:[\S ]+\1)+                           # Subtitle text.
+                       ### Other subtitles ###
+        (?:
+            \1(?<=\r\n|\r|\n)[\d]+\1
+            [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
+            [ ]-->[ ]
+            [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
+            \1(?:[\S ]+\1)+
+        )*
+        \1?
+        $/xu'
+    ;
 
     private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
 
@@ -16,23 +35,43 @@ class SubripFile extends File
 
     public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
-        $this->options = $this->defaultOptions;
         parent::__construct($_filename, $_encoding, $_useIconv);
+        $this->options = $this->defaultOptions;
     }
 
     public function parse()
     {
         $matches = array();
-        $res = preg_match_all(self::PATTERN, $this->fileContent, $matches);
+        $res = preg_match(self::PATTERN, $this->fileContent, $matches);
 
-        if (!$res || $res == 0) {
+        if ($res === false || $res === 0) {
             throw new \Exception($this->filename.' is not a proper .srt file.');
         }
 
-        $entries_count = count($matches[1]);
+        $this->setLineEnding($matches[1]);
+        $bom = pack('CCC', 0xef, 0xbb, 0xbf);
+        $matches = explode($this->lineEnding.$this->lineEnding, trim($matches[0], $bom.$this->lineEnding));
 
-        for ($i = 0; $i < $entries_count; $i++) {
-            $cue = new SubripCue($matches[1][$i], $matches[2][$i], $matches[3][$i]);
+        $subtitleOrder = 1;
+        $subtitleTime = '';
+
+        foreach ($matches as $match) {
+            $subtitle = explode($this->lineEnding, $match, 3);
+            $timeline = explode(' --> ', $subtitle[1]);
+
+            $subtitleTimeStart = $timeline[0];
+            $subtitleTimeEnd = $timeline[1];
+
+            if (
+                $subtitle[0] != $subtitleOrder++ ||
+                !$this->validateTimelines($subtitleTime, $subtitleTimeStart) ||
+                !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
+            ) {
+                throw new \Exception($this->filename.' is not a proper .srt file.');
+            }
+
+            $subtitleTime = $subtitleTimeEnd;
+            $cue = new SubripCue($timeline[0], $timeline[1], $subtitle[2]);
             $cue->setLineEnding($this->lineEnding);
             $this->addCue($cue);
         }
@@ -50,7 +89,7 @@ class SubripFile extends File
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
-        
+
         $i = 1;
         $buffer = "";
         if ($_from < 0 || $_from >= $this->getCuesCount()) {
@@ -74,7 +113,7 @@ class SubripFile extends File
             $buffer .= $this->lineEnding;
             $i++;
         }
-        
+
         $this->fileContent = $buffer;
 
         return $this;
@@ -115,5 +154,29 @@ class SubripFile extends File
             }
         }
         return true;
+    }
+
+    /**
+     * @param string $startTimeline
+     * @param string $endTimeline
+     * @return boolean
+     */
+    private function validateTimelines($startTimeline, $endTimeline)
+    {
+        $startDateTime = \DateTime::createFromFormat('H:i:s,u', $startTimeline);
+        $endDateTime = \DateTime::createFromFormat('H:i:s,u', $endTimeline);
+
+        // If DateTime objects are equals need check milliseconds precision.
+        if ($startDateTime == $endDateTime) {
+            $startSeconds = $startDateTime->getTimestamp();
+            $endSeconds = $endDateTime->getTimestamp();
+
+            $startMilliseconds = ($startSeconds * 1000) + (int)substr($startTimeline, 8);
+            $endMilliseconds = ($endSeconds * 1000) + (int)substr($endTimeline, 8);
+
+            return $startMilliseconds < $endMilliseconds;
+        }
+
+        return $startTimeline < $endTimeline;
     }
 }

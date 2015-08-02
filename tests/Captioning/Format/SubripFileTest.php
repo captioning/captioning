@@ -33,8 +33,8 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
 
         // cues
         $this->assertEquals(6, $file->getCuesCount());
-        $this->assertEquals('00:00:07,500', $file->getCue(3)->getStart());
-        $this->assertEquals('00:00:27,500', $file->getCue(3)->getStop());
+        $this->assertEquals('00:00:27,500', $file->getCue(3)->getStart());
+        $this->assertEquals('00:00:37,500', $file->getCue(3)->getStop());
         $this->assertEquals("Sure! I've only had one today.", $file->getCue(3)->getText());
 
     }
@@ -58,7 +58,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $filename = __DIR__.'/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
 
-        $expectedCue = new SubripCue('00:00:12,500', '00:00:32,500', "OK, let's go.");
+        $expectedCue = new SubripCue('00:01:12,500', '00:01:32,500', "OK, let's go.");
 
         $this->assertEquals($expectedCue, $file->getLastCue());
     }

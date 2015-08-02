@@ -160,7 +160,7 @@ abstract class File implements FileInterface
 
     public function loadFromString($_str)
     {
-        $this->fileContent = trim($_str).$this->lineEnding.$this->lineEnding;
+        $this->fileContent = $_str;
 
         $this->encode();
         $this->parse();
