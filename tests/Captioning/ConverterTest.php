@@ -16,7 +16,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $content = "WEBVTT
 
-00:00:01.000 --> 00:00:20.000
+00:00:00.000 --> 00:00:20.000
 Hi, my name is Fred,
 nice to meet you.
 
@@ -99,7 +99,7 @@ Style: Default, Arial, 20, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 0, 0,
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:01.00,0:00:20.00,Default,,0000,0000,0000,,Hi, my name is Fred,\Nnice to meet you.
+Dialogue: 0,0:00:00.00,0:00:20.00,Default,,0000,0000,0000,,Hi, my name is Fred,\Nnice to meet you.
 Dialogue: 0,0:00:21.50,0:00:22.50,Default,,0000,0000,0000,,Hi, I'm Bill.
 Dialogue: 0,0:00:23.00,0:00:25.00,Default,,0000,0000,0000,,Would you like to get a coffee?
 Dialogue: 0,0:00:27.50,0:00:37.50,Default,,0000,0000,0000,,Sure! I've only had one today.

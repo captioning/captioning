@@ -53,14 +53,14 @@ class SubripFile extends File
         $matches = explode($this->lineEnding.$this->lineEnding, trim($matches[0], $bom.$this->lineEnding));
 
         $subtitleOrder = 1;
-        $subtitleTime = \DateTime::createFromFormat('H:i:s,u', '00:00:00,000');
+        $subtitleTime = '';
 
         foreach ($matches as $match) {
             $subtitle = explode($this->lineEnding, $match, 3);
             $timeline = explode(' --> ', $subtitle[1]);
 
-            $subtitleTimeStart = \DateTime::createFromFormat('H:i:s,u', $timeline[0]);
-            $subtitleTimeEnd = \DateTime::createFromFormat('H:i:s,u', $timeline[1]);
+            $subtitleTimeStart = $timeline[0];
+            $subtitleTimeEnd = $timeline[1];
 
             if (
                 $subtitle[0] != $subtitleOrder++ ||
@@ -157,12 +157,26 @@ class SubripFile extends File
     }
 
     /**
-     * @param \DateTime $startTimeline
-     * @param \DateTime $endTimeline
+     * @param string $startTimeline
+     * @param string $endTimeline
      * @return boolean
      */
-    private function validateTimelines(\DateTime $startTimeline, \DateTime $endTimeline)
+    private function validateTimelines($startTimeline, $endTimeline)
     {
-        return !($startTimeline >= $endTimeline);
+        $startDateTime = \DateTime::createFromFormat('H:i:s,u', $startTimeline);
+        $endDateTime = \DateTime::createFromFormat('H:i:s,u', $endTimeline);
+
+        // If DateTime objects are equals need check milliseconds precision.
+        if ($startDateTime == $endDateTime) {
+            $startSeconds = $startDateTime->getTimestamp();
+            $endSeconds = $endDateTime->getTimestamp();
+
+            $startMilliseconds = ($startSeconds * 1000) + (int)substr($startTimeline, 8);
+            $endMilliseconds = ($endSeconds * 1000) + (int)substr($endTimeline, 8);
+
+            return $startMilliseconds < $endMilliseconds;
+        }
+
+        return $startTimeline < $endTimeline;
     }
 }

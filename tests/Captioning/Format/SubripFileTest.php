@@ -45,7 +45,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $filename = __DIR__.'/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
 
-        $expectedCue = new SubripCue('00:00:01,000', '00:00:20,000');
+        $expectedCue = new SubripCue('00:00:00,000', '00:00:20,000');
         $expectedCue->addTextLine('Hi, my name is Fred,');
         $expectedCue->addTextLine('nice to meet you.');
 
