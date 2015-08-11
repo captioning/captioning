@@ -171,8 +171,8 @@ class SubripFile extends File
             $startSeconds = $startDateTime->getTimestamp();
             $endSeconds = $endDateTime->getTimestamp();
 
-            $startMilliseconds = ($startSeconds * 1000) + (int)substr($startTimeline, 8);
-            $endMilliseconds = ($endSeconds * 1000) + (int)substr($endTimeline, 8);
+            $startMilliseconds = ($startSeconds * 1000) + (int)substr($startTimeline, 9);
+            $endMilliseconds = ($endSeconds * 1000) + (int)substr($endTimeline, 9);
 
             return $startMilliseconds < $endMilliseconds;
         }
