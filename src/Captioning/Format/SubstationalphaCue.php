@@ -125,7 +125,7 @@ class SubstationalphaCue extends Cue
      * @param int $tc_ms
      * @return string
      */
-    protected static function getLasTimeCodePart($tc_ms)
+    protected static function getLastTimeCodePart($tc_ms)
     {
         return substr(str_pad($tc_ms, 3, '0', STR_PAD_LEFT), 0, -1);
     }

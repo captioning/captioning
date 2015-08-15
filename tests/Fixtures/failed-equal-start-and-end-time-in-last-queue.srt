@@ -1,0 +1,28 @@
+1
+00:00:00,000 --> 00:00:20,000
+Hi, my name is Fred,
+nice to meet you.
+
+2
+00:00:21,500 --> 00:00:22,500
+Hi, I'm Bill.
+
+3
+00:00:23,000 --> 00:00:25,000
+Would you like to get a coffee?
+
+4
+00:00:27,500 --> 00:00:37,500
+Sure! I've only had one today.
+
+5
+00:00:40,000 --> 00:00:41,000
+This is my fourth!
+
+6
+00:01:12,500 --> 00:01:32,500
+OK, let's go.
+
+7
+00:01:32,500 --> 00:01:32,500
+Test next subtitle right after previous

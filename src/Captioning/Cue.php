@@ -246,7 +246,7 @@ abstract class Cue implements CueInterface
         }
         $timecode .= str_pad($tc_m, 2, '0', STR_PAD_LEFT).':'
             .str_pad($tc_s, 2, '0', STR_PAD_LEFT).$_separator
-            .static::getLasTimeCodePart($tc_ms);
+            .static::getLastTimeCodePart($tc_ms);
 
         return $timecode;
     }
@@ -255,7 +255,7 @@ abstract class Cue implements CueInterface
      * @param int $tc_ms
      * @return string
      */
-    protected static function getLasTimeCodePart($tc_ms)
+    protected static function getLastTimeCodePart($tc_ms)
     {
         return str_pad($tc_ms, 3, '0', STR_PAD_LEFT);
     }

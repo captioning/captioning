@@ -64,7 +64,7 @@ class SubripFile extends File
 
             if (
                 $subtitle[0] != $subtitleOrder++ ||
-                !$this->validateTimelines($subtitleTime, $subtitleTimeStart) ||
+                !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true) ||
                 !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
             ) {
                 throw new \Exception($this->filename.' is not a proper .srt file.');
@@ -159,9 +159,10 @@ class SubripFile extends File
     /**
      * @param string $startTimeline
      * @param string $endTimeline
+     * @param boolean $allowEqual
      * @return boolean
      */
-    private function validateTimelines($startTimeline, $endTimeline)
+    private function validateTimelines($startTimeline, $endTimeline, $allowEqual = false)
     {
         $startDateTime = \DateTime::createFromFormat('H:i:s,u', $startTimeline);
         $endDateTime = \DateTime::createFromFormat('H:i:s,u', $endTimeline);
@@ -174,7 +175,7 @@ class SubripFile extends File
             $startMilliseconds = ($startSeconds * 1000) + (int)substr($startTimeline, 9);
             $endMilliseconds = ($endSeconds * 1000) + (int)substr($endTimeline, 9);
 
-            return $startMilliseconds < $endMilliseconds;
+            return $startMilliseconds < $endMilliseconds || ($allowEqual && $startMilliseconds === $endMilliseconds);
         }
 
         return $startTimeline < $endTimeline;
