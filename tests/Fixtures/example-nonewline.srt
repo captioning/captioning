@@ -1,0 +1,12 @@
+1
+00:00:00,000 --> 00:00:20,000
+Hi, my name is Fred,
+nice to meet you.
+
+2
+00:00:21,500 --> 00:00:22,500
+Hi, I'm Bill.
+
+3
+00:00:23,000 --> 00:00:25,000
+Would you like to get a coffee?
