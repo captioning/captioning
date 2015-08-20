@@ -143,6 +143,8 @@ abstract class File implements FileInterface
     {
         if ($_filename === null) {
             $_filename = $this->filename;
+        } else {
+            $this->filename = $_filename;
         }
 
         if (!file_exists($_filename)) {
