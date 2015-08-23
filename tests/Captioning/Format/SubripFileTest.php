@@ -36,7 +36,6 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('00:00:27,500', $file->getCue(3)->getStart());
         $this->assertEquals('00:00:37,500', $file->getCue(3)->getStop());
         $this->assertEquals("Sure! I've only had one today.", $file->getCue(3)->getText());
-
     }
 
     public function testIfWeGetTheFirstCue()
@@ -61,5 +60,19 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $expectedCue = new SubripCue('00:01:12,500', '00:01:32,500', "OK, let's go.");
 
         $this->assertEquals($expectedCue, $file->getLastCue());
+    }
+
+    public function testSameEndTimeInPrevAndStartTimeInNext()
+    {
+        $filename = __DIR__.'/../../Fixtures/passed-with-same-end-in-prev-and-start-next-cue.srt';
+        $file = new SubripFile($filename);
+        $this->assertInstanceOf('Captioning\Format\SubripFile', $file);
+    }
+
+    public function testDoesNotAllowSameStartAndEndTime()
+    {
+        $filename = __DIR__.'/../../Fixtures/failed-equal-start-and-end-time-in-last-queue.srt';
+        $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
+        new SubripFile($filename);
     }
 }
