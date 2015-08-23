@@ -15,15 +15,14 @@ class SubripFile extends File
         [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # Start time.
         [ ]-->[ ]                               # Time delimiter.
         [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}         # End time.
-        \1                                      # Line end.
-        (?:[\S ]+\1)+                           # Subtitle text.
+        (?:\1[\S ]+)+                           # Subtitle text.
                        ### Other subtitles ###
         (?:
-            \1(?<=\r\n|\r|\n)[\d]+\1
+            \1\1(?<=\r\n|\r|\n)[\d]+\1
             [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
             [ ]-->[ ]
             [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
-            \1(?:[\S ]+\1)+
+            (?:\1[\S ]+)+
         )*
         \1?
         $/xu'

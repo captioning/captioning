@@ -38,6 +38,15 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("Sure! I've only had one today.", $file->getCue(3)->getText());
     }
 
+    public function testIfAFileWithoutTrailingNewlineIsParsedProperly()
+    {
+        $filename = __DIR__.'/../../Fixtures/example-nonewline.srt';
+        $file = new SubripFile($filename);
+
+        $this->assertEquals(3, $file->getCuesCount());
+        $this->assertEquals('Would you like to get a coffee?', $file->getCue(2)->getText());
+    }
+
     public function testIfWeGetTheFirstCue()
     {
         // example file from W3C spec
