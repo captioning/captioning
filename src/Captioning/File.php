@@ -162,6 +162,8 @@ abstract class File implements FileInterface
 
     public function loadFromString($_str)
     {
+        // Clear cues from previous runs
+        $this->cues = array();
         $this->fileContent = $_str;
 
         $this->encode();
