@@ -31,9 +31,11 @@ class SubripFile extends File
     private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false);
 
     private $options = array();
+    private $allowOverlaps;
 
-    public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
+    public function __construct($_filename = null, $_encoding = null, $_useIconv = false, $_allowOverlaps = false)
     {
+        $this->allowOverlaps = $_allowOverlaps;
         parent::__construct($_filename, $_encoding, $_useIconv);
         $this->options = $this->defaultOptions;
     }
@@ -63,7 +65,7 @@ class SubripFile extends File
 
             if (
                 $subtitle[0] != $subtitleOrder++ ||
-                !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true) ||
+                !($this->allowOverlaps || $this->validateTimelines($subtitleTime, $subtitleTimeStart, true)) ||
                 !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
             ) {
                 throw new \Exception($this->filename.' is not a proper .srt file.');
