@@ -6,98 +6,92 @@ use Captioning\File;
 
 class WebvttFile extends File
 {
-    const TIMECODE_PATTERN = '#^([0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{3}) ?(.*)$#';
+    const TIMECODE_PATTERN = '#^((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}.[0-9]{3}) --> ((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}.[0-9]{3})( .*)?$#';
 
     protected $regions = array();
 
     public function parse()
     {
         $fileContentArray = $this->getFileContentAsArray();
-
         $parsing_errors = array();
+        $i = 2;
 
-        $case = 'header';
-        $i = 1;
-        while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
-            // checking header
-            if ('header' === $case) {
-                if (trim($line) == 'WEBVTT') {
-                    $case = 'region';
-                    continue;
-                }
-                $parsing_errors[] = 'Missing "WEBVTT" at the beginning of the file';
-            }
-
-            if ($case !== 'header') {
-
-                if ('region' === $case) {
-                    // parsing regions
-                    if (strpos($line, 'Region:') === 0) {
-                        $this->addRegion(WebvttRegion::parseFromString($line));
-                    } else if (trim($line) === '') {
-                        $case = 'body';
-                    }
-                    continue;
-                } else if ($case === 'body') {
-                    // parsing notes
-                    if (strpos($line, 'NOTE') === 0) {
-                        $note = '';
-                        if (trim($line) !== 'NOTE') {
-                            $note = trim(ltrim($line, 'NOTE '));
-                        }
-                        $note .= $this->lineEnding;
-                        // note continues until there is a blank line
-                        while (trim($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
-                            $note .= $line.$this->lineEnding;
-                            $i++;
-                        }
-                        continue;
-                    }
-
-                    // parsing cues
-                    $id_match = !strstr($line, '-->') && trim($line) != '';
-                    $matches = array();
-                    $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
-                    if ($id_match || $timecode_match) {
-                        $id       = null;
-                        $start    = null;
-                        $stop     = null;
-                        $settings = null;
-                        $text     = '';
-                        $note     = '';
-
-                        if ($id_match) {
-                            $id = $line;
-                            $line = $this->getNextValueFromArray($fileContentArray);
-                            $matches = array();
-                            $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
-                        }
-
-                        if ($timecode_match) {
-                            $start = $matches[1];
-                            $stop = $matches[2];
-                            $settings = trim($matches[3]);
-                        } else {
-                            $parsing_errors[] = 'Malformed cue detected at line '.$i;
-                        }
-
-                        // cue continues until there is a blank line
-                        while (trim($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
-                            $text .= trim($line).$this->lineEnding;
-                        }
-
-                        // make the cue object and add it to the file
-                        $cue = $this->createCue($start, $stop, $text, $settings, $id, $note);
-
-                        $this->addCue($cue);
-                        unset($cue);
-
-                        continue;
-                    }
-                }
-            }
-            $i++;
+        // Parse signature.
+        if (rtrim($this->getNextValueFromArray($fileContentArray)) !== 'WEBVTT') {
+            $parsing_errors[] = 'Missing "WEBVTT" at the beginning of the file';
         }
+
+        // Parse regions.
+        while (($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
+            if (strpos($line, 'Region:') === 0) {
+                try {
+                    $this->addRegion(WebvttRegion::parseFromString($line));
+                } catch (\Exception $e) {
+                    $parsing_errors[] = $e->getMessage();
+                }
+            } else {
+                $parsing_errors[] = 'Incorrect Region definition at line ' . $i;
+            }
+            ++$i;
+        }
+
+        // Skip blank lines after signature.
+        while ($line === '') {
+            $line = $this->getNextValueFromArray($fileContentArray);
+            ++$i;
+        }
+
+        $note = '';
+        $id = '';
+
+        // Parse cues (comments, ids if they exists).
+        do {
+            // Comment.
+            if (strpos($line, 'NOTE') === 0) {
+
+                if (trim($line) !== 'NOTE') {
+                    $note = trim(ltrim($line, 'NOTE '));
+                }
+                $note .= $this->lineEnding;
+                // Comment continues until there is a blank line.
+                ++$i;
+                while (trim($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
+                    $note .= $line.$this->lineEnding;
+                    $i++;
+                }
+                continue;
+            }
+
+            // Timecode.
+            $matches = array();
+            $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
+
+            if ($timecode_match) {
+                $start = $matches[1];
+                $stop = $matches[2];
+                $settings = isset($matches[3]) ? trim($matches[3]): '';
+
+                // Cue continues until there is a blank line.
+                $text = '';
+                ++$i;
+                while (trim($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
+                    $text .= $line . $this->lineEnding;
+                    ++$i;
+                }
+
+                // Make the cue object and add it to the file.
+                $cue = $this->createCue($start, $stop, $text, $settings, $id, $note);
+                $note = $id = '';
+                $this->addCue($cue);
+                unset($cue);
+            } elseif ($line !== '') {
+                // Supposse what not empty line before timeline is id.
+                $id = $line;
+            } else {
+                $parsing_errors[] = 'Malformed cue detected at line ' . $i;
+            }
+            ++$i;
+        } while (($line = $this->getNextValueFromArray($fileContentArray)) !== false);
 
         if (count($parsing_errors) > 0) {
             throw new \Exception('The following errors were found while parsing the file:'."\n".print_r($parsing_errors, true));
