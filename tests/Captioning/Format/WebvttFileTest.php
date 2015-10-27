@@ -4,6 +4,146 @@ namespace Captioning\Format;
 
 class WebvttFileTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var string */
+    private $pathToVtts;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $ds = DIRECTORY_SEPARATOR;
+        $this->pathToVtts = __DIR__.$ds.'..'.$ds.'..'.$ds.'Fixtures'.$ds.'WebVTT-2015-10-09'.$ds;
+    }
+
+    /**
+     * @return array
+     */
+    public function parseProvider()
+    {
+        return array(
+            array('1-non-normative_sample-file-captions.vtt'),
+            array('1.1-non-normative_cues-with-multiple-lines.vtt'),
+            array('1.2-non-normative_comments_1.vtt'),
+            array('1.2-non-normative_comments_2.vtt'),
+            array('1.3-non-normative_other-features_1.vtt'),
+            array('1.3-non-normative_other-features_2.vtt'),
+            array('1.3-non-normative_other-features_3.vtt'),
+            array('1.3-non-normative_other-features_4.vtt'),
+        );
+    }
+
+    /**
+     * @param string $vtt
+     * @dataProvider parseProvider
+     */
+    public function testParse($vtt)
+    {
+        $webVttFile = $this->getWebvttFile($this->pathToVtts.$vtt);
+        $this->assertSame($webVttFile, $webVttFile->parse());
+    }
+
+    /**
+     * @return array
+     */
+    public function parseExceptionProvider()
+    {
+        return array(
+            array(
+                'invalid_1-non-normative_sample-file-captions.vtt',
+                [
+                    'Missing "WEBVTT" at the beginning of the file',
+                    'Incorrect Region definition at line 2',
+                    'Incorrect Region definition at line 3',
+                    'Malformed cue detected at line 7',
+                    'Malformed cue detected at line 13',
+                    'Malformed cue detected at line 19',
+                    'Malformed cue detected at line 33',
+                ],
+            ),
+            array(
+                'invalid_1.1-non-normative_cues-with-multiple-lines.vtt',
+                [
+                    'Malformed cue detected at line 10',
+                    'Malformed cue detected at line 15',
+                ],
+            ),
+            array(
+                'invalid_1.2-non-normative_comments_1.vtt',
+                [
+                    'Malformed cue detected at line 7',
+                ],
+            ),
+            array(
+                'invalid_1.2-non-normative_comments_2.vtt',
+                [
+                    'Malformed cue detected at line 9',
+                    'Malformed cue detected at line 12',
+                    'Malformed cue detected at line 23',
+                ],
+            ),
+            array(
+                'invalid_1.3-non-normative_other-features_1.vtt',
+                [
+                    'Missing "WEBVTT" at the beginning of the file',
+                    'Malformed cue detected at line 4',
+                    'Malformed cue detected at line 9',
+                ],
+            ),
+            array(
+                'invalid_1.3-non-normative_other-features_2.vtt',
+                [
+                    'Malformed cue detected at line 5',
+                    'Malformed cue detected at line 8',
+                    'Malformed cue detected at line 11',
+                ],
+            ),
+            array(
+                'invalid_1.3-non-normative_other-features_3.vtt',
+                [
+                    'Malformed cue detected at line 5',
+                    'Malformed cue detected at line 8',
+                ],
+            ),
+            array(
+                'invalid_1.3-non-normative_other-features_4.vtt',
+                [
+                    'Incorrect Region definition at line 2',
+                    'Unable to parse the string as WebvttRegion'
+                ],
+            ),
+        );
+    }
+
+    /**
+     * @param string $vtt
+     * @param array $errors
+     * @dataProvider parseExceptionProvider
+     */
+    public function testParseException($vtt, array $errors)
+    {
+        $this->setExpectedException(
+            'Exception',
+            'The following errors were found while parsing the file:'."\n".print_r($errors, true)
+        );
+        $webVttFile = $this->getWebvttFile($this->pathToVtts.$vtt);
+        $webVttFile->parse();
+    }
+
+    public function testRegionsEmpty()
+    {
+        $webVttFile = $this->getWebvttFile($this->pathToVtts.'1.3-non-normative_other-features_1.vtt');
+
+        $this->assertNull($webVttFile->getRegion(0));
+    }
+
+    public function testRegions()
+    {
+        $webVttFile = $this->getWebvttFile($this->pathToVtts.'1.3-non-normative_other-features_4.vtt');
+        $region = new WebvttRegion('fred', '40%', '3', '0%,100%', '10%,90%', 'up');
+
+        $this->assertEquals($region, $webVttFile->getRegion(0));
+    }
+
     public function testAddingCuesBothWays()
     {
         $start = '01:02:03.456';
@@ -73,5 +213,16 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
         $expectedCue->setSetting('align', 'left');
 
         $this->assertEquals($expectedCue, $file->getLastCue());
+    }
+
+    /**
+     * @param string $filename
+     * @param string $encoding
+     * @param boolean $useIconv
+     * @return WebvttFile
+     */
+    private function getWebvttFile($filename, $encoding = null, $useIconv = false)
+    {
+        return new WebvttFile($filename, $encoding = null, $useIconv = false);
     }
 }
