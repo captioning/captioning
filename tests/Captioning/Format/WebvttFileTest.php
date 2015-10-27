@@ -50,7 +50,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 'invalid_1-non-normative_sample-file-captions.vtt',
-                [
+                array(
                     'Missing "WEBVTT" at the beginning of the file',
                     'Incorrect Region definition at line 2',
                     'Incorrect Region definition at line 3',
@@ -58,58 +58,58 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
                     'Malformed cue detected at line 13',
                     'Malformed cue detected at line 19',
                     'Malformed cue detected at line 33',
-                ],
+                ),
             ),
             array(
                 'invalid_1.1-non-normative_cues-with-multiple-lines.vtt',
-                [
+                array(
                     'Malformed cue detected at line 10',
                     'Malformed cue detected at line 15',
-                ],
+                ),
             ),
             array(
                 'invalid_1.2-non-normative_comments_1.vtt',
-                [
+                array(
                     'Malformed cue detected at line 7',
-                ],
+                ),
             ),
             array(
                 'invalid_1.2-non-normative_comments_2.vtt',
-                [
+                array(
                     'Malformed cue detected at line 9',
                     'Malformed cue detected at line 12',
                     'Malformed cue detected at line 23',
-                ],
+                ),
             ),
             array(
                 'invalid_1.3-non-normative_other-features_1.vtt',
-                [
+                array(
                     'Missing "WEBVTT" at the beginning of the file',
                     'Malformed cue detected at line 4',
                     'Malformed cue detected at line 9',
-                ],
+                ),
             ),
             array(
                 'invalid_1.3-non-normative_other-features_2.vtt',
-                [
+                array(
                     'Malformed cue detected at line 5',
                     'Malformed cue detected at line 8',
                     'Malformed cue detected at line 11',
-                ],
+                ),
             ),
             array(
                 'invalid_1.3-non-normative_other-features_3.vtt',
-                [
+                array(
                     'Malformed cue detected at line 5',
                     'Malformed cue detected at line 8',
-                ],
+                ),
             ),
             array(
                 'invalid_1.3-non-normative_other-features_4.vtt',
-                [
+                array(
                     'Incorrect Region definition at line 2',
                     'Unable to parse the string as WebvttRegion'
-                ],
+                ),
             ),
         );
     }
