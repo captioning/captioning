@@ -38,6 +38,22 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("Sure! I've only had one today.", $file->getCue(3)->getText());
     }
 
+    public function testIfANonUTF8EncodedFileIsParsedProperly()
+    {
+        $filename = __DIR__.'/../../Fixtures/non-utf8-win-eol.srt';
+        $file = new SubripFile($filename, 'ISO-8859-2');
+
+        // cues
+        $this->assertEquals(8, $file->getCuesCount());
+        $this->assertEquals('00:00:00,340', $file->getCue(0)->getStart());
+        $this->assertEquals('00:00:03,860', $file->getCue(0)->getStop());
+        $this->assertEquals("<i>Az előző részek tartalmából...</i>", $file->getCue(0)->getText());
+
+        $this->assertEquals('00:00:07,010', $file->getCue(2)->getStart());
+        $this->assertEquals('00:00:10,150', $file->getCue(2)->getStop());
+        $this->assertEquals("Kocsiba ülök, és mellette megyek majd.\r\nNem mehet egyedül.", $file->getCue(2)->getText());
+    }
+
     public function testIfAFileWithoutTrailingNewlineIsParsedProperly()
     {
         $filename = __DIR__.'/../../Fixtures/example-nonewline.srt';
