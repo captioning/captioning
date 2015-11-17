@@ -24,7 +24,7 @@ class SubripFile extends File
             [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
             (?:\1[\S ]+)+
         )*
-        \1?
+        \1*
         $/xu'
     ;
 
