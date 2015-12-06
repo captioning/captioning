@@ -100,4 +100,12 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
         new SubripFile($filename);
     }
+
+
+    public function testDoesNotAllowSameOrderIndex()
+    {
+        $filename = __DIR__.'/../../Fixtures/failed-equal-subtitle-order-number.srt';
+        $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
+        new SubripFile($filename);
+    }
 }
