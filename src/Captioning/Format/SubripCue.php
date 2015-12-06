@@ -8,8 +8,9 @@ class SubripCue extends Cue
 {
     public static function tc2ms($tc)
     {
-        $tab = explode(':', $tc);
-        $durMS = $tab[0] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + floatval(str_replace(',', '.', $tab[2])) * 1000;
+        $tab = array_reverse(explode(':', $tc));
+        $tab[2] = isset($tab[2]) ? $tab[2] : 0;
+        $durMS = $tab[2] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + floatval(str_replace(',', '.', $tab[0])) * 1000;
 
         return $durMS;
     }
