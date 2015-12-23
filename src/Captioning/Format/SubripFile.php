@@ -67,7 +67,7 @@ class SubripFile extends File
                 !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
             ) {
                 switch (true) {
-                    case $subtitle[0] != $subtitleOrder++: $errorMsg = 'Invalid subtitle order index: ' . $subtitle[0]; break;
+                    case $subtitle[0] != $subtitleOrder - 1: $errorMsg = 'Invalid subtitle order index: ' . $subtitle[0]; break;
                     case !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true): $errorMsg = 'Staring time invalid: ' . $subtitleTimeStart; break;
                     case !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd): $errorMsg = 'Ending time invalid: ' . $subtitleTimeEnd; break;
                 }
