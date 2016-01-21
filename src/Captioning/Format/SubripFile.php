@@ -99,7 +99,7 @@ class SubripFile extends File
                     !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true)
                 )
             ) {
-                throw new \Exception($this->filename.' is not a proper .srt file.');
+                throw new \Exception($this->filename . " failed timeline validation. ({$subtitleTimeStart} --> {$subtitleTimeEnd})");
             }
 
             $subtitleTime = $subtitleTimeEnd;
