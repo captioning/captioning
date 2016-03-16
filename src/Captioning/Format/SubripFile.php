@@ -69,6 +69,8 @@ class SubripFile extends File
         $res = preg_match(($this->options['_requireStrictFileFormat'] ? self::PATTERN_STRICT : self::PATTERN_LOOSE), $this->fileContent, $matches);
 
         if ($res === false || $res === 0) {
+            var_dump($matches);
+            echo $this->fileContent;
             throw new \Exception($this->filename.' is not a proper .srt file.');
         }
 
@@ -91,15 +93,23 @@ class SubripFile extends File
                 $subtitleTimeEnd = $this->cleanUpTimecode($subtitleTimeEnd);
             }
 
-            if (
-                $subtitle[0] != $subtitleOrder++ ||
-                !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd, !$this->options['_requireStrictFileFormat']) ||
-                (
-                    $this->options['_requireStrictFileFormat'] && // Allow overlapping timecodes when not in "strict mode"
-                    !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true)
-                )
+            $passedValidation = true;
+            if ($subtitle[0] != $subtitleOrder++) {
+                $errorMsg = 'Invalid subtitle order index: ' . $subtitle[0];
+                $passedValidation = false;
+            } elseif (!$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd, !$this->options['_requireStrictFileFormat'])) {
+                $errorMsg = 'Ending time invalid: ' . $subtitleTimeEnd;
+                $passedValidation = false;
+            } elseif (
+                $this->options['_requireStrictFileFormat'] && // Allow overlapping timecodes when not in "strict mode"
+                !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true)
             ) {
-                throw new \Exception($this->filename . " failed timeline validation. ({$subtitleTimeStart} --> {$subtitleTimeEnd})");
+                $errorMsg = 'Staring time invalid: ' . $subtitleTimeStart;
+                $passedValidation = false;
+            }
+
+            if (!$passedValidation) {
+                throw new \Exception($this->filename." is not a proper .srt file. ({$subtitleTimeStart} --> {$subtitleTimeEnd}: {$errorMsg})");
             }
 
             $subtitleTime = $subtitleTimeEnd;
