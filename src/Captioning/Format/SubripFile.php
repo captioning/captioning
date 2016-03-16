@@ -24,7 +24,7 @@ class SubripFile extends File
             [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}
             (?:\1[\S ]+)+
         )*
-        \1?
+        \1*
         $/xu'
     ;
 
@@ -66,7 +66,12 @@ class SubripFile extends File
                 !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true) ||
                 !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
             ) {
-                throw new \Exception($this->filename.' is not a proper .srt file.');
+                switch (true) {
+                    case $subtitle[0] != $subtitleOrder - 1: $errorMsg = 'Invalid subtitle order index: ' . $subtitle[0]; break;
+                    case !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true): $errorMsg = 'Staring time invalid: ' . $subtitleTimeStart; break;
+                    case !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd): $errorMsg = 'Ending time invalid: ' . $subtitleTimeEnd; break;
+                }
+                throw new \Exception($this->filename.' is not a proper .srt file. (' . $errorMsg . ')');
             }
 
             $subtitleTime = $subtitleTimeEnd;
