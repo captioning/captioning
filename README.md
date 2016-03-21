@@ -7,6 +7,7 @@ Captioning is a collection of tools made to help you create and edit subtitles i
 * WebVTT (.vtt)
 * Substation Alpha (.ass)
 * Youtube Subtitles (.sbv)
+* JSON (TED.com) Subtitles (.json)
 * [WIP] TTML (.dfxp)
 
 # Installation
