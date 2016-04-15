@@ -51,7 +51,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
             array(
                 'invalid_1-non-normative_sample-file-captions.vtt',
                 array(
-                    'Missing "WEBVTT" at the beginning of the file',
+                    'Invalid file header (must be "WEBVTT" with optionnal description)',
                     'Incorrect Region definition at line 2',
                     'Incorrect Region definition at line 3',
                     'Malformed cue detected at line 7',
@@ -84,7 +84,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
             array(
                 'invalid_1.3-non-normative_other-features_1.vtt',
                 array(
-                    'Missing "WEBVTT" at the beginning of the file',
+                    'Invalid file header (must be "WEBVTT" with optionnal description)',
                     'Malformed cue detected at line 4',
                     'Malformed cue detected at line 9',
                 ),
@@ -109,6 +109,12 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
                 array(
                     'Incorrect Region definition at line 2',
                     'Unable to parse the string as WebvttRegion'
+                ),
+            ),
+            array(
+                'invalid_1.3-non-normative_other-features_5.vtt',
+                array(
+                    'File description must not contain "-->"'
                 ),
             ),
         );
