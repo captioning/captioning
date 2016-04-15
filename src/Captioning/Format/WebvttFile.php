@@ -10,6 +10,11 @@ class WebvttFile extends File
 
     protected $regions = array();
 
+    /**
+     * @var string
+     */
+    protected $fileDescription;
+
     public function parse()
     {
         $fileContentArray = $this->getFileContentAsArray();
@@ -17,8 +22,25 @@ class WebvttFile extends File
         $i = 2;
 
         // Parse signature.
-        if (rtrim($this->getNextValueFromArray($fileContentArray)) !== 'WEBVTT') {
+        $signature = $this->getNextValueFromArray($fileContentArray);
+
+        if (substr($signature, 0, 6) !== 'WEBVTT') {
             $parsing_errors[] = 'Missing "WEBVTT" at the beginning of the file';
+        }
+
+        if (strlen($signature) > 6) {
+            if (substr($signature, 0, 7) === 'WEBVTT ') {
+                $fileDescription = substr($signature, 7);
+
+                if (strpos($fileDescription, '-->') !== false) {
+                    $parsing_errors[] = 'File description must not contain "-->"';
+                } else {
+                    $this->fileDescription = $fileDescription;
+                }
+
+            } else {
+                $parsing_errors[] = 'Invalid file header (must be "WEBVTT" with optionnal description)';
+            }
         }
 
         // Parse regions.
@@ -107,25 +129,43 @@ class WebvttFile extends File
         return $this;
     }
 
+    /**
+     * @param $_index
+     * @return WebvttRegion|null
+     */
     public function getRegion($_index)
     {
         if (!isset($this->regions[$_index])) {
-            return;
+            return null;
         }
 
         return $this->regions[$_index];
     }
 
+    /**
+     * @return WebvttRegion[]
+     */
     public function getRegions()
     {
         return $this->regions;
     }
 
+    /**
+     * @param int $_from
+     * @param int $_to
+     * @return $this
+     */
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
 
-        $buffer = "WEBVTT".$this->lineEnding;
+        $buffer = "WEBVTT";
+
+        if ($this->fileDescription) {
+            $buffer .= ' '.$this->fileDescription;
+        }
+
+        $buffer .= $this->lineEnding;
 
         foreach ($this->regions as $region) {
             $buffer .= $region.$this->lineEnding;
@@ -180,5 +220,23 @@ class WebvttFile extends File
         }
 
         return $cue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileDescription()
+    {
+        return $this->fileDescription;
+    }
+
+    /**
+     * @param string $fileDescription
+     */
+    public function setFileDescription($fileDescription)
+    {
+        $this->fileDescription = $fileDescription;
+
+        return $this;
     }
 }
