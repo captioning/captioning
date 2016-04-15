@@ -8,6 +8,9 @@ class WebvttFile extends File
 {
     const TIMECODE_PATTERN = '#^((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}.[0-9]{3}) --> ((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}.[0-9]{3})( .*)?$#';
 
+    /**
+     * @var WebvttRegion[]
+     */
     protected $regions = array();
 
     /**
@@ -122,6 +125,10 @@ class WebvttFile extends File
         return $this;
     }
 
+    /**
+     * @param WebvttRegion $_region
+     * @return $this
+     */
     public function addRegion(WebvttRegion $_region)
     {
         $this->regions[] = $_region;
