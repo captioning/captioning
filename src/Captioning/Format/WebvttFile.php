@@ -89,7 +89,18 @@ class WebvttFile extends File
 
             // Timecode.
             $matches = array();
+
+            // Disable using JIT compiler if enabled
+            if ($pcreJit = ini_get('pcre.jit')) {
+                ini_set('pcre.jit', 0);
+            }
+
             $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
+
+            // Enable JIT compiled if it was enabled previously
+            if ($pcreJit) {
+                ini_set('pcre.jit', 1);
+            }
 
             if ($timecode_match) {
                 $start = $matches[1];
