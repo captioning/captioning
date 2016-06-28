@@ -146,11 +146,7 @@ class SubripFile extends File
             $cue = $this->getCue($j);
             $buffer .= $i.$this->lineEnding;
             $buffer .= $cue->getTimeCodeString().$this->lineEnding;
-            $buffer .= $cue->getText(
-                    $this->options['_stripTags'],
-                    $this->options['_stripBasic'],
-                    $this->options['_replacements']
-                );
+            $buffer .= $cue->getText();
             $buffer .= $this->lineEnding;
             $buffer .= $this->lineEnding;
             $i++;
