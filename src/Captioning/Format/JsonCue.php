@@ -12,7 +12,7 @@ class JsonCue extends Cue
     protected $startOfParagraph;
 
     /**
-     * @var integer
+     * @var mixed
      */
     protected $duration;
 
