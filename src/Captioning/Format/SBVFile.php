@@ -35,12 +35,13 @@ class SBVFile extends File
      *
      * @param int $_from Id of the first entry
      * @param int $_to Id of the last entry
+     * @return SBVFile
      */
     public function buildPart($_from, $_to)
     {
         $this->sortCues();
 
-        $buffer = "";
+        $buffer = '';
         if ($_from < 0 || $_from >= $this->getCuesCount()) {
             $_from = 0;
         }
@@ -50,8 +51,10 @@ class SBVFile extends File
         }
 
         for ($j = $_from; $j <= $_to; $j++) {
-            $buffer .= $this->getCue($j)->getTimeCodeString().$this->lineEnding;
-            $buffer .= $this->getCue($j)->getText().$this->lineEnding;
+            /** @var SBVCue $cue */
+            $cue = $this->getCue($j);
+            $buffer .= $cue->getTimeCodeString().$this->lineEnding;
+            $buffer .= $cue->getText().$this->lineEnding;
             $buffer .= $this->lineEnding;
         }
         
