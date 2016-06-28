@@ -20,16 +20,14 @@ class JsonFile extends File
             throw new \InvalidArgumentException('Invalid JSON subtitle');
         }
 
-        if (count($decodedContent['captions']) == 0) {
-            return false;
-        }
+        if (count($decodedContent['captions']) > 0) {
+            foreach ($decodedContent['captions'] as $c) {
+                $cue = new JsonCue($c['startTime'], $c['startTime'] + $c['duration'], $c['content']);
+                $cue->setDuration($c['duration']);
+                $cue->setStartOfParagraph($c['startOfParagraph']);
 
-        foreach ($decodedContent['captions'] as $c) {
-            $cue = new JsonCue($c['startTime'], $c['startTime'] + $c['duration'], $c['content']);
-            $cue->setDuration($c['duration']);
-            $cue->setStartOfParagraph($c['startOfParagraph']);
-
-            $this->addCue($cue);
+                $this->addCue($cue);
+            }
         }
 
         return $this;
