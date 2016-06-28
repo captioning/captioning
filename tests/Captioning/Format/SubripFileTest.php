@@ -68,6 +68,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         // example file from W3C spec
         $filename = __DIR__.'/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
+        $file->setLineEnding(SubripFile::UNIX_LINE_ENDING);
 
         $expectedCue = new SubripCue('00:00:00,000', '00:00:20,000');
         $expectedCue->addTextLine('Hi, my name is Fred,');
@@ -81,6 +82,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         // example file from W3C spec
         $filename = __DIR__.'/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
+        $file->setLineEnding(SubripFile::UNIX_LINE_ENDING);
 
         $expectedCue = new SubripCue('00:01:12,500', '00:01:32,500', "OK, let's go.");
 
