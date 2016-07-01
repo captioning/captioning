@@ -315,6 +315,7 @@ abstract class File implements FileInterface
      * @param mixed $_mixed An cue instance or a string representing the text
      * @param string $_start A timecode
      * @param string $_stop A timecode
+     * @return File
      */
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
@@ -342,6 +343,7 @@ abstract class File implements FileInterface
      * Removes a cue
      *
      * @param int $_index
+     * @return File
      */
     public function removeCue($_index)
     {
@@ -380,6 +382,7 @@ abstract class File implements FileInterface
      *
      * @param float $_old_fps
      * @param float $_new_fps
+     * @return File
      */
     public function changeFPS($_old_fps, $_new_fps)
     {

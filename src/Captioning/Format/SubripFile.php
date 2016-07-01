@@ -67,9 +67,15 @@ class SubripFile extends File
                 !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd)
             ) {
                 switch (true) {
-                    case $subtitle[0] != $subtitleOrder - 1: $errorMsg = 'Invalid subtitle order index: ' . $subtitle[0]; break;
-                    case !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true): $errorMsg = 'Staring time invalid: ' . $subtitleTimeStart; break;
-                    case !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd): $errorMsg = 'Ending time invalid: ' . $subtitleTimeEnd; break;
+                    case $subtitle[0] != $subtitleOrder - 1:
+                        $errorMsg = 'Invalid subtitle order index: ' . $subtitle[0];
+                        break;
+                    case !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true):
+                        $errorMsg = 'Staring time invalid: ' . $subtitleTimeStart;
+                        break;
+                    case !$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd):
+                        $errorMsg = 'Ending time invalid: ' . $subtitleTimeEnd;
+                        break;
                 }
                 throw new \Exception($this->filename.' is not a proper .srt file. (' . $errorMsg . ')');
             }
@@ -109,10 +115,10 @@ class SubripFile extends File
             $buffer .= $i.$this->lineEnding;
             $buffer .= $cue->getTimeCodeString().$this->lineEnding;
             $buffer .= $cue->getText(
-                    $this->options['_stripTags'],
-                    $this->options['_stripBasic'],
-                    $this->options['_replacements']
-                );
+                $this->options['_stripTags'],
+                $this->options['_stripBasic'],
+                $this->options['_replacements']
+            );
             $buffer .= $this->lineEnding;
             $buffer .= $this->lineEnding;
             $i++;
