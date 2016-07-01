@@ -4,7 +4,7 @@ namespace Captioning;
 
 interface FileInterface
 {
-    /*
+    /**
      * @return FileInterface
      */
     public function parse();
