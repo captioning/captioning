@@ -111,7 +111,7 @@ class TtmlFile extends File
      */
     public function addCue($_mixed, $_start = null, $_stop = null)
     {
-        if (get_class($_mixed) === self::getExpectedCueClass($this)) {
+        if (is_object($_mixed) && get_class($_mixed) === self::getExpectedCueClass($this)) {
             if (null !== $_mixed->getStyle() && !isset($this->styles[$_mixed->getStyle()])) {
                 throw new \InvalidArgumentException(sprintf('Invalid cue style "%s"', $_mixed->getStyle()));
             }
