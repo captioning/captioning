@@ -69,8 +69,6 @@ class SubripFile extends File
         $res = preg_match(($this->options['_requireStrictFileFormat'] ? self::PATTERN_STRICT : self::PATTERN_LOOSE), $this->fileContent, $matches);
 
         if ($res === false || $res === 0) {
-            var_dump($matches);
-            echo $this->fileContent;
             throw new \Exception($this->filename.' is not a proper .srt file.');
         }
 
