@@ -41,7 +41,18 @@ class SubripFile extends File
     public function parse()
     {
         $matches = array();
+
+        // Disable using JIT compiler if enabled
+        if ($pcreJit = ini_get('pcre.jit')) {
+            ini_set('pcre.jit', 0);
+        }
+
         $res = preg_match(self::PATTERN, $this->fileContent, $matches);
+
+        // Enable JIT compiled if it was enabled previously
+        if ($pcreJit) {
+            ini_set('pcre.jit', 1);
+        }
 
         if ($res === false || $res === 0) {
             throw new \Exception($this->filename.' is not a proper .srt file.');
