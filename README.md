@@ -23,3 +23,4 @@ Examples and snippets in the [wiki](https://github.com/captioning/captioning/wik
 # TODO-list
 * [Substation Alpha] add dynamic parsing if events format is not the default one
 * [WebVTT] Check if the region defined in WebvttFile object in WebvttCue::checkSetting()
+* [TTML] Implement the buildPart method
