@@ -36,4 +36,3 @@ Ti menjetek tovább!</i>
 00:00:23,590 --> 00:00:25,710
 - Mi az?
 - Menj tovább, majd jövök.
-
