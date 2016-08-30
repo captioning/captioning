@@ -312,9 +312,11 @@ abstract class File implements FileInterface
     /**
      * Add a cue
      *
-     * @param mixed $_mixed An cue instance or a string representing the text
+     * @param mixed  $_mixed An cue instance or a string representing the text
      * @param string $_start A timecode
-     * @param string $_stop A timecode
+     * @param string $_stop  A timecode
+     *
+     * @throws \Exception
      * @return File
      */
     public function addCue($_mixed, $_start = null, $_stop = null)
@@ -322,7 +324,7 @@ abstract class File implements FileInterface
         $fileFormat = self::getFormat($this);
 
         // if $_mixed is a Cue
-        if (is_subclass_of($_mixed, __NAMESPACE__.'\Cue')) {
+        if (is_object($_mixed) && class_exists(get_class($_mixed)) && class_exists(__NAMESPACE__.'\Cue') && is_subclass_of($_mixed, __NAMESPACE__.'\Cue')) {
             $cueFormat = Cue::getFormat($_mixed);
             if ($cueFormat !== $fileFormat) {
                 throw new \Exception("Can't add a $cueFormat cue in a $fileFormat file.");
