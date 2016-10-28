@@ -102,7 +102,7 @@ class SubripFile extends File
                 $this->options['_requireStrictFileFormat'] && // Allow overlapping timecodes when not in "strict mode"
                 !$this->validateTimelines($subtitleTime, $subtitleTimeStart, true)
             ) {
-                $errorMsg = 'Staring time invalid: ' . $subtitleTimeStart;
+                $errorMsg = 'Starting time invalid: ' . $subtitleTimeStart;
                 $passedValidation = false;
             }
 
