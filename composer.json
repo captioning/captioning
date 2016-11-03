@@ -23,5 +23,8 @@
         "psr-0": {
             "Captioning": "src/"
         }
+    },
+    "scripts": {
+      "test": "phpunit"
     }
 }
