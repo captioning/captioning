@@ -118,7 +118,7 @@ class SubripFile extends File
 
             case 'text':
                 $subtitleText[] = $line;
-                if ($line === '' || $lineNumber === count($lines) - 1) {
+                if ($lineNumber === count($lines) - 1 || ($line === '' && $lines[$lineNumber+1] !== '')) {
                   $state = 'end';
                   // Fall through...
                 } else {
