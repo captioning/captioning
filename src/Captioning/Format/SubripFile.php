@@ -79,7 +79,7 @@ class SubripFile extends File
                     throw new \Exception($this->filename.' is not a proper .srt file. (Expected subtitle order index at line '.$lineNumber.')');
                 }
                 $subtitleIndex = intval($line);
-                if ($subtitleOrder !== $subtitleIndex) {
+                if ($strict && $subtitleOrder !== $subtitleIndex) {
                     throw new \Exception($this->filename.' is not a proper .srt file. (Invalid subtitle order index: '.$line.' at line '.$lineNumber.')');
                 }
                 $state = 'time';
