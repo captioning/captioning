@@ -361,6 +361,10 @@ abstract class File implements FileInterface
      */
     public function sortCues()
     {
+        if (count($this->cues) === 0) {
+            return $this;
+        }
+
         $tmp = array();
 
         $count = 0; // useful if 2 cues start at the same time code
