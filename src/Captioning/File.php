@@ -6,6 +6,7 @@ abstract class File implements FileInterface, \Countable
 {
     const DEFAULT_ENCODING = 'UTF-8';
 
+    const PHP_LINE_ENDING    = PHP_EOL;
     const UNIX_LINE_ENDING    = "\n";
     const MAC_LINE_ENDING     = "\r";
     const WINDOWS_LINE_ENDING = "\r\n";
