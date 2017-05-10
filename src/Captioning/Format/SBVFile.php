@@ -32,7 +32,7 @@ class SBVFile extends File
                     $cueStart = trim($timeline[0]);
                     $cueStop = trim($timeline[1]);
 
-                    $cueText = [];
+                    $cueText = array();
                     $step = 'text';
                     break;
                 case 'text':
