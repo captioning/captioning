@@ -6,25 +6,50 @@ use Captioning\File;
 
 class SBVFile extends File
 {
-    const PATTERN = '#([0-9]{1,2}:[0-9]{2}:[0-9]{2}.[0-9]{3}),([0-9]{1,2}:[0-9]{2}:[0-9]{2}.[0-9]{3})(?:\r\n|\r|\n)((?:.*(?:\r\n|\r|\n))*?)(?:\r\n|\r|\n)#';
+    const PATTERN_TIMECODE = '/(\d{1,2}:\d{2}:\d{2}.\d{3}),(\d{1,2}:\d{2}:\d{2}.\d{3})/';
 
     protected $lineEnding = File::WINDOWS_LINE_ENDING;
 
     public function parse()
     {
         $matches = array();
-        $res = preg_match_all(self::PATTERN, $this->fileContent, $matches);
+        $res = preg_match_all(self::PATTERN_TIMECODE, $this->fileContent, $matches);
 
         if (!$res || $res == 0) {
             throw new \Exception($this->filename.' is not a proper .sbv file.');
         }
 
-        $entries_count = count($matches[1]);
+        $lines = explode($this->lineEnding, $this->fileContent);
 
-        for ($i = 0; $i < $entries_count; $i++) {
-            $cue = new SBVCue($matches[1][$i], $matches[2][$i], $matches[3][$i]);
-            $cue->setLineEnding($this->lineEnding);
-            $this->addCue($cue);
+        $step = 'time';
+        foreach ($lines as $lineNumber => $line) {
+            switch ($step) {
+                case 'time':
+                    $timeline = explode(',', $line);
+                    if (count($timeline) !== 2) {
+                        throw new \Exception($this->filename." is not a proper .sbv file. (Invalid timestamp delimiter at line ".$lineNumber.")");
+                    }
+                    $cueStart = trim($timeline[0]);
+                    $cueStop = trim($timeline[1]);
+
+                    $cueText = [];
+                    $step = 'text';
+                    break;
+                case 'text':
+                    $cueText[] = $line;
+                    if ($lineNumber === count($lines) - 1 || ($line === '' && $lines[$lineNumber+1] !== '')) {
+                        $step = 'end';
+                    } else {
+                        break;
+                    }
+                case 'end':
+                    $cue = new SBVCue($cueStart, $cueStop, implode($this->lineEnding, $cueText));
+                    $cue->setLineEnding($this->lineEnding);
+                    $this->addCue($cue);
+
+                    $step = 'time';
+                    break;
+            }
         }
 
         return $this;

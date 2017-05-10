@@ -21,7 +21,7 @@ class SBVCue extends Cue
      */
     public static function ms2tc($ms, $_separator = '.')
     {
-        return parent::ms2tc($ms, $_separator);
+        return parent::ms2tc($ms, $_separator, false);
     }
 
     /**
