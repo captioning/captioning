@@ -29,7 +29,7 @@ class SubstationalphaFile extends File
             'Synch Point'          => null,
             'Script Updated By'    => null,
             'Update Details'       => null,
-            'ScriptType'           => 'v4.00+',
+            'ScriptType'           => null,
             'Collisions'           => 'Normal',
             'PlayResX'             => 384,
             'PlayResY'             => 288,
@@ -84,7 +84,7 @@ class SubstationalphaFile extends File
 
     public function setHeader($_name, $_value)
     {
-        if (isset($this->headers[$_name])) {
+        if (array_key_exists($_name, $this->headers)) {
             $this->headers[$_name] = $_value;
         }
     }
@@ -170,13 +170,12 @@ class SubstationalphaFile extends File
 
     public function parse()
     {
-
         $fileContentArray = $this->getFileContentAsArray();
 
         while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
 
             // parsing headers
-            if ($line === '[script info]') {
+            if ($line === '[Script Info]') {
                 while (($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
                     if ($line[0] == ';') {
                         $this->addComment(ltrim($line, '; '));
@@ -238,6 +237,11 @@ class SubstationalphaFile extends File
 
             $this->addCue($cue);
         }
+        
+        if ($this->getHeader('ScriptType')===false) {
+            throw new \Exception($this->filename.' is not a proper .ass file (empty ScriptType).');
+        }
+        
         return $this;
     }
 
