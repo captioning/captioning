@@ -7,7 +7,7 @@ use Captioning\File;
 class SubstationalphaFile extends File {
 
     const PATTERN_V4 = '#Dialogue: Marked=([0-9]),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),(.*),(.*),([0-9]{4}),([0-9]{4}),([0-9]{4}),([^,]*),(.+)#';
-    const PATTERN_V4_PLUS = '#Dialogue: ([0-9]),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),(.*),(.*),([0-9]{4}),([0-9]{4}),([0-9]{4}),([^,]*),(.+)#';
+    const PATTERN_V4_PLUS = '#Dialogue: ([0-9]),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),([0-9]:[0-9]{2}:[0-9]{2}.[0-9]{2}),(.*),(.*),([0-9]{1,4}),([0-9]{1,4}),([0-9]{1,4}),([^,]*),(.+)#';
     const SCRIPT_TYPE_V4 = 'v4.00';
     const SCRIPT_TYPE_V4_PLUS = 'v4.00+';
     const STYLES_V4 = 'V4';
@@ -187,9 +187,9 @@ class SubstationalphaFile extends File {
 
     public function parse() {
         $fileContentArray = $this->getFileContentAsArray();
-
+       
         while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
-
+            
             // parsing headers
             if ($line === '[Script Info]') {
                 while (($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
@@ -203,7 +203,7 @@ class SubstationalphaFile extends File {
                     }
                 }
             }
-
+            
             // parsing styles
             if ($line === '[V4+ Styles]') {
                 $line = $this->getNextValueFromArray($fileContentArray);
@@ -234,10 +234,10 @@ class SubstationalphaFile extends File {
             }
         }
 
-        if ($this->getHeader('ScriptType') === false) {
+        if ($this->getScriptType() === false) {
             throw new \Exception($this->filename . ' is not a proper .ass file (empty ScriptType).');
         }
-
+        
         $matches = array();
         $pattern = $this->getPattern();
         preg_match_all($pattern, $this->fileContent, $matches);
@@ -249,8 +249,7 @@ class SubstationalphaFile extends File {
 
             $this->addCue($cue);
         }
-
-
+        
         return $this;
     }
 
@@ -292,17 +291,17 @@ class SubstationalphaFile extends File {
         $this->fileContent = $buffer;
         return $this;
     }
-    
+
     /**
      * Return event pattern.
      * 
      * @return string
      */
     private function getPattern() {
-        if ($this->getScriptType()==self::SCRIPT_TYPE_V4) {
+        if ($this->getScriptType() == self::SCRIPT_TYPE_V4) {
             return self::PATTERN_V4;
         }
-        
+
         return self::PATTERN_V4_PLUS;
     }
 

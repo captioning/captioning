@@ -10,10 +10,10 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
 
         // header
         $this->assertEquals('v4.00', $file->getScriptType());
-        
+
         // cues
         $this->assertEquals(6, $file->getCuesCount());
-      
+
         // first cue
         $this->assertEquals(0, $file->getCue(0)->getStartMS());
         $this->assertEquals(20000, $file->getCue(0)->getStopMS());
@@ -25,32 +25,32 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(22500, $file->getCue(1)->getStopMS());
         $this->assertEquals(1000.0, $file->getCue(1)->getDuration());
         $this->assertEquals("Hi, I'm Bill.", $file->getCue(1)->getText());
-        
+
         // third cue
         $this->assertEquals(23000, $file->getCue(2)->getStartMS());
         $this->assertEquals(25000, $file->getCue(2)->getStopMS());
         $this->assertEquals(2000.0, $file->getCue(2)->getDuration());
         $this->assertEquals("Would you like to get a coffee?", $file->getCue(2)->getText());
-        
+
         // fourth cue
         $this->assertEquals(27500, $file->getCue(3)->getStartMS());
         $this->assertEquals(37500, $file->getCue(3)->getStopMS());
         $this->assertEquals(10000.0, $file->getCue(3)->getDuration());
         $this->assertEquals("Sure! I've only had one today.", $file->getCue(3)->getText());
-        
+
         // fifth cue
         $this->assertEquals(40000, $file->getCue(4)->getStartMS());
         $this->assertEquals(41000, $file->getCue(4)->getStopMS());
         $this->assertEquals(1000.0, $file->getCue(4)->getDuration());
         $this->assertEquals("This is my fourth!", $file->getCue(4)->getText());
-        
+
         // fifth cue
         $this->assertEquals(72500, $file->getCue(5)->getStartMS());
         $this->assertEquals(92500, $file->getCue(5)->getStopMS());
         $this->assertEquals(20000.0, $file->getCue(5)->getDuration());
         $this->assertEquals("OK, let's go.", $file->getCue(5)->getText());
     }
-    
+
     public function testIfWeGetTheFirstV4Cue() {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_valid.ssa';
         $file = new SubstationalphaFile($filename);
@@ -59,7 +59,7 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($expectedCue, $file->getFirstCue());
     }
-    
+
     public function testIfWeGetTheLastV4Cue() {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_valid.ssa';
         $file = new SubstationalphaFile($filename);
@@ -68,23 +68,23 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($expectedCue, $file->getLastCue());
     }
-    
-        /**
+
+    /**
      * @expectedException Exception
      */
     public function testReadInvalidV4File() {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_invalid.ssa';
-     
+
         $file = new SubstationalphaFile($filename);
     }
-    
+
     public function testIfAFileV4plusIsParsedProperly() {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_valid.ass';
         $file = new SubstationalphaFile($filename);
 
         // header
         $this->assertEquals('v4.00+', $file->getScriptType());
-        
+
         // cues
         $this->assertEquals(6, $file->getCuesCount());
 
@@ -99,25 +99,25 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(22500, $file->getCue(1)->getStopMS());
         $this->assertEquals(1000.0, $file->getCue(1)->getDuration());
         $this->assertEquals("Hi, I'm Bill.", $file->getCue(1)->getText());
-        
+
         // third cue
         $this->assertEquals(23000, $file->getCue(2)->getStartMS());
         $this->assertEquals(25000, $file->getCue(2)->getStopMS());
         $this->assertEquals(2000.0, $file->getCue(2)->getDuration());
         $this->assertEquals("Would you like to get a coffee?", $file->getCue(2)->getText());
-        
+
         // fourth cue
         $this->assertEquals(27500, $file->getCue(3)->getStartMS());
         $this->assertEquals(37500, $file->getCue(3)->getStopMS());
         $this->assertEquals(10000.0, $file->getCue(3)->getDuration());
         $this->assertEquals("Sure! I've only had one today.", $file->getCue(3)->getText());
-        
+
         // fifth cue
         $this->assertEquals(40000, $file->getCue(4)->getStartMS());
         $this->assertEquals(41000, $file->getCue(4)->getStopMS());
         $this->assertEquals(1000.0, $file->getCue(4)->getDuration());
         $this->assertEquals("This is my fourth!", $file->getCue(4)->getText());
-        
+
         // fifth cue
         $this->assertEquals(72500, $file->getCue(5)->getStartMS());
         $this->assertEquals(92500, $file->getCue(5)->getStopMS());
@@ -142,14 +142,20 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($expectedCue, $file->getLastCue());
     }
-    
+
     /**
      * @expectedException Exception
-     */
-    public function testReadInvalidV4plusFile() {
-        $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_invalid.ass';
-     
-        $file = new SubstationalphaFile($filename);
-    }
+     * /
+      public function testReadInvalidV4plusFile() {
+      $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_invalid.ass';
 
+      $file = new SubstationalphaFile($filename);
+      }
+
+      /*public function testReadFile() {
+      $filename = __DIR__ . '/../../Fixtures/Substationalpha/example-9.ass';
+
+      $file = new SubstationalphaFile($filename);
+      var_dump($file->getCuesCount());
+      } */
 }
