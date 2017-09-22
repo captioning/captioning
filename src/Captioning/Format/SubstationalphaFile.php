@@ -298,12 +298,12 @@ class SubstationalphaFile extends File {
      * 
      * @return string
      */
-/*    private function getPattern() {
+    private function getPattern() {
         if ($this->getScriptType() == self::SCRIPT_TYPE_V4) {
             return self::PATTERN_V4;
         }
 
         return self::PATTERN_V4_PLUS;
-    } */
+    }
 
 }
