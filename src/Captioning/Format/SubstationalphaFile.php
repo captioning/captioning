@@ -189,6 +189,7 @@ class SubstationalphaFile extends File {
         $fileContentArray = $this->getFileContentAsArray();
        
         while (($line = $this->getNextValueFromArray($fileContentArray)) !== false) {
+            $line=preg_replace('/[\x{feff}-\x{ffff}]/u', '', $line);
             
             // parsing headers
             if ($line === '[Script Info]') {
@@ -297,12 +298,12 @@ class SubstationalphaFile extends File {
      * 
      * @return string
      */
-    private function getPattern() {
+/*    private function getPattern() {
         if ($this->getScriptType() == self::SCRIPT_TYPE_V4) {
             return self::PATTERN_V4;
         }
 
         return self::PATTERN_V4_PLUS;
-    }
+    } */
 
 }

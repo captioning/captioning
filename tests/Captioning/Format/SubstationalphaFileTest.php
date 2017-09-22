@@ -145,17 +145,17 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Exception
-     * /
-      public function testReadInvalidV4plusFile() {
-      $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_invalid.ass';
+     */
+    public function testReadInvalidV4plusFile() {
+        $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_invalid.ass';
 
-      $file = new SubstationalphaFile($filename);
-      }
+        $file = new SubstationalphaFile($filename);
+    }
 
-      /*public function testReadFile() {
-      $filename = __DIR__ . '/../../Fixtures/Substationalpha/example-9.ass';
+    public function testReadFile() {
+      $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass-3';
 
       $file = new SubstationalphaFile($filename);
       var_dump($file->getCuesCount());
-      } */
+      }
 }
