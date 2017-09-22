@@ -6,7 +6,7 @@ use Captioning\Cue;
 
 class SubstationalphaCue extends Cue {
 
-    private $layer;
+    private $layer; // margin for v4.00
     private $style;
     private $name;
     private $marginL;
@@ -37,12 +37,11 @@ class SubstationalphaCue extends Cue {
     public function setText($_text) {
         $this->text = preg_replace('#\r\n|\r|\n#', '\N', trim($_text));
     }
-    
+
     /**
      * @return string
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
 
@@ -102,7 +101,7 @@ class SubstationalphaCue extends Cue {
         $this->effect = $_effect;
     }
 
-    public function __toString() {
+    public function toString($_scriptType) {
         $params = array(
             $this->layer,
             $this->start,
@@ -116,7 +115,11 @@ class SubstationalphaCue extends Cue {
             $this->text
         );
 
-        $buffer = 'Dialogue: ';
+        if ($_scriptType == SubstationalphaFile::SCRIPT_TYPE_V4) {
+            $buffer = 'Dialogue: Marked=';
+        } else {
+            $buffer = 'Dialogue: ';
+        }
         $buffer .= implode(',', $params);
 
         return $buffer;
