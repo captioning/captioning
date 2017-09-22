@@ -6,12 +6,11 @@ use Captioning\Format\SubripFile;
 use Captioning\Format\WebvttFile;
 use Captioning\Format\SubstationalphaFile;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
-{
-    public function testSubrip2WebvttConversion()
-    {
+class ConverterTest extends \PHPUnit_Framework_TestCase {
+
+    public function testSubrip2WebvttConversion() {
         // example file from W3C spec
-        $filename = __DIR__.'/../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
 
         $content = "WEBVTT
@@ -37,13 +36,12 @@ OK, let's go.
 
 ";
 
-            $this->assertEquals($content, $file->convertTo('webvtt')->build()->getFileContent());
+        $this->assertEquals($content, $file->convertTo('webvtt')->build()->getFileContent());
     }
 
-    public function testWebvtt2SubripConversion()
-    {
+    public function testWebvtt2SubripConversion() {
         // example file from W3C spec
-        $filename = __DIR__.'/../Fixtures/example-1.vtt';
+        $filename = __DIR__ . '/../Fixtures/example-1.vtt';
         $file = new WebvttFile($filename);
 
         $content = "1
@@ -76,10 +74,46 @@ nice to meet you.
         $this->assertEquals($content, $file->convertTo('subrip')->build()->getFileContent());
     }
 
-    public function testSubrip2SubstationalphaConversion()
-    {
+    public function testSubrip2SubstationalphaConversionV4() {
         // example file from W3C spec
-        $filename = __DIR__.'/../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../Fixtures/example-1.srt';
+        $file = new SubripFile($filename);
+
+        $content = "[Script Info]
+Title: <untitled>
+Original Script: <unknown>
+ScriptType: v4.00
+Collisions: Normal
+PlayResX: 384
+PlayResY: 288
+PlayDepth: 0
+Timer: 100.0
+WrapStyle: 0
+
+[V4 Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding
+Style: Default, Arial, 20, &H00FFFFFF, &H00000000, &0000000, &H00000000, 0, 0, 1, 2, 0, 2, 15, 15, 15, 0, 0
+
+[Events]
+Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: Marked=0,0:00:00.00,0:00:20.00,Default,,0000,0000,0000,,Hi, my name is Fred,\Nnice to meet you.
+Dialogue: Marked=0,0:00:21.50,0:00:22.50,Default,,0000,0000,0000,,Hi, I'm Bill.
+Dialogue: Marked=0,0:00:23.00,0:00:25.00,Default,,0000,0000,0000,,Would you like to get a coffee?
+Dialogue: Marked=0,0:00:27.50,0:00:37.50,Default,,0000,0000,0000,,Sure! I've only had one today.
+Dialogue: Marked=0,0:00:40.00,0:00:41.00,Default,,0000,0000,0000,,This is my fourth!
+Dialogue: Marked=0,0:01:12.50,0:01:32.50,Default,,0000,0000,0000,,OK, let's go.
+";
+
+        $this->assertEquals($content, $file->convertTo('substationalpha')
+                        ->setScriptType(SubstationalphaFile::SCRIPT_TYPE_V4)
+                        ->setStylesVersion(SubstationalphaFile::STYLES_V4)
+                        ->build()
+                        ->getFileContent());
+    }
+
+    public function testSubrip2SubstationalphaConversionV4plus() {
+        // example file from W3C spec
+        $filename = __DIR__ . '/../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
 
         $content = "[Script Info]
@@ -93,7 +127,7 @@ PlayDepth: 0
 Timer: 100.0
 WrapStyle: 0
 
-[v4+ Styles]
+[V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Default, Arial, 20, &H00FFFFFF, &H00000000, &H00000000, &H00000000, 0, 0, 0, 0, 100, 100, 0, 0, 1, 2, 0, 2, 15, 15, 15, 0
 
@@ -107,16 +141,19 @@ Dialogue: 0,0:00:40.00,0:00:41.00,Default,,0000,0000,0000,,This is my fourth!
 Dialogue: 0,0:01:12.50,0:01:32.50,Default,,0000,0000,0000,,OK, let's go.
 ";
 
-        $this->assertEquals($content, $file->convertTo('substationalpha')->build()->getFileContent());
+        $this->assertEquals($content, $file->convertTo('substationalpha')
+                        ->setScriptType(SubstationalphaFile::SCRIPT_TYPE_V4_PLUS)
+                        ->build()
+                        ->getFileContent());
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testInvalidConverterException()
-    {
+    public function testInvalidConverterException() {
         $file = new SubripFile();
 
         $file->convertTo('foor');
     }
+
 }
