@@ -243,6 +243,10 @@ class SubstationalphaFile extends File {
         $pattern = $this->getPattern();
         preg_match_all($pattern, $this->fileContent, $matches);
         $matchesCount = count($matches[1]);
+        if ($matchesCount===0) {
+                throw new \Exception($this->filename . ' is not a proper .ass file (no events).');
+        }
+        
         for ($i = 0; $i < $matchesCount; $i++) {
             $cue = new SubstationalphaCue(
                     $matches[2][$i], $matches[3][$i], $matches[10][$i], $matches[1][$i], $matches[4][$i], $matches[5][$i], $matches[6][$i], $matches[7][$i], $matches[8][$i], $matches[9][$i]

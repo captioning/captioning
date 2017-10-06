@@ -150,12 +150,6 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_invalid.ass';
 
         $file = new SubstationalphaFile($filename);
-    }
+    } 
 
-    public function testReadFile() {
-      $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass-3';
-
-      $file = new SubstationalphaFile($filename);
-      var_dump($file->getCuesCount());
-      }
 }
