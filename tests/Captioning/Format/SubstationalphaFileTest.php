@@ -1,10 +1,11 @@
 <?php
-
 namespace Captioning\Format;
 
-class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
+class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase
+{
 
-    public function testIfAFileV4IsParsedProperly() {
+    public function testIfAFileV4IsParsedProperly()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_valid.ssa';
         $file = new SubstationalphaFile($filename);
 
@@ -51,7 +52,8 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("OK, let's go.", $file->getCue(5)->getText());
     }
 
-    public function testIfWeGetTheFirstV4Cue() {
+    public function testIfWeGetTheFirstV4Cue()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_valid.ssa';
         $file = new SubstationalphaFile($filename);
 
@@ -60,7 +62,8 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($expectedCue, $file->getFirstCue());
     }
 
-    public function testIfWeGetTheLastV4Cue() {
+    public function testIfWeGetTheLastV4Cue()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_valid.ssa';
         $file = new SubstationalphaFile($filename);
 
@@ -72,13 +75,15 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException Exception
      */
-    public function testReadInvalidV4File() {
+    public function testReadInvalidV4File()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ssa_v4_invalid.ssa';
 
         $file = new SubstationalphaFile($filename);
     }
 
-    public function testIfAFileV4plusIsParsedProperly() {
+    public function testIfAFileV4plusIsParsedProperly()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_valid.ass';
         $file = new SubstationalphaFile($filename);
 
@@ -125,7 +130,8 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("OK, let's go.", $file->getCue(5)->getText());
     }
 
-    public function testIfWeGetTheFirstV4plusCue() {
+    public function testIfWeGetTheFirstV4plusCue()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_valid.ass';
         $file = new SubstationalphaFile($filename);
 
@@ -134,7 +140,8 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($expectedCue, $file->getFirstCue());
     }
 
-    public function testIfWeGetTheLastV4plusCue() {
+    public function testIfWeGetTheLastV4plusCue()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_valid.ass';
         $file = new SubstationalphaFile($filename);
 
@@ -146,10 +153,10 @@ class SubstationaplphaFileTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException Exception
      */
-    public function testReadInvalidV4plusFile() {
+    public function testReadInvalidV4plusFile()
+    {
         $filename = __DIR__ . '/../../Fixtures/Substationalpha/ass_v4plus_invalid.ass';
 
         $file = new SubstationalphaFile($filename);
-    } 
-
+    }
 }
