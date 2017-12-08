@@ -230,7 +230,7 @@ class SubstationalphaFile extends File
                 $tmp_styles = array();
                 $tmp = explode(':', $line);
                 if ($tmp[0] !== 'Format') {
-                    throw new \Exception($this->filename . ' is not valid file.');
+                    throw new \Exception($this->filename . ' is not valid file (format line).');
                 }
                 $tmp2 = explode(',', $tmp[1]);
 
@@ -238,12 +238,12 @@ class SubstationalphaFile extends File
                     $tmp_styles[trim($s)] = null;
                 }
 
+                // line Style: ....
                 $line = $this->getNextValueFromArray($fileContentArray);
-                $tmp = explode(':', $line);
-                if ($tmp[0] !== 'Style') {
-                    throw new \Exception($this->filename . ' is not valid file.');
+                if (substr($line, 0, 6) !== "Style:") {
+                    throw new \Exception($this->filename . ' is not valid file (style line).');
                 }
-                $tmp2 = explode(',', $tmp[1]);
+                $tmp2 = explode(',', substr($line, 7));
                 $i = 0;
                 foreach (array_keys($tmp_styles) as $s) {
                     $this->setStyle($s, trim($tmp2[$i]));
