@@ -32,7 +32,7 @@ class SubstationalphaCue extends Cue
         return SubripCue::tc2ms($tc.'0');
     }
 
-    public static function ms2tc($ms)
+    public static function ms2tc($ms, $_separator = ',', $isHoursPaddingEnabled = true)
     {
         return parent::ms2tc($ms, '.', false);
     }
