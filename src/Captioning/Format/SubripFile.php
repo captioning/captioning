@@ -38,16 +38,13 @@ class SubripFile extends File
     {
         $content = $this->fileContent;
 
-        // Strip UTF-8 BOM
+        // strip UTF-8 BOM
         $bom = pack('CCC', 0xef, 0xbb, 0xbf);
         if (substr($content, 0, 3) === $bom) {
             $content = substr($content, 3);
         }
 
-        // remove empty lines from the beginning of a string
-        $content = preg_replace("/^[\r\n]*/", "", $content);
-
-        // remove whitespace from the beginning and end of a string
+        // remove whitespaces from the beginning and end of a string
         $content = trim($content);
 
         $matches = array();
