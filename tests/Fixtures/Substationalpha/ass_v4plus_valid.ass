@@ -1,0 +1,20 @@
+[Script Info]
+; This is an Advanced Sub Station Alpha v4+ script.
+Title: phpwqnu16
+ScriptType: v4.00+
+Collisions: Normal
+PlayDepth: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,20,&H00FFFFFF,&H0300FFFF,&H00000000,&H02000000,0,0,0,0,100,100,0,0,1,2,1,2,10,10,10,1
+Style: Aoi Hana OP,Magic:the Gathering,79,&H00FAEFF2,&H000019FF,&H00DFD0A2,&H00D5A9F8,0,-1,0,0,119.351,100,0,0,1,6.77824,0,8,30,30,56,1
+
+[Events]
+Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:20.00,Default,,0000,0000,0000,,Hi, my name is Fred,\Nnice to meet you.
+Dialogue: 0,0:00:21.50,0:00:22.50,Default,,0000,0000,0000,,Hi, I'm Bill.
+Dialogue: 0,0:00:23.00,0:00:25.00,Default,,0000,0000,0000,,Would you like to get a coffee?
+Dialogue: 0,0:00:27.50,0:00:37.50,Default,,0000,0000,0000,,Sure! I've only had one today.
+Dialogue: 0,0:00:40.00,0:00:41.00,Default,,0000,0000,0000,,This is my fourth!
+Dialogue: 0,0:01:12.50,0:01:32.50,Default,,0000,0000,0000,,OK, let's go.

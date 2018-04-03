@@ -1,9 +1,9 @@
 <?php
-
 namespace Captioning\Format;
 
 class SubripFileTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testAddingCuesBothWays()
     {
         $start = '01:02:03.456';
@@ -28,7 +28,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
     public function testIfAFileIsParsedProperly()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
 
         // cues
@@ -40,7 +40,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
 
     public function testIfANonUTF8EncodedFileIsParsedProperly()
     {
-        $filename = __DIR__.'/../../Fixtures/non-utf8-win-eol.srt';
+        $filename = __DIR__ . '/../../Fixtures/non-utf8-win-eol.srt';
         $file = new SubripFile($filename, 'ISO-8859-2');
 
         // cues
@@ -56,7 +56,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
 
     public function testIfAFileWithoutTrailingNewlineIsParsedProperly()
     {
-        $filename = __DIR__.'/../../Fixtures/example-nonewline.srt';
+        $filename = __DIR__ . '/../../Fixtures/example-nonewline.srt';
         $file = new SubripFile($filename);
 
         $this->assertEquals(3, $file->getCuesCount());
@@ -66,7 +66,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
     public function testIfWeGetTheFirstCue()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
         $file->setLineEnding(SubripFile::UNIX_LINE_ENDING);
 
@@ -80,7 +80,7 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
     public function testIfWeGetTheLastCue()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../../Fixtures/example-1.srt';
         $file = new SubripFile($filename);
         $file->setLineEnding(SubripFile::UNIX_LINE_ENDING);
 
@@ -91,23 +91,52 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
 
     public function testSameEndTimeInPrevAndStartTimeInNext()
     {
-        $filename = __DIR__.'/../../Fixtures/passed-with-same-end-in-prev-and-start-next-cue.srt';
+        $filename = __DIR__ . '/../../Fixtures/passed-with-same-end-in-prev-and-start-next-cue.srt';
         $file = new SubripFile($filename);
         $this->assertInstanceOf('Captioning\Format\SubripFile', $file);
     }
 
     public function testDoesNotAllowSameStartAndEndTime()
     {
-        $filename = __DIR__.'/../../Fixtures/failed-equal-start-and-end-time-in-last-queue.srt';
-        $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
+        $filename = __DIR__ . '/../../Fixtures/failed-equal-start-and-end-time-in-last-queue.srt';
+        $this->setExpectedException('\Exception', $filename . ' is not a proper .srt file.');
         new SubripFile($filename);
     }
 
-
     public function testDoesNotAllowSameOrderIndex()
     {
-        $filename = __DIR__.'/../../Fixtures/failed-equal-subtitle-order-number.srt';
-        $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
+        $filename = __DIR__ . '/../../Fixtures/failed-equal-subtitle-order-number.srt';
+        $this->setExpectedException('\Exception', $filename . ' is not a proper .srt file.');
         new SubripFile($filename);
+    }
+
+    public function testFileWithEmptyLinesAfterTime()
+    {
+        $filename = __DIR__ . '/../../Fixtures/example-empty-lines-after-time.srt';
+        $file = new SubripFile($filename);
+
+        // cues
+        $this->assertEquals(5, $file->getCuesCount());
+        $this->assertEquals('00:00:26,000', $file->getCue(3)->getStart());
+        $this->assertEquals('00:00:27,000', $file->getCue(3)->getStop());
+        $this->assertEquals("\n\n\nThis is empty line after time", $file->getCue(3)->getText());
+    }
+
+    public function testFileNewLines()
+    {
+        $filename = __DIR__ . '/../../Fixtures/example-new-lines.srt';
+        $file = new SubripFile($filename, null, false, false);
+
+        // cues
+        $this->assertEquals(7, $file->getCuesCount());
+        $this->assertEquals('00:00:11,635', $file->getCue(0)->getStart());
+        $this->assertEquals('00:00:12,834', $file->getCue(0)->getStop());
+        $this->assertEquals("Text number 3", $file->getCue(0)->getText());
+        $this->assertEquals('00:00:13,608', $file->getCue(1)->getStart());
+        $this->assertEquals('00:00:14,669', $file->getCue(1)->getStop());
+        $this->assertEquals("Text number 4", $file->getCue(1)->getText());
+        $this->assertEquals('00:42:41,719', $file->getCue(6)->getStart());
+        $this->assertEquals('00:42:49,735', $file->getCue(6)->getStop());
+        $this->assertEquals("The last text", $file->getCue(6)->getText());
     }
 }

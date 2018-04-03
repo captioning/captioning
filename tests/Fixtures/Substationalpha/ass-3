@@ -1,0 +1,54 @@
+﻿[Script Info]
+; This is an Advanced Sub Station Alpha v4+ script.
+Title: czech.forced
+ScriptType: v4.00+
+Collisions: Normal
+PlayDepth: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,20,&H00FFFFFF,&H0300FFFF,&H00000000,&H02000000,0,0,0,0,100,100,0,0,1,2,1,2,10,10,10,1
+
+[Events]
+Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:01:55.61,0:01:59.87,Default,,0,0,0,,{\i1}Drazí bohové\NJste tak úžasně božští{\i0}
+Dialogue: 0,0:02:00.03,0:02:01.79,Default,,0,0,0,,{\i1}Modlíme s k vám{\i0}
+Dialogue: 0,0:02:02.62,0:02:07.46,Default,,0,0,0,,{\i1}Drazí bohové\NNavždy vás budeme milovat{\i0}
+Dialogue: 0,0:02:09.00,0:02:12.55,Default,,0,0,0,,{\i1}Nikdo nás nerozdělí{\i0}
+Dialogue: 0,0:02:12.84,0:02:15.84,Default,,0,0,0,,{\i1}Odneste nás do Příštího světa{\i0}
+Dialogue: 0,0:02:16.01,0:02:19.72,Default,,0,0,0,,{\i1}Kde čeká na jídlo pravý ráj{\i0}
+Dialogue: 0,0:02:19.89,0:02:23.31,Default,,0,0,0,,{\i1}Až se odsud dostaneme\NVšechno bude fajn{\i0}
+Dialogue: 0,0:02:23.47,0:02:26.60,Default,,0,0,0,,{\i1}Naše sny se splní\NV zaslíbené zemi{\i0}
+Dialogue: 0,0:02:26.77,0:02:30.10,Default,,0,0,0,,{\i1}Víme, že nám v rukou božích\NBude skvěle{\i0}
+Dialogue: 0,0:02:30.27,0:02:35.90,Default,,0,0,0,,{\i1}V Příštím světě\NŠťastné sedneme si na prdele{\i0}
+Dialogue: 0,0:02:36.19,0:02:40.95,Default,,0,0,0,,{\i1}Každý regál\NMá svou vlastní víru{\i0}
+Dialogue: 0,0:02:43.74,0:02:48.37,Default,,0,0,0,,{\i1}Ale v jednom se shodneme{\i0}
+Dialogue: 0,0:02:50.33,0:02:57.09,Default,,0,0,0,,{\i1}Každej je vylízaný pako{\i0}
+Dialogue: 0,0:02:57.42,0:03:02.60,Default,,0,0,0,,{\i1}Pokud má jinej názor než já{\i0}
+Dialogue: 0,0:03:02.76,0:03:04.56,Default,,0,0,0,,{\i1}- A já!\N-A já!{\i0}
+Dialogue: 0,0:03:04.72,0:03:05.89,Default,,0,0,0,,{\i1}A já!{\i0}
+Dialogue: 0,0:03:06.22,0:03:10.48,Default,,0,0,0,,{\i1}Tam venku\NBudeme v klidu meditovat{\i0}
+Dialogue: 0,0:03:10.65,0:03:12.56,Default,,0,0,0,,{\i1}Rámen s vámi{\i0}
+Dialogue: 0,0:03:13.31,0:03:17.78,Default,,0,0,0,,{\i1}Tam venku\NSi budeme máčet pytlíky{\i0}
+Dialogue: 0,0:03:19.07,0:03:23.16,Default,,0,0,0,,{\i1}A strkat si papričky\NDo prdele{\i0}
+Dialogue: 0,0:03:23.41,0:03:26.62,Default,,0,0,0,,{\i1}Bílé zelí má bílou sílu!{\i0}
+Dialogue: 0,0:03:26.91,0:03:32.38,Default,,0,0,0,,{\i1}Nižší rasy\NPatří do trouby{\i0}
+Dialogue: 0,0:03:35.34,0:03:38.76,Default,,0,0,0,,{\i1}Tady jsme zavření v pytlíku{\i0}
+Dialogue: 0,0:03:38.92,0:03:41.18,Default,,0,0,0,,{\i1}Tak to je{\i0}
+Dialogue: 0,0:03:41.55,0:03:46.81,Default,,0,0,0,,{\i1}Bez něj bychom nebyly\NTak svěží{\i0}
+Dialogue: 0,0:03:46.97,0:03:51.14,Default,,0,0,0,,{\i1}Tam venku se můžeme\NRozepnout{\i0}
+Dialogue: 0,0:03:51.31,0:03:54.69,Default,,0,0,0,,{\i1}Smíte se do nás\NZasunout{\i0}
+Dialogue: 0,0:03:54.86,0:03:58.86,Default,,0,0,0,,{\i1}Jinými slovy\NKonečně se bude mrdat{\i0}
+Dialogue: 0,0:03:59.03,0:04:02.32,Default,,0,0,0,,{\i1}- A milovat. A objímat. A laskat\N-A mrdat. A mrdat. A mrdat{\i0}
+Dialogue: 0,0:04:02.49,0:04:05.24,Default,,0,0,0,,{\i1}Bohové se o nás postarají{\i0}
+Dialogue: 0,0:04:05.87,0:04:08.70,Default,,0,0,0,,{\i1}Budeme si žít jako v ráji{\i0}
+Dialogue: 0,0:04:08.87,0:04:13.29,Default,,0,0,0,,{\i1}Jsme si zkrátka\Nstoprocentně jistí ve své víře{\i0}
+Dialogue: 0,0:04:13.46,0:04:16.63,Default,,0,0,0,,{\i1}Že nás v Příštím světě\NČeká ráj{\i0}
+Dialogue: 0,0:07:26.57,0:07:28.07,Default,,0,0,0,,4. července - SLEVY
+Dialogue: 0,0:34:22.81,0:34:23.85,Default,,0,0,0,,Všichni jsou si rovni
+Dialogue: 0,0:47:06.03,0:47:08.78,Default,,0,0,0,,Ryby a mořské plody
+Dialogue: 0,0:52:00.11,0:52:01.57,Default,,0,0,0,,CHUŤ INDIE
+Dialogue: 0,0:58:12.82,0:58:13.82,Default,,0,0,0,,KUCHAŘKA
+Dialogue: 0,1:02:45.55,1:02:49.64,Default,,0,0,0,,{\i1}Drazí bohové\NJste tak úžasně božští{\i0}
+Dialogue: 0,1:02:49.80,1:02:51.51,Default,,0,0,0,,{\i1}Modlíme se k vám{\i0}
+Dialogue: 0,1:02:52.85,1:02:56.77,Default,,0,0,0,,{\i1}Drazí bohové\NNavždy vás budeme milovat{\i0}
