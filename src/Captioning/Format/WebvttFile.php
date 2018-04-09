@@ -113,7 +113,8 @@ class WebvttFile extends File
                 // Supposse what not empty line before timeline is id.
                 $id = $line;
             } else {
-                $parsing_errors[] = 'Malformed cue detected at line ' . $i;
+                // ilos changes - this used to throw an error, but this is the "empty line"
+                // case.  Nothing wrong with an empty line; simply keep running the parser.
             }
             ++$i;
         } while (($line = $this->getNextValueFromArray($fileContentArray)) !== false);
