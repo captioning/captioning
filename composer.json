@@ -1,5 +1,5 @@
 {
-    "name": "captioning/captioning",
+    "name": "ilosvideos/captioning",
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.0"
