@@ -20,9 +20,9 @@ class SubripCue extends Cue
      * @param string $_separator
      * @return string
      */
-    public static function ms2tc($ms, $_separator = ',')
+    public static function ms2tc($ms, $_separator = ',', $isHoursPaddingEnabled = true)
     {
-        return parent::ms2tc($ms, $_separator);
+        return parent::ms2tc($ms, $_separator, $isHoursPaddingEnabled);
     }
 
     public function getText($_stripTags = false, $_stripBasic = false, $_replacements = array())

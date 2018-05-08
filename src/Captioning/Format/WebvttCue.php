@@ -15,9 +15,9 @@ class WebvttCue extends Cue
         return SubripCue::tc2ms($tc);
     }
 
-    public static function ms2tc($ms)
+    public static function ms2tc($ms, $_separator = '.', $isHoursPaddingEnabled = true)
     {
-        return SubripCue::ms2tc($ms, '.');
+        return SubripCue::ms2tc($ms, $_separator, $isHoursPaddingEnabled);
     }
 
     public function setSetting($_name, $_value)

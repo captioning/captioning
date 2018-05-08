@@ -19,7 +19,7 @@ class SBVCue extends Cue
      * @param string $_separator
      * @return string
      */
-    public static function ms2tc($ms, $_separator = '.')
+    public static function ms2tc($ms, $_separator = '.', $isHoursPaddingEnabled = true)
     {
         return parent::ms2tc($ms, $_separator, false);
     }

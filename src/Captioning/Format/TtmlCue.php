@@ -29,7 +29,7 @@ class TtmlCue extends Cue
      * @param  int $_ms
      * @return string
      */
-    public static function ms2tc($_ms)
+    public static function ms2tc($_ms, $_separator = ',', $isHoursPaddingEnabled = true)
     {
         return null;
     }
