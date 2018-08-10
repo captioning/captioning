@@ -28,11 +28,11 @@ class SubripFile extends File
     $/xu'
     ;
 
-    private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false, '_requireStrictFileFormat' => true);
+    private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false, '_requireStrictFileFormat' => false);
 
     private $options = array();
 
-    public function __construct($_filename = null, $_encoding = null, $_useIconv = false, $_requireStrictFileFormat = true)
+    public function __construct($_filename = null, $_encoding = null, $_useIconv = false, $_requireStrictFileFormat = false)
     {
         $this->options = $this->defaultOptions;
         $this->options['_requireStrictFileFormat'] = $_requireStrictFileFormat;
