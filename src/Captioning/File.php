@@ -560,6 +560,30 @@ abstract class File implements FileInterface, \Countable
             throw new \Exception('Unable to save the file.');
         }
     }
+    /**
+     * returns string of vtt
+     *
+     * @param bool $writeBOM
+     */
+    public function toString($writeBOM = false){
+        if (trim($this->fileContent) == '') {
+            $this->build();
+        }
+
+        $file_content = $this->fileContent;
+        if (strtolower($this->encoding) != 'utf-8') {
+            if ($this->useIconv) {
+                $file_content = iconv('UTF-8', $this->encoding, $file_content);
+            } else {
+                $file_content = mb_convert_encoding($file_content, $this->encoding, 'UTF-8');
+            }
+        }
+
+        if ($writeBOM) {
+            $file_content = "\xef\xbb\xbf".$file_content;
+        }
+        return $file_content;
+    }
 
     /**
      * Computes reading speed statistics
