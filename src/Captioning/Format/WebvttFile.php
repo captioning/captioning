@@ -118,7 +118,7 @@ class WebvttFile extends File
             ++$i;
         } while (($line = $this->getNextValueFromArray($fileContentArray)) !== false);
 
-        if (count($parsing_errors) > 0) {
+        if (count($parsing_errors) > 1) {
             throw new \Exception('The following errors were found while parsing the file:'."\n".print_r($parsing_errors, true));
         }
 
