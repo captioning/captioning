@@ -130,7 +130,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Exception',
-            'The following errors were found while parsing the file:'."\n".print_r($errors, true)
+            'The following errors were found while parsing the file:'."\n".implode("\n", $errors)
         );
         $webVttFile = $this->getWebvttFile($this->pathToVtts.$vtt);
         $webVttFile->parse();
