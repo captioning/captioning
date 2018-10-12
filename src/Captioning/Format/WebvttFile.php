@@ -1,11 +1,11 @@
 <?php
-
 namespace Captioning\Format;
 
 use Captioning\File;
 
 class WebvttFile extends File
 {
+
     const TIMECODE_PATTERN = '#^((?:[0-9]{2,}:)?[0-9]{2}:[0-9]{2}.[0-9]{3}) --> ((?:[0-9]{2,}:)?[0-9]{2}:[0-9]{2}.[0-9]{3})( .*)?$#';
 
     /**
@@ -40,14 +40,14 @@ class WebvttFile extends File
                 } else {
                     $this->fileDescription = $fileDescription;
                 }
-
             } else {
                 $parsing_errors[] = 'Invalid file header (must be "WEBVTT" with optionnal description)';
             }
         }
 
         // Parse regions.
-        while (($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
+        $line = $this->getNextValueFromArray($fileContentArray);
+        while (($line !== '') && ($line !== false)) {
             if (strpos($line, 'Region:') === 0) {
                 try {
                     $this->addRegion(WebvttRegion::parseFromString($line));
@@ -58,6 +58,7 @@ class WebvttFile extends File
                 $parsing_errors[] = 'Incorrect Region definition at line ' . $i;
             }
             ++$i;
+            $line = $this->getNextValueFromArray($fileContentArray);
         }
 
         // Skip blank lines after signature.
@@ -109,6 +110,13 @@ class WebvttFile extends File
                 $note = $id = '';
                 $this->addCue($cue);
                 unset($cue);
+
+                // skip empty lines
+                // see https://www.w3.org/TR/webvtt1/#webvtt-file-bodyhttps://www.w3.org/TR/webvtt1/#webvtt-file-body
+                // point 7
+                while (current($fileContentArray) === '') {
+                    next($fileContentArray);
+                }
             } elseif ($line !== '') {
                 // Supposse what not empty line before timeline is id.
                 $id = $line;
