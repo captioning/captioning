@@ -31,6 +31,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
             array('1.3-non-normative_other-features_4.vtt'),
             array('long-hours.vtt'),
             array('empty.vtt'),
+            array('more_line_terminators.vtt'),
         );
     }
 
