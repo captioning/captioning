@@ -695,11 +695,10 @@ abstract class File implements FileInterface, \Countable
      */
     protected function getNextValueFromArray(array &$array)
     {
-        $element = each($array);
-        if (is_array($element)) {
-            return $element['value'];
-        }
-        return false;
+        $element = current($array);
+        next($array);
+
+        return $element;
     }
 
     /**
