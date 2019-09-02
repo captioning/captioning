@@ -12,7 +12,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $ds = DIRECTORY_SEPARATOR;
-        $this->pathToVtts = __DIR__.$ds.'..'.$ds.'..'.$ds.'Fixtures'.$ds.'WebVTT-2015-10-09'.$ds;
+        $this->pathToVtts = __DIR__.$ds.'..'.$ds.'..'.$ds.'Fixtures'.$ds.'Webvtt'.$ds;
     }
 
     /**
@@ -175,7 +175,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
     public function testIfAFileIsParsedProperly()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../../Fixtures/example-1.vtt';
+        $filename = __DIR__ . '/../../Fixtures/Webvtt/example-1.vtt';
         $file = new WebvttFile($filename);
 
         // regions
@@ -197,7 +197,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
     public function testIfWeGetTheFirstCue()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../../Fixtures/example-1.vtt';
+        $filename = __DIR__ . '/../../Fixtures/Webvtt/example-1.vtt';
         $file = new WebvttFile($filename);
 
         $expectedCue = new WebvttCue('00:00:00.000', '00:00:20.000');
@@ -212,7 +212,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
     public function testIfWeGetTheLastCue()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../../Fixtures/example-1.vtt';
+        $filename = __DIR__ . '/../../Fixtures/Webvtt/example-1.vtt';
         $file = new WebvttFile($filename);
 
         $expectedCue = new WebvttCue('00:00:12.500', '00:00:32.500', "<v Fred>OK, let's go.");

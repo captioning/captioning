@@ -11,7 +11,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testSubrip2WebvttConversion()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../Fixtures/Subrip/example-1.srt';
         $file = new SubripFile($filename);
 
         $content = "WEBVTT
@@ -43,7 +43,7 @@ OK, let's go.
     public function testWebvtt2SubripConversion()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../Fixtures/example-1.vtt';
+        $filename = __DIR__ . '/../Fixtures/Webvtt/example-1.vtt';
         $file = new WebvttFile($filename);
 
         $content = "1
@@ -79,7 +79,7 @@ nice to meet you.
     public function testSubrip2SubstationalphaConversion()
     {
         // example file from W3C spec
-        $filename = __DIR__.'/../Fixtures/example-1.srt';
+        $filename = __DIR__ . '/../Fixtures/Subrip/example-1.srt';
         $file = new SubripFile($filename);
 
         $content = "[Script Info]
