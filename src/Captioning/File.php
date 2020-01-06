@@ -656,6 +656,19 @@ abstract class File implements FileInterface, \Countable
     }
 
     /**
+     * Taken from https://stackoverflow.com/a/15423899/1278921
+     * Camtasia's newest version now uses UTF-8-BOM and the small
+     * header of bytes (the "BOM") needs to be removed, or it messes
+     * with this library (it doesn't find "WEBVTT" at the very beginning)
+     */
+    protected function remove_utf8_bom($text)
+    {
+        $bom = pack('H*','EFBBBF');
+        $text = preg_replace("/^$bom/", '', $text);
+        return $text;
+    }
+    
+    /**
      * Encode file content
      */
     protected function encode()
@@ -665,6 +678,7 @@ abstract class File implements FileInterface, \Countable
         } else {
             $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
         }
+        $this->fileContent = $this->remove_utf8_bom($this->fileContent);
     }
 
     /**
