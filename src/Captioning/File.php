@@ -9,6 +9,7 @@ abstract class File implements FileInterface, \Countable
     const UNIX_LINE_ENDING    = "\n";
     const MAC_LINE_ENDING     = "\r";
     const WINDOWS_LINE_ENDING = "\r\n";
+    const BYTE_ORDER_MARK = 'EFBBBF';
 
     /**
      * @var array
@@ -663,7 +664,7 @@ abstract class File implements FileInterface, \Countable
      * with this library (it doesn't find "WEBVTT" at the very beginning)
      */
     protected function handleUtf8ByteOrderMark(string $fileContent) : string {
-        $byteOrderMark = pack('H*','EFBBBF');
+        $byteOrderMark = pack('H*',self::BYTE_ORDER_MARK);
         $fileContent = preg_replace("/^$byteOrderMark/", '', $fileContent);
         return $fileContent;
     }
