@@ -664,7 +664,7 @@ abstract class File implements FileInterface, \Countable
      * with this library (it doesn't find "WEBVTT" at the very beginning)
      */
     protected function handleUtf8ByteOrderMark(string $fileContent) : string {
-        $byteOrderMark = pack('H*',self::BYTE_ORDER_MARK);
+        $byteOrderMark = pack('H*', self::BYTE_ORDER_MARK);
         $fileContent = preg_replace("/^$byteOrderMark/", '', $fileContent);
         return $fileContent;
     }
