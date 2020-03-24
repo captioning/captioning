@@ -9,6 +9,7 @@ abstract class File implements FileInterface, \Countable
     const UNIX_LINE_ENDING    = "\n";
     const MAC_LINE_ENDING     = "\r";
     const WINDOWS_LINE_ENDING = "\r\n";
+    const BYTE_ORDER_MARK = 'EFBBBF';
 
     /**
      * @var array
@@ -656,18 +657,18 @@ abstract class File implements FileInterface, \Countable
     }
 
     /**
-     * Taken from https://stackoverflow.com/a/15423899/1278921
+     * @param string $fileContent
+     * @return string
      * Camtasia's newest version now uses UTF-8-BOM and the small
      * header of bytes (the "BOM") needs to be removed, or it messes
      * with this library (it doesn't find "WEBVTT" at the very beginning)
      */
-    protected function remove_utf8_bom($text)
-    {
-        $bom = pack('H*','EFBBBF');
-        $text = preg_replace("/^$bom/", '', $text);
-        return $text;
+    protected function handleUtf8ByteOrderMark(string $fileContent) : string {
+        $byteOrderMark = pack('H*', self::BYTE_ORDER_MARK);
+        $fileContent = preg_replace("/^$byteOrderMark/", '', $fileContent);
+        return $fileContent;
     }
-    
+
     /**
      * Encode file content
      */
@@ -678,7 +679,7 @@ abstract class File implements FileInterface, \Countable
         } else {
             $this->fileContent = mb_convert_encoding($this->fileContent, 'UTF-8', $this->encoding);
         }
-        $this->fileContent = $this->remove_utf8_bom($this->fileContent);
+        $this->fileContent = $this->handleUtf8ByteOrderMark($this->fileContent);
     }
 
     /**
