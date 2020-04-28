@@ -47,9 +47,9 @@ abstract class File implements FileInterface, \Countable
 
     /**
      * File constructor.
-     * @param null       $_filename
-     * @param null       $_encoding
-     * @param bool|false $_useIconv
+     * @param string|null $_filename
+     * @param string|null $_encoding
+     * @param bool|false  $_useIconv
      */
     public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
