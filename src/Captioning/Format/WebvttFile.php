@@ -56,7 +56,7 @@ class WebvttFile extends File
                     $parsing_errors[] = $e->getMessage();
                 }
             } else {
-                $parsing_errors[] = 'Incorrect Region definition at line ' . $i;
+                $parsing_errors[] = 'Incorrect Region definition at line '.$i;
             }
             ++$i;
             $line = $this->getNextValueFromArray($fileContentArray);
@@ -96,13 +96,13 @@ class WebvttFile extends File
             if ($timecode_match) {
                 $start = $matches[1];
                 $stop = $matches[2];
-                $settings = isset($matches[3]) ? trim($matches[3]): '';
+                $settings = isset($matches[3]) ? trim($matches[3]) : '';
 
                 // Cue continues until there is a blank line.
                 $text = '';
                 ++$i;
                 while (trim($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
-                    $text .= $line . $this->lineEnding;
+                    $text .= $line.$this->lineEnding;
                     ++$i;
                 }
 
@@ -115,7 +115,7 @@ class WebvttFile extends File
                 // Supposse what not empty line before timeline is id.
                 $id = $line;
             } else {
-                $parsing_errors[] = 'Malformed cue detected at line ' . $i;
+                $parsing_errors[] = 'Malformed cue detected at line '.$i;
             }
             ++$i;
         } while (($line = $this->getNextValueFromArray($fileContentArray)) !== false);
