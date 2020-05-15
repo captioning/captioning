@@ -72,7 +72,6 @@ class SubripFile extends File
 
         $state = 'order';
         foreach ($lines as $lineNumber => $line) {
-        
             switch ($state) {
             case 'order':
                 if (!preg_match(self::PATTERN_ORDER, $line)) {
@@ -113,12 +112,14 @@ class SubripFile extends File
                     throw new \Exception($this->filename.' is not a proper .srt file. (Ending time invalid: '.$subtitleTimeEnd.' at line '.$lineNumber.')');
                 }
                 $subtitleText = array();
+                $subtitleTextRaw = '';
                 $state = 'text';
                 break;
 
             case 'text':
                 $subtitleText[] = $line;
-                if ($lineNumber === count($lines) - 1 || ($line === '' && $lines[$lineNumber+1] !== '')) {
+                $subtitleTextRaw .= $line;
+                if (($lineNumber === count($lines) - 1) || ($line === '' && $lines[$lineNumber+1] !== '' && $subtitleTextRaw != '')) {
                   $state = 'end';
                   // Fall through...
                 } else {
