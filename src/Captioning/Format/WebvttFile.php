@@ -48,6 +48,9 @@ class WebvttFile extends File
 
         // Parse regions.
         while (($line = $this->getNextValueFromArray($fileContentArray)) !== '') {
+            if ($line === false) {
+                break; // end of file -- without this, in certain cases can become infinite loop
+            }
             if (strpos($line, 'Region:') === 0) {
                 try {
                     $this->addRegion(WebvttRegion::parseFromString($line));
