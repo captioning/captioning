@@ -704,6 +704,7 @@ abstract class File implements FileInterface, \Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->getCuesCount();
