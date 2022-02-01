@@ -110,4 +110,17 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
         new SubripFile($filename);
     }
+
+    public function testFileWithEmptyLinesAfterTime()
+    {
+        $filename = __DIR__.'/../../Fixtures/example-empty-lines-after-time.srt';
+        $file = new SubripFile($filename);
+
+        // cues
+        $this->assertEquals(5, $file->getCuesCount());
+        $this->assertEquals('00:00:26,000', $file->getCue(3)->getStart());
+        $this->assertEquals('00:00:27,000', $file->getCue(3)->getStop());
+        $this->assertEquals("\n\n\nThis is empty line after time", $file->getCue(3)->getText());
+    }
+
 }
