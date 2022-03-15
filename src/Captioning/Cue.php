@@ -338,13 +338,13 @@ abstract class Cue implements CueInterface
      */
     public static function ms2tc($ms, $_separator = '.', $isHoursPaddingEnabled = true)
     {
-        $tc_ms = round((($ms / 1000) - intval($ms / 1000)) * 1000);
+        $tc_ms = round((($ms / 1000) - floor($ms / 1000)) * 1000);
         $x = $ms / 1000;
-        $tc_s = intval($x % 60);
+        $tc_s = floor((int)$x % 60);
         $x /= 60;
-        $tc_m = intval($x % 60);
+        $tc_m = floor((int)$x % 60);
         $x /= 60;
-        $tc_h = intval($x % 24);
+        $tc_h = floor((int)$x % 24);
 
         if ($isHoursPaddingEnabled) {
             $timecode = str_pad($tc_h, 2, '0', STR_PAD_LEFT).':';
