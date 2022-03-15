@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
-         backupGlobals="false"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          colors="true"
-         bootstrap="vendor/autoload.php">
-    <testsuites>
-        <testsuite name="Captioning Test Suite">
-            <directory>tests/Captioning/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/Captioning/</directory>
-        </whitelist>
-    </filter>
+         bootstrap="vendor/autoload.php"
+>
+  <coverage>
+    <include>
+      <directory suffix=".php">src/Captioning/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="Captioning Test Suite">
+      <directory>tests/Captioning/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
