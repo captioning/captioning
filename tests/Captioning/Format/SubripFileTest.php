@@ -2,7 +2,10 @@
 
 namespace Captioning\Format;
 
-class SubripFileTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use Captioning\Format\SubripFile;
+
+class SubripFileTest extends TestCase
 {
     public function testAddingCuesBothWays()
     {
@@ -93,13 +96,14 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
     {
         $filename = __DIR__ . '/../../Fixtures/Subrip/passed-with-same-end-in-prev-and-start-next-cue.srt';
         $file = new SubripFile($filename);
-        $this->assertInstanceOf('Captioning\Format\SubripFile', $file);
+        $this->assertInstanceOf(SubripFile::class, $file);
     }
 
     public function testDoesNotAllowSameStartAndEndTime()
     {
         $filename = __DIR__ . '/../../Fixtures/Subrip/failed-equal-start-and-end-time-in-last-queue.srt';
-        $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage($filename.' is not a proper .srt file.');
         new SubripFile($filename);
     }
 
@@ -107,7 +111,8 @@ class SubripFileTest extends \PHPUnit_Framework_TestCase
     public function testDoesNotAllowSameOrderIndex()
     {
         $filename = __DIR__ . '/../../Fixtures/Subrip/failed-equal-subtitle-order-number.srt';
-        $this->setExpectedException('\Exception', $filename.' is not a proper .srt file.');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage($filename.' is not a proper .srt file.');
         new SubripFile($filename);
     }
 }

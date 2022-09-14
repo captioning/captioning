@@ -2,18 +2,11 @@
 
 namespace Captioning\Format;
 
-class WebvttFileTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class WebvttFileTest extends TestCase
 {
-    /** @var string */
-    private $pathToVtts;
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $ds = DIRECTORY_SEPARATOR;
-        $this->pathToVtts = __DIR__.$ds.'..'.$ds.'..'.$ds.'Fixtures'.$ds.'Webvtt'.$ds;
-    }
+    const PATH_TO_VTTTS = __DIR__.'/../../Fixtures/Webvtt/';
 
     /**
      * @return array
@@ -40,7 +33,7 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testParse($vtt)
     {
-        $webVttFile = $this->getWebvttFile($this->pathToVtts.$vtt);
+        $webVttFile = $this->getWebvttFile(self::PATH_TO_VTTTS.$vtt);
         $this->assertSame($webVttFile, $webVttFile->parse());
     }
 
@@ -129,24 +122,24 @@ class WebvttFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseException($vtt, array $errors)
     {
-        $this->setExpectedException(
-            'Exception',
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
             'The following errors were found while parsing the file:'."\n".implode("\n", $errors)
         );
-        $webVttFile = $this->getWebvttFile($this->pathToVtts.$vtt);
+        $webVttFile = $this->getWebvttFile(self::PATH_TO_VTTTS.$vtt);
         $webVttFile->parse();
     }
 
     public function testRegionsEmpty()
     {
-        $webVttFile = $this->getWebvttFile($this->pathToVtts.'1.3-non-normative_other-features_1.vtt');
+        $webVttFile = $this->getWebvttFile(self::PATH_TO_VTTTS.'1.3-non-normative_other-features_1.vtt');
 
         $this->assertNull($webVttFile->getRegion(0));
     }
 
     public function testRegions()
     {
-        $webVttFile = $this->getWebvttFile($this->pathToVtts.'1.3-non-normative_other-features_4.vtt');
+        $webVttFile = $this->getWebvttFile(self::PATH_TO_VTTTS.'1.3-non-normative_other-features_4.vtt');
         $region = new WebvttRegion('fred', '40%', '3', '0%,100%', '10%,90%', 'up');
 
         $this->assertEquals($region, $webVttFile->getRegion(0));

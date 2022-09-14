@@ -5,8 +5,9 @@ namespace Captioning;
 use Captioning\Format\SubripFile;
 use Captioning\Format\WebvttFile;
 use Captioning\Format\SubstationalphaFile;
+use PHPUnit\Framework\TestCase;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends TestCase
 {
     public function testSubrip2WebvttConversion()
     {
@@ -110,13 +111,12 @@ Dialogue: 0,0:01:12.50,0:01:32.50,Default,,0000,0000,0000,,OK, let's go.
         $this->assertEquals($content, $file->convertTo('substationalpha')->build()->getFileContent());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidConverterException()
     {
-        $file = new SubripFile();
+        $this->expectException(\InvalidArgumentException::class);
 
+        $file = new SubripFile();
         $file->convertTo('foor');
+
     }
 }

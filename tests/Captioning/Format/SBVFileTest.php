@@ -2,7 +2,9 @@
 
 namespace Captioning\Format;
 
-class SBVFileTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class SBVFileTest extends TestCase
 {
     public function testIfAFileIsParsedProperly()
     {
