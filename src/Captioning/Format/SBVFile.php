@@ -3,6 +3,7 @@
 namespace Captioning\Format;
 
 use Captioning\File;
+use Captioning\FileInterface;
 
 class SBVFile extends File
 {
@@ -10,7 +11,11 @@ class SBVFile extends File
 
     protected $lineEnding = File::WINDOWS_LINE_ENDING;
 
-    public function parse()
+    /**
+     * @return SBVFile
+     * @throws \Exception
+     */
+    public function parse(): FileInterface
     {
         $matches = array();
         $res = preg_match_all(self::PATTERN_TIMECODE, $this->fileContent, $matches);
@@ -62,7 +67,7 @@ class SBVFile extends File
      * @param int $_to Id of the last entry
      * @return SBVFile
      */
-    public function buildPart($_from, $_to)
+    public function buildPart(int $_from, int $_to): FileInterface
     {
         $this->sortCues();
 

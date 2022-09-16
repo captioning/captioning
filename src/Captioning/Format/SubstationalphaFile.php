@@ -3,6 +3,7 @@
 namespace Captioning\Format;
 
 use Captioning\File;
+use Captioning\FileInterface;
 
 class SubstationalphaFile extends File
 {
@@ -82,7 +83,7 @@ class SubstationalphaFile extends File
         parent::__construct($_filename, $_encoding, $_useIconv);
     }
 
-    public function setHeader($_name, $_value)
+    public function setHeader(string $_name, $_value)
     {
         if (isset($this->headers[$_name])) {
             $this->headers[$_name] = $_value;
@@ -99,7 +100,7 @@ class SubstationalphaFile extends File
         return $this->headers;
     }
 
-    public function setStylesVersion($stylesVersion)
+    public function setStylesVersion(string $stylesVersion)
     {
         if (!in_array($stylesVersion, array(self::STYLES_V4, self::STYLES_V4_PLUS))) {
             throw new \InvalidArgumentException('Invalid styles version');
@@ -108,12 +109,12 @@ class SubstationalphaFile extends File
         $this->stylesVersion = $stylesVersion;
     }
 
-    public function getStylesVersion()
+    public function getStylesVersion(): string
     {
         return $this->stylesVersion;
     }
 
-    public function setStyle($_name, $_value)
+    public function setStyle(string $_name, $_value)
     {
         if (isset($this->styles[$_name])) {
             $this->styles[$_name] = $_value;
@@ -125,12 +126,12 @@ class SubstationalphaFile extends File
         return isset($this->styles[$_name]) ? $this->styles[$_name] : false;
     }
 
-    public function getStyles()
+    public function getStyles(): array
     {
         return $this->styles;
     }
 
-    public function getNeededStyles()
+    public function getNeededStyles(): array
     {
         $styles = $this->styles;
 
@@ -168,7 +169,11 @@ class SubstationalphaFile extends File
         return $this->comments;
     }
 
-    public function parse()
+    /**
+     * @return SubstationalphaFile
+     * @throws \Exception
+     */
+    public function parse(): FileInterface
     {
 
         $fileContentArray = $this->getFileContentAsArray();
@@ -241,7 +246,12 @@ class SubstationalphaFile extends File
         return $this;
     }
 
-    public function buildPart($_from, $_to)
+    /**
+     * @param int $_from
+     * @param int $_to
+     * @return SubstationalphaFile
+     */
+    public function buildPart(int $_from, int $_to): FileInterface
     {
         // headers
         $buffer = '[Script Info]'.$this->lineEnding;

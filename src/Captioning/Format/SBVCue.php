@@ -6,22 +6,20 @@ use Captioning\Cue;
 
 class SBVCue extends Cue
 {
-    public static function tc2ms($tc)
+    public static function tc2ms(string $_timecode): int
     {
-        $tab = explode(':', $tc);
-        $durMS = $tab[0] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + floatval($tab[2]) * 1000;
-
-        return $durMS;
+        $tab = explode(':', $_timecode);
+        return $tab[0] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + (float) $tab[2] * 1000;
     }
 
     /**
-     * @param int $ms
+     * @param int $_ms
      * @param string $_separator
      * @return string
      */
-    public static function ms2tc($ms, $_separator = '.', $isHoursPaddingEnabled = true)
+    public static function ms2tc(int $_ms, string $_separator = '.', $isHoursPaddingEnabled = true): string
     {
-        return parent::ms2tc($ms, $_separator, false);
+        return parent::ms2tc($_ms, $_separator, false);
     }
 
     /**
@@ -29,7 +27,7 @@ class SBVCue extends Cue
      *
      * @return string
      */
-    public function getTimeCodeString()
+    public function getTimeCodeString(): string
     {
         return $this->start.','.$this->stop;
     }

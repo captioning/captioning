@@ -24,16 +24,16 @@ class WebvttRegion
         $this->setScroll($_scroll);
     }
 
-    public function setId($_id)
+    public function setId($_id): self
     {
         $this->id = $_id;
 
         return $this;
     }
 
-    public function setWidth($_width)
+    public function setWidth($_width): self
     {
-        $_width = intval($_width);
+        $_width = (int)$_width;
 
         if ($_width < 0) {
             $_width = 0;
@@ -46,7 +46,7 @@ class WebvttRegion
         return $this;
     }
 
-    public function setLines($_lines)
+    public function setLines($_lines): self
     {
         $this->lines = intval($_lines) >= 1 ? intval($_lines) : 1;
 
@@ -78,7 +78,7 @@ class WebvttRegion
         return $this->setAnchor($_viewportAnchor, self::ANCHOR_TYPE_VIEWPORT);
     }
 
-    public function setScroll($_scroll)
+    public function setScroll($_scroll): self
     {
         if (in_array($_scroll, array('up', 'none'))) {
             $this->scroll = $_scroll;
@@ -90,7 +90,7 @@ class WebvttRegion
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -98,7 +98,7 @@ class WebvttRegion
     /**
      * @return integer
      */
-    public function getLines()
+    public function getLines(): int
     {
         return $this->lines;
     }
@@ -106,7 +106,7 @@ class WebvttRegion
     /**
      * @return string
      */
-    public function getRegionAnchor()
+    public function getRegionAnchor(): string
     {
         return $this->regionAnchor;
     }
@@ -114,7 +114,7 @@ class WebvttRegion
     /**
      * @return string
      */
-    public function getScroll()
+    public function getScroll(): string
     {
         return $this->scroll;
     }
@@ -122,7 +122,7 @@ class WebvttRegion
     /**
      * @return string
      */
-    public function getViewportAnchor()
+    public function getViewportAnchor(): string
     {
         return $this->viewportAnchor;
     }
@@ -130,12 +130,12 @@ class WebvttRegion
     /**
      * @return string
      */
-    public function getWidth()
+    public function getWidth(): string
     {
         return $this->width;
     }
 
-    public static function parseFromString($_string)
+    public static function parseFromString(string $_string): self
     {
         $obj = new self();
 
@@ -182,7 +182,7 @@ class WebvttRegion
         return $obj;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $buffer = 'Region:';
         $buffer .= !is_null($this->id)             ? ' id='.$this->id : '';

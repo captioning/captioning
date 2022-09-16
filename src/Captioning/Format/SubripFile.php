@@ -3,6 +3,7 @@
 namespace Captioning\Format;
 
 use Captioning\File;
+use Captioning\FileInterface;
 
 class SubripFile extends File
 {
@@ -40,7 +41,11 @@ class SubripFile extends File
         parent::__construct($_filename, $_encoding, $_useIconv);
     }
 
-    public function parse()
+    /**
+     * @return SubripFile
+     * @throws \Exception
+     */
+    public function parse(): FileInterface
     {
         $content = $this->fileContent;
 
@@ -78,7 +83,7 @@ class SubripFile extends File
                 if (!preg_match(self::PATTERN_ORDER, $line)) {
                     throw new \Exception($this->filename.' is not a proper .srt file. (Expected subtitle order index at line '.$lineNumber.')');
                 }
-                $subtitleIndex = intval($line);
+                $subtitleIndex = (int) $line;
                 if ($strict && $subtitleOrder !== $subtitleIndex) {
                     throw new \Exception($this->filename.' is not a proper .srt file. (Invalid subtitle order index: '.$line.' at line '.$lineNumber.')');
                 }
@@ -142,14 +147,22 @@ class SubripFile extends File
         return $this;
     }
 
-    public function build()
+    /**
+     * @return SubripFile
+     */
+    public function build(): FileInterface
     {
         $this->buildPart(0, $this->getCuesCount() - 1);
 
         return $this;
     }
 
-    public function buildPart($_from, $_to)
+    /**
+     * @param int $_from
+     * @param int $_to
+     * @return SubripFile
+     */
+    public function buildPart(int $_from, int $_to): FileInterface
     {
         $this->sortCues();
 
@@ -187,21 +200,23 @@ class SubripFile extends File
      * @return SubripFile
      * @throws \UnexpectedValueException
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): self
     {
         if (!$this->validateOptions($options)) {
             throw new \UnexpectedValueException('Options consists not allowed keys');
         }
         $this->options = array_merge($this->defaultOptions, $options);
+
         return $this;
     }
 
     /**
      * @return SubripFile
      */
-    public function resetOptions()
+    public function resetOptions(): self
     {
         $this->options = $this->defaultOptions;
+
         return $this;
     }
 
@@ -209,13 +224,14 @@ class SubripFile extends File
      * @param array $options
      * @return bool
      */
-    private function validateOptions(array $options)
+    private function validateOptions(array $options): bool
     {
         foreach (array_keys($options) as $key) {
             if (!array_key_exists($key, $this->defaultOptions)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -225,7 +241,7 @@ class SubripFile extends File
      * @param boolean $allowEqual
      * @return boolean
      */
-    private function validateTimelines($startTimeline, $endTimeline, $allowEqual = false)
+    private function validateTimelines(string $startTimeline, string $endTimeline, $allowEqual = false): bool
     {
         $startDateTime = \DateTime::createFromFormat('H:i:s,u', $startTimeline);
         $endDateTime = \DateTime::createFromFormat('H:i:s,u', $endTimeline);
@@ -247,11 +263,11 @@ class SubripFile extends File
     /**
      * Add milliseconds and leading zeroes if they are missing
      *
-     * @param $timecode
+     * @param string $timecode
      *
      * @return mixed
      */
-    private function cleanUpTimecode($timecode)
+    private function cleanUpTimecode(string $timecode)
     {
         strpos($timecode, ',') ?: $timecode .= ',000';
 

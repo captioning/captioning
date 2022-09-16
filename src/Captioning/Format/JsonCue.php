@@ -3,6 +3,7 @@
 namespace Captioning\Format;
 
 use Captioning\Cue;
+use Captioning\CueInterface;
 
 class JsonCue extends Cue
 {
@@ -20,7 +21,7 @@ class JsonCue extends Cue
      * @param string $_timecode
      * @return null
      */
-    public static function tc2ms($_timecode)
+    public static function tc2ms(string $_timecode): int
     {
         return $_timecode;
     }
@@ -28,7 +29,7 @@ class JsonCue extends Cue
     /**
      * @return boolean
      */
-    public function isStartOfParagraph()
+    public function isStartOfParagraph(): bool
     {
         return $this->startOfParagraph;
     }
@@ -37,7 +38,7 @@ class JsonCue extends Cue
      * @param $startOfParagraph
      * @return $this
      */
-    public function setStartOfParagraph($startOfParagraph)
+    public function setStartOfParagraph($startOfParagraph): JsonCue
     {
         $this->startOfParagraph = $startOfParagraph;
 
@@ -47,7 +48,7 @@ class JsonCue extends Cue
     /**
      * @return int
      */
-    public function getDuration()
+    public function getDuration(): int
     {
         return $this->duration;
     }
@@ -56,7 +57,7 @@ class JsonCue extends Cue
      * @param $duration
      * @return $this
      */
-    public function setDuration($duration)
+    public function setDuration($duration): JsonCue
     {
         $this->duration = $duration;
 
@@ -67,7 +68,7 @@ class JsonCue extends Cue
      * @param mixed $_start
      * @return $this
      */
-    public function setStart($_start)
+    public function setStart($_start): Cue
     {
         parent::setStart($_start);
 
@@ -82,7 +83,7 @@ class JsonCue extends Cue
      * @param mixed $_stop
      * @return $this
      */
-    public function setStop($_stop)
+    public function setStop($_stop): Cue
     {
         parent::setStop($_stop);
 

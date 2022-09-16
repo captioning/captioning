@@ -3,6 +3,7 @@
 namespace Captioning\Format;
 
 use Captioning\Cue;
+use Captioning\CueInterface;
 
 class SubstationalphaCue extends Cue
 {
@@ -27,19 +28,25 @@ class SubstationalphaCue extends Cue
         $this->effect  = $_effect;
     }
 
-    public static function tc2ms($tc)
+    public static function tc2ms(string $_timecode): int
     {
-        return SubripCue::tc2ms($tc.'0');
+        return SubripCue::tc2ms($_timecode.'0');
     }
 
-    public static function ms2tc($ms, $_separator = ',', $isHoursPaddingEnabled = true)
+    public static function ms2tc(int $_ms, string $_separator = ',', $isHoursPaddingEnabled = true): string
     {
-        return parent::ms2tc($ms, '.', false);
+        return parent::ms2tc($_ms, '.', false);
     }
 
-    public function setText($_text)
+    /**
+     * @param string $_text
+     * @return SubstationalphaCue
+     */
+    public function setText(string $_text): Cue
     {
         $this->text = preg_replace('#\r\n|\r|\n#', '\N', trim($_text));
+
+        return $this;
     }
 
     public function getLayer()
@@ -100,7 +107,7 @@ class SubstationalphaCue extends Cue
         $this->effect = $_effect;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $params = array(
             $this->layer,
@@ -125,7 +132,7 @@ class SubstationalphaCue extends Cue
      * @param int $tc_ms
      * @return string
      */
-    protected static function getLastTimeCodePart($tc_ms)
+    protected static function getLastTimeCodePart(int $tc_ms): string
     {
         return substr(str_pad($tc_ms, 3, '0', STR_PAD_LEFT), 0, -1);
     }

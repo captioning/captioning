@@ -6,26 +6,25 @@ use Captioning\Cue;
 
 class SubripCue extends Cue
 {
-    public static function tc2ms($tc)
+    public static function tc2ms(string $_timecode): int
     {
-        $tab = array_reverse(explode(':', $tc));
-        $tab[2] = isset($tab[2]) ? $tab[2] : 0;
-        $durMS = $tab[2] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + floatval(str_replace(',', '.', $tab[0])) * 1000;
+        $tab = array_reverse(explode(':', $_timecode));
+        $tab[2] = $tab[2] ?? 0;
 
-        return $durMS;
+        return $tab[2] * 60 * 60 * 1000 + $tab[1] * 60 * 1000 + (float)str_replace(',', '.', $tab[0]) * 1000;
     }
 
     /**
-     * @param int $ms
+     * @param int $_ms
      * @param string $_separator
      * @return string
      */
-    public static function ms2tc($ms, $_separator = ',', $isHoursPaddingEnabled = true)
+    public static function ms2tc(int $_ms, string $_separator = ',', $isHoursPaddingEnabled = true): string
     {
-        return parent::ms2tc($ms, $_separator, $isHoursPaddingEnabled);
+        return parent::ms2tc($_ms, $_separator, $isHoursPaddingEnabled);
     }
 
-    public function getText($_stripTags = false, $_stripBasic = false, $_replacements = array())
+    public function getText($_stripTags = false, $_stripBasic = false, $_replacements = []): string
     {
         parent::getText();
 
@@ -43,7 +42,7 @@ class SubripCue extends Cue
      * @param array $_replacements
      * @return string
      */
-    public function getStrippedText($_stripBasic = false, $_replacements = array())
+    public function getStrippedText($_stripBasic = false, array $_replacements = []): string
     {
         $text = $this->text;
 
@@ -68,12 +67,12 @@ class SubripCue extends Cue
      *
      * @return string
      */
-    public function getTimeCodeString()
+    public function getTimeCodeString(): string
     {
         return $this->start.' --> '.$this->stop;
     }
 
-    public function strlen()
+    public function strlen(): int
     {
         return mb_strlen($this->getText(true, true), 'UTF-8');
     }

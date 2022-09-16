@@ -12,7 +12,7 @@ use Captioning\Format\SubstationalphaCue;
 class Converter
 {
     /* fallback converter in case specific converter isn't implemented */
-    public static function defaultConverter(FileInterface $_file, $_convertTo)
+    public static function defaultConverter(FileInterface $_file, string $_convertTo): FileInterface
     {
         $subtitleClass = __NAMESPACE__.'\\Format\\'.ucfirst($_convertTo).'File';
 
@@ -31,7 +31,7 @@ class Converter
     }
 
     /* subrip converters */
-    public static function subrip2webvtt(SubripFile $_srt)
+    public static function subrip2webvtt(SubripFile $_srt): WebvttFile
     {
         $vtt = new WebvttFile();
         foreach ($_srt->getCues() as $cue) {
@@ -41,7 +41,7 @@ class Converter
         return $vtt;
     }
 
-    public static function subrip2substationalpha(SubripFile $_srt)
+    public static function subrip2substationalpha(SubripFile $_srt): SubstationalphaFile
     {
         $ass = new SubstationalphaFile();
         foreach ($_srt->getCues() as $cue) {
@@ -64,7 +64,7 @@ class Converter
     }
 
     /* webvtt converters */
-    public static function webvtt2subrip(WebvttFile $_vtt)
+    public static function webvtt2subrip(WebvttFile $_vtt): SubripFile
     {
         $srt = new SubripFile();
         foreach ($_vtt->getCues() as $cue) {
@@ -74,13 +74,13 @@ class Converter
         return $srt;
     }
 
-    public static function webvtt2substationalpha(WebvttFile $_vtt)
+    public static function webvtt2substationalpha(WebvttFile $_vtt): SubstationalphaFile
     {
         return self::subrip2substationalpha(self::webvtt2subrip($_vtt));
     }
 
     /* substation alpha converters */
-    public static function substationalpha2subrip(SubstationalphaFile $_ass)
+    public static function substationalpha2subrip(SubstationalphaFile $_ass): SubripFile
     {
         $srt = new SubripFile();
         foreach ($_ass->getCues() as $cue) {
@@ -102,13 +102,13 @@ class Converter
         return $srt;
     }
 
-    public static function substationalpha2webvtt(SubstationalphaFile $_ass)
+    public static function substationalpha2webvtt(SubstationalphaFile $_ass): WebvttFile
     {
         return self::subrip2webvtt(self::substationalpha2subrip($_ass));
     }
 
     /* ttml converters */
-    public static function ttml2subrip(TtmlFile $_ttml)
+    public static function ttml2subrip(TtmlFile $_ttml): SubripFile
     {
         $srt = new SubripFile();
         foreach ($_ttml->getCues() as $cue) {
@@ -161,7 +161,7 @@ class Converter
         return $srt;
     }
 
-    private static function applyTtmlStyles($text, array $styles)
+    private static function applyTtmlStyles(string $text, array $styles): string
     {
         if (isset($styles['fontStyle']) && 'italic' === $styles['fontStyle']) {
             $text = '<i>'.$text.'</i>';

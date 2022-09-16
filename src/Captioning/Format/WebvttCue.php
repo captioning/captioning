@@ -10,14 +10,14 @@ class WebvttCue extends Cue
     protected $note       = null;
     protected $settings   = array();
 
-    public static function tc2ms($tc)
+    public static function tc2ms(string $_timecode): int
     {
-        return SubripCue::tc2ms($tc);
+        return SubripCue::tc2ms($_timecode);
     }
 
-    public static function ms2tc($ms, $_separator = '.', $isHoursPaddingEnabled = true)
+    public static function ms2tc(int $_ms, string $_separator = '.', $isHoursPaddingEnabled = true): string
     {
-        return SubripCue::ms2tc($ms, $_separator, $isHoursPaddingEnabled);
+        return SubripCue::ms2tc($_ms, $_separator, $isHoursPaddingEnabled);
     }
 
     public function setSetting($_name, $_value)
@@ -58,7 +58,7 @@ class WebvttCue extends Cue
         return $this->identifier;
     }
 
-    public static function checkSetting($_name, $_value)
+    public static function checkSetting($_name, $_value): bool
     {
         switch ($_name) {
             case 'region':
@@ -83,12 +83,12 @@ class WebvttCue extends Cue
      *
      * @return string
      */
-    public function getTimeCodeString()
+    public function getTimeCodeString(): string
     {
         return $this->start.' --> '.$this->stop;
     }
 
-    public function getSettingsString()
+    public function getSettingsString(): string
     {
         $buffer = '';
         foreach ($this->settings as $setting => $value) {
@@ -98,7 +98,7 @@ class WebvttCue extends Cue
         return trim($buffer);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $buffer = '';
 

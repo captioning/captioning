@@ -18,9 +18,9 @@ class TtmlCue extends Cue
      * @param  string $_timecode timecode as string
      * @return int
      */
-    public static function tc2ms($_timecode)
+    public static function tc2ms(string $_timecode): int
     {
-        return null;
+        return 0;
     }
 
     /**
@@ -29,12 +29,12 @@ class TtmlCue extends Cue
      * @param  int $_ms
      * @return string
      */
-    public static function ms2tc($_ms, $_separator = ',', $isHoursPaddingEnabled = true)
+    public static function ms2tc(int $_ms, string $_separator = ',', $isHoursPaddingEnabled = true): string
     {
-        return null;
+        return '';
     }
 
-    public function setStyle($_style)
+    public function setStyle($_style): TtmlCue
     {
         $this->style = $_style;
 
@@ -46,7 +46,7 @@ class TtmlCue extends Cue
         return $this->style;
     }
 
-    public function setId($_id)
+    public function setId($_id): TtmlCue
     {
         $this->id = $_id;
 
@@ -58,7 +58,7 @@ class TtmlCue extends Cue
         return $this->id;
     }
 
-    public function setRegion($_region)
+    public function setRegion($_region): TtmlCue
     {
         $this->region = $_region;
 
