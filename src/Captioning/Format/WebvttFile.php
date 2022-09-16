@@ -12,7 +12,7 @@ class WebvttFile extends File
     /**
      * @var WebvttRegion[]
      */
-    protected $regions = array();
+    protected $regions = [];
 
     /**
      * @var string
@@ -26,7 +26,7 @@ class WebvttFile extends File
     public function parse(): FileInterface
     {
         $fileContentArray = $this->getFileContentAsArray();
-        $parsing_errors = array();
+        $parsing_errors = [];
         $i = 2;
 
         // Parse signature.
@@ -95,7 +95,7 @@ class WebvttFile extends File
             }
 
             // Timecode.
-            $matches = array();
+            $matches = [];
             $timecode_match = preg_match(self::TIMECODE_PATTERN, $line, $matches);
 
             if ($timecode_match) {

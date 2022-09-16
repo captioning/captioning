@@ -109,7 +109,7 @@ class SubstationalphaCue extends Cue
 
     public function __toString(): string
     {
-        $params = array(
+        $params = [
             $this->layer,
             $this->start,
             $this->stop,
@@ -120,7 +120,7 @@ class SubstationalphaCue extends Cue
             $this->marginV,
             $this->effect,
             $this->text
-        );
+        ];
 
         $buffer = 'Dialogue: ';
         $buffer .= implode(',', $params);

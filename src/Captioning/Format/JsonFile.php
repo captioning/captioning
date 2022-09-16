@@ -56,20 +56,20 @@ class JsonFile extends File
         }
 
 
-        $captions = array();
+        $captions = [];
         for ($j = $_from; $j <= $_to; $j++) {
             /** @var JsonCue $cue */
             $cue = $this->getCue($j);
 
-            $captions[] = array(
+            $captions[] = [
                 'duration'         => $cue->getDuration(),
                 'content'          => $cue->getText(),
                 'startOfParagraph' => $cue->isStartOfParagraph(),
                 'startTime'        => $cue->getStart(),
-            );
+            ];
         }
 
-        $this->fileContent = json_encode(array('captions' => $captions));
+        $this->fileContent = json_encode(['captions' => $captions]);
 
         return $this;
     }

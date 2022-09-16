@@ -15,9 +15,9 @@ class TtmlFile extends File
 
     private $tickRate;
 
-    private $styles = array();
+    private $styles = [];
 
-    private $regions = array();
+    private $regions = [];
 
     /**
      * @param string $_timeBase
@@ -25,17 +25,17 @@ class TtmlFile extends File
      */
     public function setTimeBase(string $_timeBase): TtmlFile
     {
-        $matchingTable = array(
+        $matchingTable = [
             'media' => self::TIMEBASE_MEDIA,
             'smpte' => self::TIMEBASE_SMPTE,
             'clock' => self::TIMEBASE_CLOCK
-        );
+        ];
 
         if (isset($matchingTable[$_timeBase])) {
             $_timeBase = $matchingTable[$_timeBase];
         }
 
-        if (!in_array($_timeBase, array(self::TIMEBASE_MEDIA, self::TIMEBASE_SMPTE, self::TIMEBASE_CLOCK))) {
+        if (!in_array($_timeBase, [self::TIMEBASE_MEDIA, self::TIMEBASE_SMPTE, self::TIMEBASE_CLOCK], true)) {
             throw new \InvalidArgumentException;
         }
 
@@ -88,7 +88,7 @@ class TtmlFile extends File
             $this->regions[$regionData['id']] = $regionData;
 
             if ($region->style) {
-                $regionAttr = array();
+                $regionAttr = [];
                 foreach ($region->style as $regionStyle) {
                     $regionAttr = array_merge($regionAttr, $this->parseAttributes($regionStyle));
                 }
@@ -161,7 +161,7 @@ class TtmlFile extends File
 
     private function parseAttributes($_node, $_namespace = 'tts')
     {
-        $attributes = array();
+        $attributes = [];
 
         foreach ($_node->attributes($_namespace, true) as $property => $value) {
             $attributes[(string)$property] = (string)$value;

@@ -32,7 +32,7 @@ abstract class Cue implements CueInterface
     /**
      * @var array
      */
-    protected $textLines = array();
+    protected $textLines = [];
 
     /**
      * @var string
@@ -130,11 +130,11 @@ abstract class Cue implements CueInterface
      */
     public function setLineEnding(string $_lineEnding): self
     {
-        $lineEndings = array(
+        $lineEndings = [
             File::UNIX_LINE_ENDING,
             File::MAC_LINE_ENDING,
             File::WINDOWS_LINE_ENDING
-        );
+        ];
 
         if (!in_array($_lineEnding, $lineEndings, true)) {
             return $this;

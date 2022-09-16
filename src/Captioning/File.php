@@ -69,7 +69,7 @@ abstract class File implements FileInterface, \Countable
             $this->loadFromFile();
         }
 
-        $this->stats = array(
+        $this->stats = [
             'tooSlow'        => 0,
             'slowAcceptable' => 0,
             'aBitSlow'       => 0,
@@ -118,13 +118,13 @@ abstract class File implements FileInterface, \Countable
     /**
      * @param string $_lineEnding
      */
-    public function setLineEnding($_lineEnding)
+    public function setLineEnding(string $_lineEnding)
     {
-        $lineEndings = array(
+        $lineEndings = [
             self::UNIX_LINE_ENDING,
             self::MAC_LINE_ENDING,
             self::WINDOWS_LINE_ENDING
-        );
+        ];
         if (!in_array($_lineEnding, $lineEndings)) {
             return;
         }
@@ -246,7 +246,7 @@ abstract class File implements FileInterface, \Countable
     public function loadFromString(string $_str): self
     {
         // Clear cues from previous runs
-        $this->cues = array();
+        $this->cues = [];
         $this->fileContent = $_str;
 
         $this->encode();
@@ -265,7 +265,7 @@ abstract class File implements FileInterface, \Countable
      */
     public function search(string $_word, $_case_sensitive = false, $_strict = false): array
     {
-        $list = array();
+        $list = [];
         $pattern = preg_quote($_word, '#');
 
         $pattern = str_replace(' ', '( |\r\n|\r|\n)', $pattern);
@@ -365,7 +365,7 @@ abstract class File implements FileInterface, \Countable
             return $this;
         }
 
-        $tmp = array();
+        $tmp = [];
 
         $count = 0; // useful if 2 cues start at the same time code
         foreach ($this->cues as $cue) {
@@ -375,7 +375,7 @@ abstract class File implements FileInterface, \Countable
 
         ksort($tmp);
 
-        $this->cues = array();
+        $this->cues = [];
         foreach ($tmp as $cue) {
             $this->cues[] = $cue;
         }
@@ -566,7 +566,7 @@ abstract class File implements FileInterface, \Countable
      */
     public function getStats(): array
     {
-        $this->stats = array(
+        $this->stats = [
             'tooSlow'        => 0,
             'slowAcceptable' => 0,
             'aBitSlow'       => 0,
@@ -576,7 +576,7 @@ abstract class File implements FileInterface, \Countable
             'aBitFast'       => 0,
             'fastAcceptable' => 0,
             'tooFast'        => 0
-        );
+        ];
 
         $cuesCount = $this->getCuesCount();
         for ($i = 0; $i < $cuesCount; $i++) {
@@ -677,16 +677,16 @@ abstract class File implements FileInterface, \Countable
             $this->loadFromFile($this->filename);
         }
         $fileContent = str_replace( // So we change line endings to one format
-            array(
+            [
                 self::WINDOWS_LINE_ENDING,
                 self::MAC_LINE_ENDING,
-            ),
+            ],
             self::UNIX_LINE_ENDING,
             $this->fileContent
         );
-        $fileContentArray = explode(self::UNIX_LINE_ENDING, $fileContent); // Create array from file content
 
-        return $fileContentArray;
+        // Create array from file content
+        return explode(self::UNIX_LINE_ENDING, $fileContent);
     }
 
     /**

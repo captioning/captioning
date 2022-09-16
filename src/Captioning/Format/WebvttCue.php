@@ -8,7 +8,7 @@ class WebvttCue extends Cue
 {
     protected $identifier = null;
     protected $note       = null;
-    protected $settings   = array();
+    protected $settings   = [];
 
     public static function tc2ms(string $_timecode): int
     {
@@ -64,15 +64,15 @@ class WebvttCue extends Cue
             case 'region':
                 return true;
             case 'vertical':
-                return in_array($_value, array('rl', 'lr'));
+                return in_array($_value, ['rl', 'lr']);
             case 'line':
-                return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value) || in_array($_value, array('start', 'middle', 'end'));
+                return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value) || in_array($_value, ['start', 'middle', 'end']);
             case 'size':
                 return preg_match('#^[0-9][0-9]?%$|^100%$#', $_value);
             case 'position':
-                return in_array($_value, array('start', 'middle', 'end'));
+                return in_array($_value, ['start', 'middle', 'end']);
             case 'align':
-                return in_array($_value, array('start', 'middle', 'end', 'left', 'right'));
+                return in_array($_value, ['start', 'middle', 'end', 'left', 'right']);
             default:
                 return false;
         }

@@ -17,10 +17,10 @@ class SBVFile extends File
      */
     public function parse(): FileInterface
     {
-        $matches = array();
+        $matches = [];
         $res = preg_match_all(self::PATTERN_TIMECODE, $this->fileContent, $matches);
 
-        if (!$res || $res == 0) {
+        if (!$res) {
             throw new \Exception($this->filename.' is not a proper .sbv file.');
         }
 
@@ -37,7 +37,7 @@ class SBVFile extends File
                     $cueStart = trim($timeline[0]);
                     $cueStop = trim($timeline[1]);
 
-                    $cueText = array();
+                    $cueText = [];
                     $step = 'text';
                     break;
                 case 'text':

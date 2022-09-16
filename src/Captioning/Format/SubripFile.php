@@ -29,9 +29,9 @@ class SubripFile extends File
     $/xu'
     ;
 
-    private $defaultOptions = array('_stripTags' => false, '_stripBasic' => false, '_replacements' => false, '_requireStrictFileFormat' => true);
+    private $defaultOptions = ['_stripTags' => false, '_stripBasic' => false, '_replacements' => false, '_requireStrictFileFormat' => true];
 
-    private $options = array();
+    private $options = [];
 
     public function __construct($_filename = null, $_encoding = null, $_useIconv = false, $_requireStrictFileFormat = true)
     {
@@ -55,7 +55,7 @@ class SubripFile extends File
           $content = substr($content, 3);
         }
 
-        $matches = array();
+        $matches = [];
         $res = preg_match(self::PATTERN_HEADER, $content, $matches);
         if ($res === false || $res === 0) {
             throw new \Exception($this->filename.' is not a proper .srt file (Invalid header).');
@@ -117,7 +117,7 @@ class SubripFile extends File
                 if (!$this->validateTimelines($subtitleTimeStart, $subtitleTimeEnd, !$strict)) {
                     throw new \Exception($this->filename.' is not a proper .srt file. (Ending time invalid: '.$subtitleTimeEnd.' at line '.$lineNumber.')');
                 }
-                $subtitleText = array();
+                $subtitleText = [];
                 $state = 'text';
                 break;
 

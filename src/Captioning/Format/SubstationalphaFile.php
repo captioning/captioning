@@ -21,7 +21,7 @@ class SubstationalphaFile extends File
 
     public function __construct($_filename = null, $_encoding = null, $_useIconv = false)
     {
-        $this->headers = array(
+        $this->headers = [
             'Title'                => '<untitled>',
             'Original Script'      => '<unknown>',
             'Original Translation' => null,
@@ -37,11 +37,11 @@ class SubstationalphaFile extends File
             'PlayDepth'            => 0,
             'Timer'                => '100.0',
             'WrapStyle'            => 0
-        );
+        ];
 
         $this->stylesVersion = self::STYLES_V4_PLUS;
 
-        $this->styles = array(
+        $this->styles = [
             'Name'            => 'Default',
             'Fontname'        => 'Arial',
             'Fontsize'        => 20,
@@ -67,18 +67,18 @@ class SubstationalphaFile extends File
             'MarginV'         => 15,
             'AlphaLevel'      => 0,
             'Encoding'        => 0
-        );
+        ];
 
-        $this->excludedStyles = array(
-            self::STYLES_V4      => array('OutlineColour', 'Underline', 'StrikeOut', 'ScaleX', 'ScaleY', 'Spacing', 'Angle'),
-            self::STYLES_V4_PLUS => array('TertiaryColour', 'AlphaLevel')
-        );
+        $this->excludedStyles = [
+            self::STYLES_V4      => ['OutlineColour', 'Underline', 'StrikeOut', 'ScaleX', 'ScaleY', 'Spacing', 'Angle'],
+            self::STYLES_V4_PLUS => ['TertiaryColour', 'AlphaLevel']
+        ];
 
-        $this->events = array(
+        $this->events = [
             'Layer', 'Start', 'End', 'Style', 'Name', 'MarginL', 'MarginR', 'MarginV', 'Effect', 'Text'
-        );
+        ];
 
-        $this->comments = array();
+        $this->comments = [];
 
         parent::__construct($_filename, $_encoding, $_useIconv);
     }
@@ -102,7 +102,7 @@ class SubstationalphaFile extends File
 
     public function setStylesVersion(string $stylesVersion)
     {
-        if (!in_array($stylesVersion, array(self::STYLES_V4, self::STYLES_V4_PLUS))) {
+        if (!in_array($stylesVersion, [self::STYLES_V4, self::STYLES_V4_PLUS], true)) {
             throw new \InvalidArgumentException('Invalid styles version');
         }
 
@@ -197,7 +197,7 @@ class SubstationalphaFile extends File
             // parsing styles
             if ($line === '[v4+ styles]') {
                 $line = $this->getNextValueFromArray($fileContentArray);
-                $tmp_styles = array();
+                $tmp_styles = [];
                 $tmp = explode(':', $line);
                 if ($tmp[0] !== 'Format') {
                     throw new \Exception($this->filename.' is not valid file.');
@@ -224,7 +224,7 @@ class SubstationalphaFile extends File
             }
         }
 
-        $matches = array();
+        $matches = [];
         preg_match_all(self::PATTERN, $this->fileContent, $matches);
         $matchesCount = count($matches[1]);
         for ($i = 0; $i < $matchesCount; $i++) {
@@ -282,6 +282,7 @@ class SubstationalphaFile extends File
         }
 
         $this->fileContent = $buffer;
+
         return $this;
     }
 }
