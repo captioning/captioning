@@ -92,7 +92,7 @@ class SubstationalphaFile extends File
 
     public function getHeader($_name)
     {
-        return isset($this->headers[$_name]) ? $this->headers[$_name] : false;
+        return $this->headers[$_name] ?? false;
     }
 
     public function getHeaders()
@@ -123,7 +123,7 @@ class SubstationalphaFile extends File
 
     public function getStyle($_name)
     {
-        return isset($this->styles[$_name]) ? $this->styles[$_name] : false;
+        return $this->styles[$_name] ?? false;
     }
 
     public function getStyles(): array
@@ -183,11 +183,11 @@ class SubstationalphaFile extends File
             // parsing headers
             if ($line === '[script info]') {
                 while (($line = trim($this->getNextValueFromArray($fileContentArray))) !== '') {
-                    if ($line[0] == ';') {
+                    if ($line[0] === ';') {
                         $this->addComment(ltrim($line, '; '));
                     } else {
                         $tmp = explode(':', $line);
-                        if (count($tmp) == 2) {
+                        if (count($tmp) === 2) {
                             $this->setHeader(trim($tmp[0]), trim($tmp[1]));
                         }
                     }

@@ -45,7 +45,7 @@ class WebvttCue extends Cue
 
     public function getSetting($_name)
     {
-        return isset($this->settings[$_name]) ? $this->settings[$_name] : false;
+        return $this->settings[$_name] ?? false;
     }
 
     public function getSettings()

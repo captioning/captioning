@@ -48,7 +48,7 @@ class WebvttRegion
 
     public function setLines($_lines): self
     {
-        $this->lines = intval($_lines) >= 1 ? intval($_lines) : 1;
+        $this->lines = max((int) $_lines, 1);
 
         return $this;
     }

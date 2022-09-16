@@ -32,12 +32,12 @@ class WebvttFile extends File
         // Parse signature.
         $signature = $this->getNextValueFromArray($fileContentArray);
 
-        if (substr($signature, 0, 6) !== 'WEBVTT') {
+        if (strpos($signature, 'WEBVTT') !== 0) {
             $parsing_errors[] = 'Missing "WEBVTT" at the beginning of the file';
         }
 
         if (strlen($signature) > 6) {
-            if (substr($signature, 0, 7) === 'WEBVTT ') {
+            if (strpos($signature, 'WEBVTT ') === 0) {
                 $fileDescription = substr($signature, 7);
 
                 if (strpos($fileDescription, '-->') !== false) {

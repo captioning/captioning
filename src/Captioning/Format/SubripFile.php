@@ -273,8 +273,7 @@ class SubripFile extends File
 
         $patternNoLeadingZeroes = '/(?:(?<=\:)|^)\d(?=(:|,))/';
 
-        return preg_replace_callback($patternNoLeadingZeroes, function($matches)
-        {
+        return preg_replace_callback($patternNoLeadingZeroes, function($matches) {
             return sprintf('%02d', $matches[0]);
         }, $timecode);
     }

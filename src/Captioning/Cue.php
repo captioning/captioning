@@ -242,7 +242,7 @@ abstract class Cue implements CueInterface
      */
     public function getTextLine(int $_index)
     {
-        return isset($this->textLines[$_index]) ? $this->textLines[$_index] : null;
+        return $this->textLines[$_index] ?? null;
     }
 
     /**
@@ -282,7 +282,7 @@ abstract class Cue implements CueInterface
         if (!is_int($_time)) {
             return false;
         }
-        if ($_time == 0) {
+        if ($_time === 0) {
             return true;
         }
 
@@ -302,7 +302,7 @@ abstract class Cue implements CueInterface
      */
     public function scale($_baseTime, int $_factor = 1): bool
     {
-        if ($_factor == 1) {
+        if ($_factor === 1) {
             return false;
         }
 

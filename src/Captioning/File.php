@@ -176,7 +176,7 @@ abstract class File implements FileInterface, \Countable
      */
     public function getCue(int $_index)
     {
-        return isset($this->cues[$_index]) ? $this->cues[$_index] : null;
+        return $this->cues[$_index] ?? null;
     }
 
     /**
@@ -184,7 +184,7 @@ abstract class File implements FileInterface, \Countable
      */
     public function getFirstCue()
     {
-        return isset($this->cues[0]) ? $this->cues[0] : null;
+        return $this->cues[0] ?? null;
     }
 
     /**
@@ -435,10 +435,7 @@ abstract class File implements FileInterface, \Countable
      */
     public function shift(int $_time, $_startIndex = null, $_endIndex = null): bool
     {
-        if (!is_int($_time)) {
-            return false;
-        }
-        if ($_time == 0) {
+        if ($_time === 0) {
             return true;
         }
 
@@ -458,8 +455,8 @@ abstract class File implements FileInterface, \Countable
         }
 
         for ($i = $_startIndex; $i <= $_endIndex; $i++) {
-                $cue = $this->getCue($i);
-                $cue->shift($_time);
+            $cue = $this->getCue($i);
+            $cue->shift($_time);
         }
 
         return true;
@@ -538,12 +535,12 @@ abstract class File implements FileInterface, \Countable
             $filename = $this->filename;
         }
 
-        if (trim($this->fileContent) == '') {
+        if (trim($this->fileContent) === '') {
             $this->build();
         }
 
         $file_content = $this->fileContent;
-        if (strtolower($this->encoding) != 'utf-8') {
+        if (strtolower($this->encoding) !== 'utf-8') {
             if ($this->useIconv) {
                 $file_content = iconv('UTF-8', $this->encoding, $file_content);
             } else {

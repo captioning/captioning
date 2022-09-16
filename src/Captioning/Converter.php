@@ -20,8 +20,8 @@ class Converter
             throw new \InvalidArgumentException(sprintf('Unable to convert to "%s", this format does not exists.', $_convertTo));
         }
 
-        $newSub        = new $subtitleClass();
-        $cueClass      = File::getExpectedCueClass($newSub);
+        $newSub = new $subtitleClass();
+        $cueClass = File::getExpectedCueClass($newSub);
 
         foreach ($_file->getCues() as $cue) {
             $newSub->addCue($cue->getText(), $cueClass::ms2tc($cue->getStartMS()), $cueClass::ms2tc($cue->getStopMS()));
@@ -133,7 +133,7 @@ class Converter
 
                         $textForReplace = self::applyTtmlStyles($spanText, $spanStyle);
 
-                        if ($textForReplace != $spanText) {
+                        if ($textForReplace !== $spanText) {
                             $text = str_replace($spanStr, $textForReplace, $text);
                         }
                     }
