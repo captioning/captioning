@@ -46,7 +46,7 @@ class WebvttFileTest extends TestCase
             array(
                 'invalid_1-non-normative_sample-file-captions.vtt',
                 array(
-                    'Invalid file header (must be "WEBVTT" with optionnal description)',
+                    'Invalid file header (must be "WEBVTT" with optional description)',
                     'Incorrect Region definition at line 2',
                     'Incorrect Region definition at line 3',
                     'Malformed cue detected at line 7',
@@ -79,7 +79,7 @@ class WebvttFileTest extends TestCase
             array(
                 'invalid_1.3-non-normative_other-features_1.vtt',
                 array(
-                    'Invalid file header (must be "WEBVTT" with optionnal description)',
+                    'Invalid file header (must be "WEBVTT" with optional description)',
                     'Malformed cue detected at line 4',
                     'Malformed cue detected at line 9',
                 ),

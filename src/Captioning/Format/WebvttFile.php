@@ -47,7 +47,7 @@ class WebvttFile extends File
                 }
 
             } else {
-                $parsing_errors[] = 'Invalid file header (must be "WEBVTT" with optionnal description)';
+                $parsing_errors[] = 'Invalid file header (must be "WEBVTT" with optional description)';
             }
         }
 
